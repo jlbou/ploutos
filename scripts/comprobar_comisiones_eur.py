@@ -12,6 +12,7 @@ al reves: negativo = la pagas), y la lectura en % positivo.
 from __future__ import annotations
 
 import asyncio
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -74,7 +75,10 @@ async def main() -> int:
                 print(f"  grupo {g['groupId']}: maker {pct(g['maker'])} %, taker {pct(g['taker'])} %")
         return 0
     except Exception as exc:  # noqa: BLE001 - nunca el mensaje entero (podria llevar la cabecera)
-        print(f"OKX no contesto bien: {type(exc).__name__}")
+        codigos = sorted(set(re.findall(r"\b5\d{4}\b", str(exc))))   # solo los codigos de OKX, nunca el mensaje
+        print(f"OKX no contesto bien: {type(exc).__name__}, codigo {', '.join(codigos) or '?'}"
+              " (50119: IP fuera de la lista, host o clave mal copiada; 50101: clave del demo contra la real;"
+              " 50105/50113: passphrase o firma)")
         return 1
     finally:
         await client.close()
