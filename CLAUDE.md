@@ -19,7 +19,11 @@ fue con prisa. **Ahora se trabaja como en Ebisu, en este orden y sin saltarse pa
 2. **Estudio (EN CURSO):** criterio **aprobado y congelado el 15/10** (`docs/plan-estudio-paso-2.md`, etiqueta
    `criterio-paso2`): Bitstamp en euros, H1 medias / H2 Donchian / H3 momento (+ capa de volatilidad), N = 40, liston
    en dos etapas. **V5 recogiendo libros de ordenes hasta el 30/10** (`ploutos-libros.timer`, juez `check_libros.py`);
-   mientras, el simulador y sus tests. La exploracion se mide al acabar V5.
+   **El simulador, HECHO el 16/10** (`docs/estudios/paso2/sim/`, `estudio.py`; validacion con datos reales:
+   comprar y mantener = BTC mantenido, diferencia 0,00). Aclaraciones 1-3 aprobadas antes de medir (etiquetas
+   `criterio-paso2-a1..a3`). **Lo que sigue, en orden, desde el 30/10:** `calcular_v5.py` con la copia de
+   `ploutos-libros.db` -> `estudio.py explorar` -> decision 4 (apalancamiento y cortos) con la candidata ->
+   `estudio.py limpia` (una vez; deja un cerrojo) -> veredicto. Ninguna estrategia medida aun.
 3. **Construir solo si una estrategia pasa**, con la prueba de oro (el bot hace lo mismo que el simulador). Aqui se
    limpia el codigo de los setups (etiqueta `archivo/antes-de-limpiar`, en el repositorio privado del historial) y se
    arregla el hueco S5 del panel.
