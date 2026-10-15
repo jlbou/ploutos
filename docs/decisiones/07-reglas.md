@@ -27,3 +27,44 @@ estrategia ya pasa sin el; los cortos, como variantes declaradas antes de medir.
   caras que las configuradas, ese par no se opera (como hoy).
 - El deslizamiento no decide nada: lo que pesa son las comisiones, y OKX es el mas barato; ademas, todo lo verificado
   (OCO, errores, conciliacion, 7 dias de demo) es de OKX.
+
+## Regla 3 — la lista de pares
+
+**Solo BTC/EUR y ETH/EUR** (opcion a), validado en los mismos 4 puntos (arranque, generador de candidatos, motor de
+riesgo y justo antes de enviar la orden). La clave de OKX, limitada a BTC, ETH y EUR (la lista vive en DOS sitios:
+`settings.yaml` y la clave). Anyadir otra moneda es un intento nuevo (decision 3) y se cambia en los dos sitios.
+
+## Regla 4 — posiciones
+
+**Maximo 1 posicion por moneda (2 en total); nunca promediar a la baja ni martingala** (opcion a). Anyadir a una
+posicion que va GANANDO (piramide) solo si la estrategia lo lleva escrito antes de medir: cuenta como la misma
+posicion y el riesgo total hasta el stop no pasa el limite de la regla 12. Las entradas pendientes cuentan.
+
+## Regla 5 — capital y suelo
+
+**Capital de referencia en euros, puesto a mano; suelo al 50 % de ese capital** (opcion a). Si se anyade dinero, el
+capital de referencia (y con el el suelo) solo cambia cuando el propietario lo cambia a mano. **En el estudio, una
+estrategia no pasa si su caida maxima historica se acerca al suelo** (el umbral exacto, p. ej. 35 %, se fija antes de
+medir): el suelo es el freno de emergencia, no algo que salte en una caida normal; los escalones (regla 9) frenan antes.
+
+## Regla 6 — el equity
+
+**Igual, en euros** (opcion a): euros + Σ(cantidad × mejor bid en euros) − comisiones estimadas de salida, cada 15 s,
+con datos del exchange (el saldo TOTAL, `eq`, nunca el `free`).
+
+## Regla 7 — el freno de emergencia
+
+**Igual** (opcion a): equity <= suelo en dos lecturas seguidas -> `CLOSE_ONLY_CAPITAL`, enclavado (solo reset manual) y
+Telegram. No vende lo abierto: cada posicion sale en su stop o su objetivo, con reglas deterministas.
+
+## Regla 8 — la preventiva
+
+**Igual, con el colchon al 2 % del capital de referencia** (opcion a): solo se abre si, con todas las posiciones
+(incluida la nueva) cerradas en su stop y con la comision de salida, el equity queda >= suelo + colchon. El salto por
+debajo del stop no se suma aparte: con BTC y ETH suele ser pequenyo y lo cubre el colchon.
+
+## Regla 9 — los escalones
+
+**En % del capital de referencia** (opcion a): **−10 %** -> riesgo por operacion a la mitad + Telegram; **−20 %** ->
+maximo 1 posicion; **−30 %** -> maximo 1 posicion y riesgo a la mitad. **El estudio los simula:** lo que se mide es la
+estrategia CON los escalones (una de tendencia puede caer un 20-30 % en un anyo normal).
