@@ -9,17 +9,17 @@ mensaje.
 | # | Que | Como | Estado |
 |---|---|---|---|
 | V1 | El demo tiene BTC/EUR y ETH/EUR | API publica con `x-simulated-trading: 1` | **Hecho (15/10): los dos `live`** |
-| V2 | Comisiones REALES de BTC/EUR y ETH/EUR | `account/trade-fee` con una clave de la cuenta real (solo lectura) | Pendiente: hoy solo hay clave del demo **[decide el propietario]** |
-| V3 | Historia del cambio EUR/USD diario desde 2017, tal como se conocia cada dia | fuente oficial (p. ej. el BCE, publicado cada dia habil) | Pendiente: bajarla pide permiso **[decide el propietario]** |
-| V4 | Que BTC/USDT pasado a euros se parezca a BTC/EUR de OKX desde 11/2023 | comparar cierres diarios (diferencia media y maxima) | Pendiente (tras V3) |
+| V2 | Comisiones REALES de BTC/EUR y ETH/EUR | `account/trade-fee` con una clave de la cuenta real (solo lectura) | **Hecho (15/10): grupo 18, maker 0,10 % y taker 0,20 % en los dos** (las configuradas) |
+| V3 | Historia en euros desde 2017 | **Decidido (15/10, opcion a): la historia NATIVA en euros de Bitstamp** (BTC/EUR y ETH/EUR diarias desde 10/2017, API publica): sin cambio EUR/USD ni USDT | Bajada con permiso del propietario |
+| V4 | Que Bitstamp se parezca a OKX donde coinciden (desde 11/2023) | cierres diarios en UTC (`1Dutc` en OKX), diferencia relativa | **Criterio fijado ANTES de mirar (15/10):** se acepta si la mediana de la diferencia absoluta es < 0,10 % y el 99 % de los dias < 1 %, en los dos pares; si no, se estudia por que antes de usar Bitstamp |
 | V5 | Profundidad de BTC/EUR y ETH/EUR en varios momentos (no una foto) | el libro cada hora durante 2 semanas, compra y venta | Pendiente (un recolector de solo lectura) |
-| V7 | Historia de USDT/USD (o BTC en dolares de otra fuente) desde 2017, para pasar a euros sin el error del descuento de USDT de 2018 | fuente publica a elegir **[decide el propietario si hay que bajarla]** | Pendiente (revision R2) |
+| V7 | El error del descuento de USDT | ya no hace falta: la historia es nativa en euros (V3) | **Cerrado** |
 | V6 | Si OKX spot deja dos stops de venta a la vez o hay que modificar el que hay | en el demo | Para el paso 3 (no afecta al estudio) |
 
 ## 1. Los datos y como se reparten
 
-- **BTC y ETH contra USDT** en OKX, velas de 1 dia (y de 4 h si una hipotesis lo pide), desde 10/2017, pasadas a euros
-  con el cambio de V3.
+- **BTC/EUR y ETH/EUR de Bitstamp**, velas de 1 dia en UTC, desde 10/2017 (V3); OKX en euros (desde 11/2023) para
+  comprobarlas (V4) y para los costes.
 - **Exploracion:** 12/2020 - 09/2026 (ya vista en estudios anteriores: se puede explorar en ella, no prueba nada).
 - **Prueba limpia, UNA vez:** 10/2017 - 11/2020 (sin mirar por ningun estudio de Ploutos: buscado el 15/10; que nadie
   la haya mirado nunca no se puede demostrar). Incluye el mercado bajista de 2018, el lateral de 2019 y la caida de
