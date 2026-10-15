@@ -30,10 +30,10 @@ Todavia no hay token. Para crear el bot:
   4. Te pide un USUARIO, que debe acabar en 'bot' y ser unico.
                                             Ejemplo: mi_ploutos_bot
   5. Te responde con un token, con esta pinta:
-         8123456789:AAH-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+         <numero del bot>:<unos 35 caracteres de letras, numeros, - y _>
   6. Copialo en el fichero .env de este repositorio, en la linea:
 
-         TELEGRAM_BOT_TOKEN=8123456789:AAH-xxxx...
+         TELEGRAM_BOT_TOKEN=<el token entero>
 
   7. Vuelve a ejecutar este script.
 
