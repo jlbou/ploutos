@@ -87,7 +87,7 @@ muestra; lo mas probable es que ninguna pase.
   compensan las ganancias del anyo y las sobrantes, las de los 4 anyos siguientes. **El BTC de referencia vende el
   ultimo dia y paga entonces** (el aplazamiento es una ventaja real de mantener). Fuentes de los tramos (15/10):
   guiafiscal.es, Rankia, Billeo; sin la norma oficial abierta.
-- **Peor caida historica** lejos del suelo (p. ej. <= 35 %).
+- **Peor caida historica <= 35 %** (propietario, 15/10, opcion a): 15 puntos de margen hasta el suelo del 50 %.
 - **Senyales de alarma:** Sharpe > 2 o fuera de muestra casi igual que dentro: se investiga antes de creer.
 
 ## 5. Las herramientas
