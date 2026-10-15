@@ -119,3 +119,41 @@ Skills: ml4t-lookahead-bias, ml4t-data-leakage, ml4t-point-in-time, ml4t-deflate
 
 Con las correcciones, quedan para el propietario (una por mensaje): V2 (clave de solo lectura), V3 (bajar el cambio
 oficial), el liston de la prueba limpia, la lista de hipotesis y los numeros del criterio (seccion 4).
+
+## 8. Los parametros (propietario, 15/10, opcion a), fijados antes de medir
+
+Velas diarias de Bitstamp cerradas a las 00:00 UTC; la senyal con la vela cerrada del dia t, la orden a la apertura de
+t+1 (taker 0,20 % + el deslizamiento de V5 con 10.000 €; mientras V5 no este, 0,01 % por lado).
+
+| | Senyal (cada moneda por separado) | Tamanyo y proteccion |
+|---|---|---|
+| **H1** | dentro si el cierre esta por encima de las 4 medias simples (20/50/100/200 dias); fuera al perder alguna | hasta **45 %** del equity por moneda (90 % entre las dos, regla 15), riesgo hasta el stop <= 5 % (regla 12); **stop 3 ATR(14)** fijo desde la entrada, en el exchange |
+| **H2** | 4 plazos N = 20/50/100/200: cada uno entra si el cierre supera el maximo de los N dias anteriores y sale si baja del minimo de los N/2 anteriores; **tamanyo = media de los 4** (0-100 % del maximo) | igual que H1 |
+| **H3** | **cada lunes**: el signo del rendimiento de 1, 2, 3 y 4 semanas; tamanyo = fraccion positiva de las 4 | igual que H1 |
+| **H1v, H2v** | H1 y H2 con el tamanyo × **min(1; 60 % / volatilidad anualizada de 30 dias)** | igual que H1 |
+
+**5 intentos nuevos; N = 40.** H5 ("muy seguro") solo si alguna pasa, como intento aparte.
+
+## 9. Como se elige y se juzga
+
+1. **Simulador validado** antes de medir nada: comprar y mantener tiene que dar exactamente BTC/EUR mantenido.
+2. **Exploracion** (12/2020-09/2026): las 5, con todas las reglas del PRD v3 simuladas. **Candidata = la de mayor
+   deflactado (N = 40) entre las que cumplan en la exploracion el liston y los tipos de mercado**; PBO de las 5 < 0,50.
+   Si ninguna cumple, **se para aqui** y no se mira la prueba limpia.
+3. **Decision 4** (apalancamiento y cortos), con la candidata, antes de mirar la prueba limpia.
+4. **Prueba limpia** (04/03/2018-30/11/2020), una vez, solo la candidata: liston, tipos de mercado, caida <= 35 % y
+   Sharpe probabilistico >= 0,95.
+5. **Veredicto** escrito; si pasa, el paso 3 (construir) y el papel de 6-12 meses.
+
+## 10. Revision final (15/10/2026)
+
+- **Calentamiento de la exploracion:** sus medias de 200 dias usan precios de 06-11/2020, que son de la prueba limpia.
+  Se usan solo para calcular indicadores; **el simulador no da ningun resultado de fechas de la prueba limpia** durante
+  la exploracion (un test lo comprueba).
+- **El orden:** la prueba limpia es anterior a la exploracion; 2018 (bajista) no es el mercado de hoy. Se dice.
+- **El 60 % de la capa de volatilidad** no sale de los datos: es una volatilidad tipica de BTC; cambiarlo seria otro
+  intento.
+- **El ETH de la prueba limpia** empieza el 16/08/2017: con el calentamiento, la prueba arranca el 04/03/2018 para
+  las dos monedas.
+- **Pendiente antes de medir:** V5 (la profundidad en varios momentos); hasta entonces, 0,01 % de deslizamiento por
+  lado (lo medido el 15/10 con 10.000 €: 0,003-0,006 %).
