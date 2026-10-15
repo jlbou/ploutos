@@ -16,15 +16,17 @@ fue con prisa. **Ahora se trabaja como en Ebisu, en este orden y sin saltarse pa
 0. **Inventario y limpieza** (`docs/inventario-1510.md`): que se queda, que se reaprovecha, que se descarta.
 1. **Decisiones de fondo: HECHO el 15/10** (`docs/decisiones/01` a `09`) y **PRD v3 aprobado**
    (`docs/prd-ploutos-v3.md`): ganar a BTC en euros, escalable a 10.000 €, BTC/EUR y ETH/EUR, la IA de freno, 17 reglas.
-2. **Estudio profundo**: literatura y datos limpios primero; cuantos anyos de datos hacen falta; el criterio subido a
-   git ANTES de medir; N >= 35 intentos en el deflactado; por tipo de mercado; lo no visto, UNA sola vez.
+2. **Estudio (EN CURSO):** criterio **aprobado y congelado el 15/10** (`docs/plan-estudio-paso-2.md`, etiqueta
+   `criterio-paso2`): Bitstamp en euros, H1 medias / H2 Donchian / H3 momento (+ capa de volatilidad), N = 40, liston
+   en dos etapas. **V5 recogiendo libros de ordenes hasta el 30/10** (`ploutos-libros.timer`, juez `check_libros.py`);
+   mientras, el simulador y sus tests. La exploracion se mide al acabar V5.
 3. **Construir solo si una estrategia pasa**, con la prueba de oro (el bot hace lo mismo que el simulador). Aqui se
    limpia el codigo de los setups (etiqueta `archivo/antes-de-limpiar`, en el repositorio privado del historial) y se
    arregla el hueco S5 del panel.
 
 **Sigue en marcha, en silencio:** el papel de L (12/10/2026-11/01/2027, `docs/diseno-papel-l.md`), el embudo de
 noticias en sombra (`docs/diseno-embudo-noticias.md`), los medios en sombra, las noticias de OKX, la ingesta,
-Telegram, el panel, las copias y 4 jueces cada noche. **Retirados el 15/10, sin veredicto:** las dos carteras de la
+Telegram, el panel, las copias y 5 jueces cada noche (desde el 16/10, tambien el de los libros de ordenes). **Retirados el 15/10, sin veredicto:** las dos carteras de la
 fase 6 y el demo (`docs/cierre-fase-6.md`).
 
 ## Jerarquia de documentos
