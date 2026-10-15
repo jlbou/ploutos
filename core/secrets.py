@@ -47,6 +47,11 @@ class Secrets(BaseSettings):
     okx_api_secret: SecretStr | None = None
     okx_password: SecretStr | None = None
     okx_demo: bool = True
+    # Paso 2 (15/10/2026): una clave de la cuenta REAL SOLO DE LECTURA, para leer sus comisiones de BTC-EUR y ETH-EUR
+    # (`scripts/comprobar_comisiones_eur.py`). Sin trading ni retirada; la pone el propietario y se puede borrar despues.
+    okx_lectura_api_key: SecretStr | None = None
+    okx_lectura_api_secret: SecretStr | None = None
+    okx_lectura_password: SecretStr | None = None
 
     # --- Claude (fase 3) ---
     claude_code_oauth_token: SecretStr | None = Field(default=None)
