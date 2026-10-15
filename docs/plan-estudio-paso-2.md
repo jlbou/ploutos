@@ -81,7 +81,12 @@ muestra; lo mas probable es que ninguna pase.
   en **lateral**, no pierde mas de un **10 % anualizado**.
 - **Con las reglas del PRD v3 simuladas:** escalones, limite diario, suelo, exposicion y riesgo (techo 5 % / 10 %).
 - **Costes:** comisiones de V2 (si no, las configuradas, 0,10/0,20 %) + deslizamiento de V5 con 10.000 €.
-- **Impuestos:** como se cuentan (p. ej. el tramo del ahorro sobre cada venta con ganancia, FIFO) **[decide]**.
+- **Impuestos (propietario, 15/10, opcion a):** los tramos de la base del ahorro de cada anyo natural (19 % hasta
+  6.000 €, 21 % hasta 50.000 €, 23 % hasta 200.000 €, 27 % hasta 300.000 € y 30 % por encima; el ultimo, 28 % o 30 %
+  segun la fuente: subido por la Ley 7/2024, sin efecto por debajo de 300.000 €), coste por **FIFO**, las perdidas
+  compensan las ganancias del anyo y las sobrantes, las de los 4 anyos siguientes. **El BTC de referencia vende el
+  ultimo dia y paga entonces** (el aplazamiento es una ventaja real de mantener). Fuentes de los tramos (15/10):
+  guiafiscal.es, Rankia, Billeo; sin la norma oficial abierta.
 - **Peor caida historica** lejos del suelo (p. ej. <= 35 %).
 - **Senyales de alarma:** Sharpe > 2 o fuera de muestra casi igual que dentro: se investiga antes de creer.
 
