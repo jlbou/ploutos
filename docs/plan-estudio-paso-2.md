@@ -173,3 +173,9 @@ senyal; C6 los tamanyos parciales solo se ajustan si cambia la fraccion y la dif
 C7 el limite diario desde las 00:00 UTC; C8 BTC mantenido compra a la apertura del primer dia y vende al cierre del
 ultimo, con costes e impuesto al final; C9 el PBO con 5 configuraciones se calcula y se dice que es poco informativo;
 C10 un test comprueba que ninguna media se calcula con menos dias de los que dice.
+
+## 12. Aclaracion 2 (propietario, 16/10/2026, opcion a), antes de medir
+
+**Una compra que una regla no deja hacer** (la regla 8, el maximo de posiciones de un escalon, el suelo, o no llegar al
+minimo por orden) **se reintenta cada dia mientras la senyal siga encendida**: se retrasa, no se pierde (como haria el
+bot de verdad). Es lo que hace el motor (`docs/estudios/paso2/sim/MOTOR.md`, punto 6b). Etiqueta `criterio-paso2-a2`.
