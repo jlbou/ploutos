@@ -1,4 +1,8 @@
-# Plan del paso 2: el estudio de la estrategia (BORRADOR, 15/10/2026)
+# Plan del paso 2: el estudio de la estrategia (15/10/2026)
+
+**CRITERIO APROBADO Y CONGELADO por el propietario el 15/10/2026 (decision 11, opcion a), antes de medir nada**
+(etiqueta de git `criterio-paso2`). Cambiar algo de aqui = un intento nuevo, escrito y aprobado antes.
+**V5:** recolector de libros de ordenes en el VPS durante 2 semanas; la exploracion se mide al acabar, con sus costes.
 
 Del PRD v3 (`docs/prd-ploutos-v3.md`, secciones 1, 4 y 7) y las decisiones 1-9. **Nada se mide hasta que este plan y
 el criterio esten aprobados y subidos a git.** Lo marcado **[decide el propietario]** se le pregunta una cosa por
