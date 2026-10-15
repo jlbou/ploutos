@@ -161,3 +161,15 @@ t+1 (taker 0,20 % + el deslizamiento de V5 con 10.000 €; mientras V5 no este, 
   las dos monedas.
 - **Pendiente antes de medir:** V5 (la profundidad en varios momentos); hasta entonces, 0,01 % de deslizamiento por
   lado (lo medido el 15/10 con 10.000 €: 0,003-0,006 %).
+
+## 11. Aclaracion 1 (propietario, 16/10/2026, opcion a), antes de medir
+
+Los 10 huecos de `docs/estudios/paso2/revision-candidatas.md`, aprobados tal como se propusieron (etiqueta
+`criterio-paso2-a1`). No cambian nada de lo congelado; dicen como hace el simulador lo que estaba a medias:
+C1 volver a entrar tras un stop solo con una senyal nueva (apagarse y encenderse; en H3, el lunes siguiente);
+C2 en los escalones, la mitad del tamanyo (22,5 %) y del riesgo (2,5 %); C3 el stop sale a su precio o a la apertura si
+abre por debajo; C4 el tipo de mercado con el cierre de ayer; C5 el tamanyo con el equity al cierre del dia de la
+senyal; C6 los tamanyos parciales solo se ajustan si cambia la fraccion y la diferencia llega al minimo por orden;
+C7 el limite diario desde las 00:00 UTC; C8 BTC mantenido compra a la apertura del primer dia y vende al cierre del
+ultimo, con costes e impuesto al final; C9 el PBO con 5 configuraciones se calcula y se dice que es poco informativo;
+C10 un test comprueba que ninguna media se calcula con menos dias de los que dice.
