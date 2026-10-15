@@ -179,3 +179,11 @@ C10 un test comprueba que ninguna media se calcula con menos dias de los que dic
 **Una compra que una regla no deja hacer** (la regla 8, el maximo de posiciones de un escalon, el suelo, o no llegar al
 minimo por orden) **se reintenta cada dia mientras la senyal siga encendida**: se retrasa, no se pierde (como haria el
 bot de verdad). Es lo que hace el motor (`docs/estudios/paso2/sim/MOTOR.md`, punto 6b). Etiqueta `criterio-paso2-a2`.
+
+## 13. Aclaracion 3 (propietario, 16/10/2026, opcion a), antes de ver V5
+
+**El coste de V5:** en cada foto, el coste de una orden a mercado de **10.000 €** de compra (subiendo por las ofertas) y
+de venta (bajando por las demandas) frente al precio medio (incluye el medio spread); de todas las fotos de un par, el
+**percentil 90**; el simulador usa **el mas caro de los dos pares** como deslizamiento por lado. Una foto sin
+profundidad para 10.000 € en sus 400 niveles cuenta con un 1 % de coste y se dice cuantas hubo. Lo calcula
+`docs/estudios/paso2/calcular_v5.py`, que no corre antes del final del recolector. Etiqueta `criterio-paso2-a3`.
