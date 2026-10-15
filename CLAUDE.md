@@ -94,6 +94,10 @@ claude_runtime/  directorio VACIO desde el que se ejecuta claude -p
 - **Configuracion** en `config/settings.yaml`, validada con pydantic: invalida → **el bot no arranca**.
 - **Secretos:** solo en `.env` (`.env.example` sin valores). Nunca en logs ni en el chat; **nunca se le pide al
   propietario que pegue un token**; **nunca `source .env`**. Leerlos con `core.secrets.Secrets`.
+- **El `.env` (15/10, el propietario): se edita en el PORTATIL** (los valores los pone el; Claude deja las lineas
+  preparadas) y **Claude copia al VPS solo las claves nombradas** con `deploy/env_a_vps.py <alias> CLAVE ...` (no
+  ensenya valores, no toca el resto, compara la huella). Nunca el fichero entero: `HEALTHCHECK_COPIA_PORTATIL` es
+  solo del portatil y las URL de Healthchecks del VPS, solo del VPS.
 - **`ruff`** como un test mas. **Tests primero en `risk/`** y `scripts/mutation_check.py` (16/16).
 - **Mirar pytest ANTES del commit.** Push al acabar cada encargo; directorio siempre en `main`.
 - **Formato de commit (fijo):** `<ambito>: <que, en minuscula, max 72>`, y QUE CAMBIA / POR QUE / HALLAZGOS /
