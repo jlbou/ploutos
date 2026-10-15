@@ -42,3 +42,14 @@ def test_el_juez_cada_hora_esta_bien_y_un_hueco_falla():
     codigo, texto = cl.juzgar(hueco, AHORA)
     assert codigo == 1 and "ETH-EUR" in texto
     assert cl.juzgar([], AHORA)[0] == 2
+
+
+def test_el_primer_dia_no_da_falla_por_llevar_poco():
+    """16/10: a los pocos minutos de arrancar pedia 20 libros en 24 h y daba FALLA (aviso falso a las 00:30)."""
+    recien = [(p, AHORA - 10 * 60_000) for p in rl.PARES]
+    assert cl.juzgar(recien, AHORA)[0] == 0
+    tres_horas = [(p, AHORA - i * H) for p in rl.PARES for i in range(3)]
+    assert cl.juzgar(tres_horas, AHORA)[0] == 0
+    # 10 h desde el primero y solo 2 libros (el ultimo reciente): falta casi todo -> FALLA
+    pocos = [(p, ms) for p in rl.PARES for ms in (AHORA - 10 * H, AHORA - H)]
+    assert cl.juzgar(pocos, AHORA)[0] == 1

@@ -36,10 +36,14 @@ def juzgar(libros: list[tuple[str, int]], ahora_ms: int) -> tuple[int, str]:
     if ahora_ms >= fin_ms + 2 * H:
         return 0, f"V5 terminada: {total}"
     malos = []
+    # Las primeras 24 h no puede haber 20: se piden las horas que lleva (menos 4 de margen). 16/10: el primer dia daba
+    # FALLA a los pocos minutos de arrancar.
+    horas = min(24.0, (ahora_ms - min(ms for _, ms in libros)) / H)
+    minimo = max(0, min(20, int(horas) - 4))
     for p in PARES:
         dia = sum(1 for x, ms in libros if x == p and ms > ahora_ms - 24 * H)
         ultimo = max((ms for x, ms in libros if x == p), default=0)
-        if dia < 20 or ahora_ms - ultimo > 2 * H:
+        if dia < minimo or ahora_ms - ultimo > 2 * H:
             malos.append(f"{p}: {dia} en 24 h, el ultimo hace {(ahora_ms - ultimo) / H:.1f} h")
     if malos:
         return 1, "FALLA: el recolector no recoge: " + "; ".join(malos)
