@@ -35,7 +35,18 @@ Con el deflactado (N = 35 + los intentos nuevos), para Sharpe 0,8 / 1,0 / 1,5, c
 falta para llegar a 0,95 (`docs/preregistro-papel-l.md` 2: con N = 35, ~107 / ~21 / ~3,7 anyos). La prueba limpia
 tiene ~2,6 anyos utiles (3,1 menos el calentamiento). **Consecuencia que se dice antes:** con esos anyos, solo una
 estrategia con un Sharpe muy alto podria pasar el deflactado en la prueba limpia; lo mas probable es "no se puede
-demostrar con la historia". **[decide el propietario: que liston usar en la prueba limpia con tan pocos anyos]**.
+demostrar con la historia".
+
+**Calculo (15/10, con Bitstamp):** la prueba limpia util es de **1.002 dias (2,75 anyos, 04/03/2018-30/11/2020)**:
+ETH desde el 16/08/2017 mas 200 dias de calentamiento. Para un deflactado >= 0,95 con N = 35-45 haria falta un Sharpe
+anual de **1,65-1,80** (dispersion de los intentos 0,30-0,36).
+
+**Decidido (propietario, 15/10, opcion a): el liston en dos etapas.**
+- **Exploracion:** el deflactado (N >= 35 + los intentos nuevos) y el PBO < 0,50 sirven para **elegir UNA** candidata.
+- **Prueba limpia, una vez y con una sola estrategia (N = 1 ahi):** el liston de la decision 1 (en euros y neto),
+  no perder de forma grave en ningun tipo de mercado y **Sharpe probabilistico >= 0,95** frente a 0 (en 2,75 anyos,
+  un Sharpe anual de ~1,0). El deflactado se informa, sin decidir.
+- **Despues, el papel de 6-12 meses** confirma.
 
 ## 3. La lista cerrada de hipotesis (cada una cuenta como intento)
 
