@@ -50,17 +50,23 @@ anual de **1,65-1,80** (dispersion de los intentos 0,30-0,36).
 
 ## 3. La lista cerrada de hipotesis (cada una cuenta como intento)
 
-Pocas, porque cada una sube el liston. Propuesta (a revisar):
+**Decidida por el propietario (15/10, opcion a) tras la revision de la literatura**
+(`docs/estudios/paso2/recerca-hipotesis.md`; la primera lista no tenia fuentes y se rehizo):
 
-| # | Hipotesis | Por que |
+| # | Hipotesis | Evidencia |
 |---|---|---|
-| H1 | **Tendencia en el tiempo**: en BTC y en ETH, dentro si el precio esta por encima de sus medias (4 plazos, como L) y fuera en euros si no | lo que la literatura y L dicen que funciona (protege) |
-| H2 | **Momento doble**: la mas fuerte de BTC y ETH en las ultimas N semanas si su rendimiento es positivo; si no, euros | rotacion simple entre dos, con salida a efectivo |
-| H3 | **H1 con tamanyo por volatilidad** (menos exposicion cuando la volatilidad sube) | reduce caidas sin cambiar la senyal |
-| H4 | **Modelo de scikit-learn** (decision 5) | la idea del propietario; con walk-forward, purga y PBO |
-| H5 | **"Muy seguro"** (decision 4): con H1, mas tamanyo / cortos cuando la senyal es fuerte | la idea del propietario; solo si H1 ya pasa sin ello |
+| H1 | **Tendencia con medias de 4 plazos** (20/50/100/200 dias), en BTC y ETH por separado; fuera, en euros | media (Detzel et al. 2021; Hudson y Urquhart 2019, que en BTC fuera de muestra no la ven) |
+| H2 | **Rupturas de Donchian con varios plazos** juntas | media-baja (Zarattini et al. 2025, documento de trabajo) |
+| H3 | **Momento de 1-4 semanas** (signo del rendimiento pasado) | media (Liu y Tsyvinski 2021; mas debil despues) |
+| capa | **Tamanyo por volatilidad** dentro de H1 y H2, no como estrategia aparte | baja sola (Cederburg et al. 2020) |
+| H5 | **"Muy seguro"** (decision 4): solo si H1 o H2 pasan sin ello | sin evidencia propia |
 
-Los parametros de cada una se fijan antes; si se prueban varios, cada combinacion es un intento y se calcula el PBO.
+**Aplazadas:** scikit-learn (H4) y la rotacion BTC/ETH (sin evidencia directa). **3 intentos de base** (+ la capa y H5
+si se usan): N = 35 + los que se prueben. Los parametros de cada una se fijan en el criterio, antes de medir; cada
+combinacion probada es un intento y se calcula el PBO.
+
+**Lo que se dice antes:** el estudio mas solido (Hudson y Urquhart) no encuentra predictibilidad en Bitcoin fuera de
+muestra; lo mas probable es que ninguna pase.
 
 ## 4. El criterio (se fija antes de medir) **[decide el propietario, punto a punto]**
 
