@@ -19,7 +19,8 @@ fue con prisa. **Ahora se trabaja como en Ebisu, en este orden y sin saltarse pa
 2. **Estudio profundo**: literatura y datos limpios primero; cuantos anyos de datos hacen falta; el criterio subido a
    git ANTES de medir; N >= 35 intentos en el deflactado; por tipo de mercado; lo no visto, UNA sola vez.
 3. **Construir solo si una estrategia pasa**, con la prueba de oro (el bot hace lo mismo que el simulador). Aqui se
-   limpia el codigo de los setups (`archivo/antes-de-limpiar`) y se arregla el hueco S5 del panel.
+   limpia el codigo de los setups (etiqueta `archivo/antes-de-limpiar`, en el repositorio privado del historial) y se
+   arregla el hueco S5 del panel.
 
 **Sigue en marcha, en silencio:** el papel de L (12/10/2026-11/01/2027, `docs/diseno-papel-l.md`), el embudo de
 noticias en sombra (`docs/diseno-embudo-noticias.md`), los medios en sombra, las noticias de OKX, la ingesta,
@@ -120,9 +121,10 @@ claude_runtime/  directorio VACIO desde el que se ejecuta claude -p
   personal, en `CLAUDE.local.md` o en `privado/` (los dos en `.gitignore`).
 - Autor de los commits: el correo anonimo de GitHub (configurado en el repo, en `CLAUDE.local.md`).
 - Antes de cada commit, mirar el diff buscando datos personales.
-- **El historial y los documentos de antes del 15/10 SI tienen datos personales**: antes de publicar hay que decidir
-  como se limpian: decidido (15/10, opcion a), con un historial NUEVO (un solo commit limpio), guardando antes el de
-  ahora en privado. Reescribir la rama de GitHub es irreversible: se pide el OK justo antes.
+- **Historial NUEVO desde el 15/10** (opcion a): un repositorio nuevo con un solo commit limpio; el historial de
+  trabajo anterior (con datos personales) vive en un repositorio PRIVADO aparte y en una copia local
+  (`CLAUDE.local.md`). **Nunca** se trae ese historial aqui (ni ramas, ni etiquetas, ni `git push --all`).
+- Las etiquetas `archivo/...` (ramas archivadas y `antes-de-limpiar`) estan en ese repositorio privado.
 
 ## Verificado (no re-suponer)
 
