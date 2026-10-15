@@ -14,7 +14,7 @@ por Claude vía `claude -p`, dentro de reglas deterministas que la IA **no puede
 
 ## Jerarquía de documentos
 
-1. `docs/prd-ploutos-v2.md` — **fuente de verdad**.
+1. `docs/archivo/prd-ploutos-v2.md` — **fuente de verdad**.
 2. `docs/informe-ploutos.md` — el *cómo* (arquitectura, contrato IA, APIs, UI). Solo manda donde el PRD calla.
 3. Si ninguno lo cubre y afecta a riesgo, dinero o reglas duras → **preguntar al propietario**, no decidir.
 
@@ -778,7 +778,7 @@ sobre ellas `check_gaps.py --db <copia> --until <hora>`; `check_paper.py` (y con
 
 | Documento | Que hay |
 |---|---|
-| `docs/prd-ploutos-v2.md` | **fuente de verdad** |
+| `docs/archivo/prd-ploutos-v2.md` | **fuente de verdad** |
 | `docs/informe-ploutos.md` | el como; manda solo donde el PRD calla |
 | `docs/archivo/cierre-fase-2.md` | criterios de la fase 2, comandos y plantilla de resultados |
 | `docs/archivo/cierre-fase-4.md` | el cierre de la fase 4 preparado (06/10): cuando se cierra, de donde puede salir la operacion completa, criterios y jueces, caos, hallazgos (el `429` al arrancar) y plantilla de resultados |

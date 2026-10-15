@@ -14,8 +14,8 @@ estrategia pasa el liston contra la suerte contando todos los intentos (`docs/pr
 fue con prisa. **Ahora se trabaja como en Ebisu, en este orden y sin saltarse pasos:**
 
 0. **Inventario y limpieza** (`docs/inventario-1510.md`): que se queda, que se reaprovecha, que se descarta.
-1. **Decisiones de fondo otra vez**, una por mensaje: objetivo, capital, mercado, apalancamiento, papel de la IA,
-   tiempo. Cada una escrita en `docs/decisiones/`. De ahi, un PRD nuevo (el v3 del 11/10, archivado, no vale).
+1. **Decisiones de fondo: HECHO el 15/10** (`docs/decisiones/01` a `09`) y **PRD v3 aprobado**
+   (`docs/prd-ploutos-v3.md`): ganar a BTC en euros, escalable a 10.000 €, BTC/EUR y ETH/EUR, la IA de freno, 17 reglas.
 2. **Estudio profundo**: literatura y datos limpios primero; cuantos anyos de datos hacen falta; el criterio subido a
    git ANTES de medir; N >= 35 intentos en el deflactado; por tipo de mercado; lo no visto, UNA sola vez.
 3. **Construir solo si una estrategia pasa**, con la prueba de oro (el bot hace lo mismo que el simulador). Aqui se
@@ -29,7 +29,8 @@ fase 6 y el demo (`docs/cierre-fase-6.md`).
 
 ## Jerarquia de documentos
 
-1. `docs/prd-ploutos-v2.md` — fuente de verdad hasta que el paso 1 de un PRD nuevo.
+1. `docs/prd-ploutos-v3.md` — **fuente de verdad** (aprobado el 15/10/2026, de las decisiones de `docs/decisiones/`).
+   El v2, archivado (`docs/archivo/prd-ploutos-v2.md`).
 2. `docs/informe-ploutos.md` — el *como*; solo manda donde el PRD calla.
 3. Si ninguno lo cubre y afecta a riesgo, dinero o reglas duras → **preguntar al propietario**, no decidir.
 
@@ -37,37 +38,27 @@ fase 6 y el demo (`docs/cierre-fase-6.md`).
 `docs/archivo/claude-md-1510.md`); `docs/historial-claude-md.md`, el de antes del 06/10. Buscar ahi antes de
 re-decidir o re-medir.
 
-## Las 19 reglas duras (PRD §4)
+## Las reglas duras (PRD v3, seccion 4; numeracion del v2)
 
-1. Sin apalancamiento. Solo spot. Nunca margin, futuros ni prestamos.
-2. Exchange: OKX EU, via `ccxt`.
-3. Solo `X/USDC` de una whitelist explicita de **8 monedas** (`BTC, ETH, SOL, XRP, DOGE, AVAX, TRX, NEAR`). Validado en
-   4 puntos: arranque, generador de candidatos, motor de riesgo y justo antes de enviar la orden.
-4. Max. **3 posiciones simultaneas**; las entradas pendientes **cuentan**. Max. 1 por simbolo. Sin promediar a la baja.
-5. `initial_capital = 50`, `floor = 25`, en configuracion. Solo se cambian a mano.
-6. `equity` = USDC libre + Σ(cantidad × mejor bid) − comisiones estimadas de salida, cada 15 s, del **exchange**.
-7. Equity ≤ 25 $ en **dos lecturas consecutivas** → `CLOSE_ONLY_CAPITAL`, **enclavado** (solo reset manual) + Telegram.
-8. Se abre solo si, con **todas** las posiciones (incluida la nueva) cerradas en su stop y con la comision de salida,
-   el equity queda ≥ 25 $ + 1 $ de colchon.
-9. Escalones: < 45 $ → riesgo/op. a la mitad + Telegram; < 40 $ → max. 2 posiciones; < 35 $ → max. 1.
-10. Perdida del dia ≥ 3 $ → `CLOSE_ONLY_DAILY` hasta las 00:00 UTC.
-11. Max. **6 operaciones al dia**.
-12. Riesgo por operacion: 1 % del equity por defecto, en **[0,5 %; 1,5 %]**.
-13. Stop-loss y take-profit **siempre en el exchange** (OCO / orden algoritmica), creados al abrir.
-14. Cooldown 2 h en un simbolo tras stop-loss; pausa 4 h tras 3 perdidas seguidas.
-15. Exposicion max. 90 % del equity. Max. 2 posiciones con correlacion entre si > 0,8 (7 d).
-16. No entrar con spread > **0,10 %** ni con objetivo esperado < **3×** el coste de ida y vuelta.
-17. USDC desviado > 1,5 % de la paridad → sin entradas nuevas.
-18. Presupuesto de la IA: max. **40 llamadas/dia** y **8 por ventana de 5 h**.
-19. Claves API: solo lectura y trading, **nunca retirada**, IP whitelist del VPS, fuera del repo. La IA nunca ve
-    claves ni variables de entorno.
+1. Solo spot, sin apalancamiento ni cortos (revision solo con las condiciones de `docs/decisiones/04`).
+2. OKX EU via `ccxt`.  3. Solo **BTC/EUR y ETH/EUR**, validado en 4 puntos; la clave, con BTC, ETH y EUR.
+4. 1 posicion por moneda (2 en total), pendientes cuentan; nunca promediar a la baja ni martingala.
+5. Capital de referencia en euros, a mano; **suelo al 50 %**.  6. Equity en euros cada 15 s, del exchange.
+7. Suelo dos lecturas -> `CLOSE_ONLY_CAPITAL` enclavado.  8. Preventiva con stops y comision; colchon 2 %.
+9. Escalones −10 / −20 / −30 %.  10. Perdida del dia (cerrado y abierto) >= 6 % -> `CLOSE_ONLY_DAILY`.
+11. Max. 6 operaciones al dia.  12. Riesgo hasta el stop: lo fija el estudio; techo 5 % por posicion, 10 % total.
+13. El stop siempre en el exchange.  14. *(retirada)*  15. Exposicion max. 90 %.
+16. Spread max. 0,10 %; 3x el coste solo con objetivo fijo.  17. *(retirada)*  18. IA: 40/dia, 8 por 5 h.
+19. Claves sin retirada, IP del VPS, fuera del repo; la IA nunca las ve.
+
+**Hasta construir la estrategia nueva (paso 3), el CODIGO sigue con las 19 del v2** (en dolares, 8 monedas contra
+USDC): lo que corre hoy (papel de L, embudo) no opera.
 
 **Modos** (PRD §5): `NORMAL`, `CLOSE_ONLY_QUOTA`, `CLOSE_ONLY_DEGRADED`, `CLOSE_ONLY_DAILY`, `CLOSE_ONLY_CAPITAL`,
 `HALTED` (y `CLOSE_ONLY_MANUAL`). El efectivo es **el mas restrictivo**. Al entrar en `CLOSE_ONLY_*`: cancelar entradas
 pendientes, verificar/crear la OCO de cada posicion, gestionar con reglas deterministas, notificar.
 
-**Ya decidido para cuando haya estrategia** (revision del 15/10): la caida y su corte se miden vela a vela; la regla 10
-cuenta lo realizado Y lo abierto si la estrategia se midio asi; el objetivo de OKX spot sale a mercado (taker).
+**Ya decidido** (revision del 15/10): la caida y su corte se miden vela a vela; el objetivo de OKX spot sale a mercado (taker).
 
 ## Estructura
 

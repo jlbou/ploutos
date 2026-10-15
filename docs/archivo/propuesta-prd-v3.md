@@ -5,7 +5,7 @@ como estrategia, sin slider, con las referencias de mantener y L en el panel; 3 
 4 la regla 12 al 5 % por posicion y 15 % en total; 5 la OCO, las pausas y los modos de solo cierre sin time-stop; 6 la
 fase 7 con el papel de L como requisito y su decision expresa). El propietario pregunto si las otras dos carteras desaparecen:
 si, pero no ahora (se decide el dia del veredicto de la fase 6, D1 del dossier).
-El PRD v2 (`docs/prd-ploutos-v2.md`) sigue siendo la fuente de verdad hasta que se aplique. **Aprobarla no pone nada
+El PRD v2 (`docs/archivo/prd-ploutos-v2.md`) sigue siendo la fuente de verdad hasta que se aplique. **Aprobarla no pone nada
 en marcha:** solo se aplicaria si L pasa su papel (11/01/2027) y el propietario decide ir al
 dinero real; y nada del bot se toca mientras dure la muestra de la fase 6 (huella `f063d80147a9`).
 

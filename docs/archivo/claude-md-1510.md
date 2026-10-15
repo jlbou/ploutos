@@ -13,7 +13,7 @@ se aplica solo si L pasa su papel (11/01/2027) y el propietario decide. Hasta en
 
 ## Jerarquía de documentos
 
-1. `docs/prd-ploutos-v2.md` — **fuente de verdad**.
+1. `docs/archivo/prd-ploutos-v2.md` — **fuente de verdad**.
 2. `docs/informe-ploutos.md` — el *cómo*. Solo manda donde el PRD calla.
 3. Si ninguno lo cubre y afecta a riesgo, dinero o reglas duras → **preguntar al propietario**, no decidir.
 
@@ -358,7 +358,7 @@ despues: fills, ordenes, OCO y su efecto en los saldos). Con la copia del 06/10 
 
 | Documento | Que hay |
 |---|---|
-| `docs/prd-ploutos-v2.md` / `docs/informe-ploutos.md` | la fuente de verdad / el como |
+| `docs/archivo/prd-ploutos-v2.md` / `docs/informe-ploutos.md` | la fuente de verdad / el como |
 | `docs/historial-claude-md.md` | el CLAUDE.md completo hasta el 06/10: cada decision y hallazgo con su detalle |
 | `docs/cierre-fase-{2,3,4,5}.md` | criterios, jueces, resultados y veredicto de cada fase (la 4, preparada) |
 | `docs/hallazgos-fase-0-1.md`, `-fase-2.md`, `-fase-3-4.md`, `hallazgos-claude-cli.md` | lo verificado, con detalle |

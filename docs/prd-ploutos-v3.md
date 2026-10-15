@@ -1,8 +1,9 @@
 # PRD v3 — Ploutos: bot de trading spot de cripto, construido para escalar
 
-**Version:** 3.0 BORRADOR (15/10/2026), pendiente de la aprobacion del propietario. Sustituira al PRD v2
-(`docs/prd-ploutos-v2.md`) y al PRD v3 del 11/10 (archivado, `docs/archivo/propuesta-prd-v3.md`, que no llego a
-aplicarse). **Sale de las decisiones del paso 1** (`docs/decisiones/01` a `09`); cada seccion dice de cual.
+**Version:** 3.0 (15/10/2026), **APROBADO por el propietario** tras una revision con las skills
+ml4t-production-readiness y ml4t-backtest-overfitting. Sustituye al PRD v2 (`docs/archivo/prd-ploutos-v2.md`) y al
+PRD v3 del 11/10 (archivado, `docs/archivo/propuesta-prd-v3.md`, que no llego a aplicarse). Las dos propuestas que no
+venian de una decision (modo `CLOSE_ONLY_QUOTA` y avisos al abrir) quedan aprobadas con el. **Sale de las decisiones del paso 1** (`docs/decisiones/01` a `09`); cada seccion dice de cual.
 **Documento complementario:** `docs/informe-ploutos.md` (el *como*); si algo lo contradice, manda este PRD.
 
 ## 1. Objetivo (decisiones 1 y 2)
@@ -81,7 +82,7 @@ deterministas y notificar.
 | Modo | Se activa | Abre | Cierra | Salida |
 |---|---|---|---|---|
 | `NORMAL` | arranque correcto | si | si | — |
-| `CLOSE_ONLY_QUOTA` | presupuesto o acceso de la IA agotado; *propuesta (sin decidir):* solo si el bot usa a la IA para decidir | no | si | automatica, al volver |
+| `CLOSE_ONLY_QUOTA` | presupuesto o acceso de la IA agotado, solo si el bot usa a la IA para decidir | no | si | automatica, al volver |
 | `CLOSE_ONLY_DEGRADED` | datos obsoletos, errores repetidos del exchange, desfase del reloj | no | si | automatica, tras un rato sano |
 | `CLOSE_ONLY_DAILY` | regla 10 | no | si | 00:00 UTC |
 | `CLOSE_ONLY_CAPITAL` | regla 7 | no | si | **solo manual** |
@@ -110,6 +111,15 @@ deterministas y notificar.
   estrategia como la ejecutaria el bot. Una estrategia no pasa si su peor caida historica se acerca al suelo.
 - **Apalancamiento y cortos** (decision 4): solo con las condiciones escritas; se decide entre la exploracion y la
   prueba limpia, antes de mirarla.
+- **Contra el sobreajuste:** si se prueban varios parametros, la probabilidad de sobreajuste (PBO, con validacion
+  combinatoria) tiene que ser **< 0,50**; se informa el Sharpe con su recorte por intentos y el deflactado.
+  **Senyales de alarma** que se investigan antes de creer nada: Sharpe > 2 en datos diarios, o fuera de muestra casi
+  igual que dentro.
+- **Sin ver el futuro:** indicadores solo con velas cerradas; la historia contra USDT se pasa a euros con el cambio
+  EUR/USD **de cada dia tal como se conocia ese dia**.
+- **Se fija en el criterio del estudio, antes de medir** (abierto desde la decision 1): como se cuentan los impuestos,
+  que es "una caida claramente menor" y como se calcula BTC mantenido en euros (desde el mismo dia y con sus
+  comisiones).
 
 ## 8. Fases y criterios de avance (decision 8)
 
@@ -119,11 +129,12 @@ deterministas y notificar.
 | Construir | la estrategia en el bot, con la **prueba de oro** | el bot y el simulador dan lo mismo con las mismas velas |
 | Demo | la mecanica en el demo de OKX (ordenes, stops, euros) | sin descuadres; los caos de la estrategia |
 | Papel | hacia adelante, con datos nuevos | **6 meses y al menos un cambio de tipo de mercado** (max. 12), con el criterio fijado antes |
+| Antes del dinero | **simulacros** de la parada de emergencia, del suelo enclavado y de la restauracion de copias; un **guion de incidentes** (OKX caido, una proteccion que falla, datos parados) | los tres simulacros hechos y el guion escrito |
 | Dinero real | poco al principio (la cifra, del propietario) | **se dobla cada 3 meses solo si el tramo cumple**: resultado dentro de lo normal del estudio, sin incidencias, caida no peor que la peor del estudio. Nunca > 10.000 € sin un estudio nuevo |
 
 ## 9. Notificaciones (Telegram)
 
-Obligatorias: cada operacion (*propuesta (sin decidir):* al abrir y al cerrar, no solo al cerrar como en el v2; con el resultado en euros y en %), cambio de modo, bot caido (avisa el
+Obligatorias: cada operacion (al abrir y al cerrar; con el resultado en euros y en %), cambio de modo, bot caido (avisa el
 vigilante externo), fallo de conciliacion, error de acceso a la IA o a OKX, token de la IA a punto de caducar y un
 **resumen semanal**. Comandos solo desde el chat del propietario: `/status`, `/pause`, `/kill`, `/resume`.
 
@@ -147,6 +158,10 @@ latir.
 - El estado verdadero es el del exchange (conciliacion al arrancar y cada 5 min).
 - `risk/` no depende de `ai/`.
 - **La prueba de oro:** el bot hace exactamente lo que el simulador.
+- **La version de la estrategia, siempre conocida:** una huella de la estrategia y sus parametros; un cambio parte la
+  muestra en tramos y se dice.
+- **Vigilancia continua:** un juez avisa si el bot se sale de lo normal segun el estudio (caida, numero de operaciones,
+  resultado) sin esperar al final del tramo de 3 meses.
 - **El repositorio es publico:** sin datos personales ni nada con forma de secreto (hay tests).
 
 ## 13. Riesgos aceptados
@@ -163,4 +178,5 @@ latir.
 - Si el demo de OKX tiene BTC/EUR y ETH/EUR.
 - Si OKX spot deja dos stops de venta a la vez sobre la misma cantidad (o si hay que modificar el que hay).
 - Que la historia contra USDT pasada a euros se parezca a la de BTC/EUR donde coinciden.
+- De donde sale la historia del cambio EUR/USD diario desde 2017 (y que sea la que se conocia cada dia).
 - La profundidad de los libros en euros en momentos de panico (solo una foto del 15/10).
