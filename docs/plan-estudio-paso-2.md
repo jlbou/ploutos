@@ -70,11 +70,15 @@ muestra; lo mas probable es que ninguna pase.
 
 ## 4. El criterio (se fija antes de medir) **[decide el propietario, punto a punto]**
 
-- **Liston (decision 1):** en euros y neto, gana mas que BTC mantenido, o lo mismo con una caida "claramente menor"
-  (numero a fijar, p. ej. <= 2/3 de la de BTC).
+- **Liston (decision 1; propietario, 15/10, opcion a):** en euros, neto, contra BTC/EUR mantenido desde el mismo dia
+  y con sus comisiones, pasa de UNA de dos maneras: **gana** (rendimiento anual >= el de BTC y caida maxima no mayor
+  que la suya) **o protege** (rendimiento anual como mucho **5 puntos** por debajo del de BTC y caida maxima **<= 2/3**
+  de la suya).
 - **Contra la suerte:** deflactado >= 0,95 con N total; PBO < 0,50 si hay parametros probados.
-- **Por tipo de mercado:** subida, bajada y lateral (definidos con BTC/EUR y su media de 200 dias, fijado antes): no
-  tiene que perder de forma grave en ninguno.
+- **Por tipo de mercado (propietario, 15/10, opcion a):** con BTC/EUR y su media de 200 dias, cada dia es
+  **alcista** (precio sobre la media y la media sube), **bajista** (precio bajo la media y la media baja) o **lateral**
+  (el resto). En cada tramo: en **bajista**, pierde menos que BTC; en **alcista**, gana al menos **la mitad** que BTC;
+  en **lateral**, no pierde mas de un **10 % anualizado**.
 - **Con las reglas del PRD v3 simuladas:** escalones, limite diario, suelo, exposicion y riesgo (techo 5 % / 10 %).
 - **Costes:** comisiones de V2 (si no, las configuradas, 0,10/0,20 %) + deslizamiento de V5 con 10.000 €.
 - **Impuestos:** como se cuentan (p. ej. el tramo del ahorro sobre cada venta con ganancia, FIFO) **[decide]**.
