@@ -190,11 +190,11 @@ try {
     #   no, la de papel la tapaba.
     $backups = Get-ChildItem (Join-Path $repo 'var/backups') -Filter '*.db.gz' -ErrorAction SilentlyContinue
     # La de la IA es opcional hasta que se despliegue: sin copias suyas no es un fallo.
-    $opcionales = @('ploutos-paper-ai', 'ploutos-exec', 'ploutos-medios', 'ploutos-embudo')
+    $opcionales = @('ploutos-paper-ai', 'ploutos-exec', 'ploutos-medios', 'ploutos-embudo', 'ploutos-libros')
     $vieja = $false
     # Las cinco bases desde el 25/09 (noticias y comandos se anyadieron a la vigilancia el 27/09); el ejecutor desde el
     # 03/10, los medios en sombra desde el 07/10 y el embudo de noticias de L desde el 12/10.
-    foreach ($familia in @('ploutos', 'ploutos-paper', 'ploutos-paper-ai', 'ploutos-news', 'ploutos-control', 'ploutos-exec', 'ploutos-medios', 'ploutos-embudo')) {
+    foreach ($familia in @('ploutos', 'ploutos-paper', 'ploutos-paper-ai', 'ploutos-news', 'ploutos-control', 'ploutos-exec', 'ploutos-medios', 'ploutos-embudo', 'ploutos-libros')) {
         $fechas = @($backups | ForEach-Object {
             if ($_.Name -match "^$familia-(\d{8}T\d{6})Z\.db\.gz$") {
                 [datetime]::ParseExact($Matches[1], 'yyyyMMddTHHmmss', $null, 'AssumeUniversal,AdjustToUniversal')

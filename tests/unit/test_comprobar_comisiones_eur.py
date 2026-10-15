@@ -27,3 +27,7 @@ def test_ensenya_los_campos_tal_cual_y_el_grupo():
     assert c["maker"] == "-0.001" and c["taker"] == "-0.002" and "makerUSDC" not in c and "level" not in c
     assert c["feeGroup"] == [{"groupId": "1", "maker": "-0.0008", "taker": "-0.001"}]
     assert abs(cc.pct("-0.002") - 0.2) < 1e-12 and cc.pct("") is None
+
+
+def test_un_campo_que_no_es_numero_no_rompe():
+    assert cc.pct("tier") is None and cc.pct(None) is None

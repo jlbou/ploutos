@@ -55,7 +55,10 @@ def main() -> int:
     nuevas = leer(sys.stdin.read())
     texto, estado = fusionar(ruta.read_text(encoding="utf-8"), nuevas)
     tmp = ruta.with_name(ruta.name + ".nuevo")
-    tmp.write_text(texto, encoding="utf-8")
+    # Nace con 600 (revision del 16/10: con write_text + chmod habia un instante legible por otros).
+    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write(texto)
     os.chmod(tmp, 0o600)
     os.replace(tmp, ruta)
     escritas = leer(ruta.read_text(encoding="utf-8"))

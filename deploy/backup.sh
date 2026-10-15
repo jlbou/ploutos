@@ -30,6 +30,8 @@ EXEC_DB="${PLOUTOS_EXEC_DB:-/opt/ploutos/var/ploutos-exec.db}"
 MEDIOS_DB="${PLOUTOS_MEDIOS_DB:-/opt/ploutos/var/ploutos-medios.db}"
 # El embudo de noticias de L (11/10): los casos y cada llamada a la IA no se pueden rehacer.
 EMBUDO_DB="${PLOUTOS_EMBUDO_DB:-/opt/ploutos/var/ploutos-embudo.db}"
+# Los libros de ordenes del paso 2 (V5, 16-30/10/2026): no se pueden volver a pedir (revision del 16/10).
+LIBROS_DB="${PLOUTOS_LIBROS_DB:-/opt/ploutos/var/ploutos-libros.db}"
 DEST="${PLOUTOS_BACKUP_DIR:-/var/backups/ploutos}"
 KEEP_DAYS="${PLOUTOS_BACKUP_KEEP_DAYS:-14}"
 
@@ -100,12 +102,13 @@ copiar "${CONTROL_DB}" "ploutos-control" "control_comandos" || fallos=$((fallos 
 copiar "${EXEC_DB}"  "ploutos-exec"  "exec_journal"  || fallos=$((fallos + 1))
 copiar "${MEDIOS_DB}" "ploutos-medios" "medios_titulares" || fallos=$((fallos + 1))
 copiar "${EMBUDO_DB}" "ploutos-embudo" "casos" || fallos=$((fallos + 1))
+copiar "${LIBROS_DB}" "ploutos-libros" "libros" || fallos=$((fallos + 1))
 
 # Rotacion de las dos familias. El patron lleva el "2" del anyo: con "ploutos-*"
 # la familia "ploutos" contaba tambien las de "ploutos-paper-" (el log decia 6
 # guardadas con 4). Borrar no borraba de mas (las dos usan KEEP_DAYS), pero el
 # recuento mentia. Revision del 23/09/2026.
-for prefijo in ploutos ploutos-paper ploutos-paper-ai ploutos-news ploutos-control ploutos-exec ploutos-medios ploutos-embudo; do
+for prefijo in ploutos ploutos-paper ploutos-paper-ai ploutos-news ploutos-control ploutos-exec ploutos-medios ploutos-embudo ploutos-libros; do
     borradas="$(find "${DEST}" -name "${prefijo}-2*.db.gz" -mtime "+${KEEP_DAYS}" -print -delete | wc -l)"
     total="$(find "${DEST}" -name "${prefijo}-2*.db.gz" | wc -l)"
     log "${prefijo}: ${borradas} copias viejas borradas, ${total} guardadas"

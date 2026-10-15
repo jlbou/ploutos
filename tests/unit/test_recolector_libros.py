@@ -23,11 +23,25 @@ rl = _cargar("recolector_libros")
 cl = _cargar("check_libros")
 H = 3600_000
 AHORA = int(datetime(2026, 10, 20, 12, tzinfo=UTC).timestamp() * 1000)
+LIBRO = {"ts": "5", "asks": [["10", "2", "0", "1"]], "bids": [["9", "3", "0", "2"]]}
 
 
 def test_guarda_solo_precio_y_cantidad():
-    d = json.loads(rl.linea("BTC-EUR", 1, {"ts": "5", "asks": [["10", "2", "0", "1"]], "bids": [["9", "3", "0", "2"]]}))
-    assert d == {"par": "BTC-EUR", "ms": 1, "ts_libro": 5, "asks": [[10.0, 2.0]], "bids": [[9.0, 3.0]]}
+    par, ms, ts, asks, bids = rl.fila("BTC-EUR", 1, LIBRO)
+    assert (par, ms, ts) == ("BTC-EUR", 1, 5)
+    assert json.loads(asks) == [[10.0, 2.0]] and json.loads(bids) == [[9.0, 3.0]]
+
+
+def test_la_base_sin_wal_y_el_juez_la_lee_en_solo_lectura(tmp_path):
+    """16/10: en SQLite (no gzip): entra en la copia de cada noche y una escritura cortada no la rompe."""
+    ruta = tmp_path / "libros.db"
+    conn = rl.abrir(ruta)
+    assert conn.execute("PRAGMA journal_mode").fetchone()[0] == "delete"
+    rl.guardar(conn, [rl.fila("BTC-EUR", AHORA, LIBRO), rl.fila("ETH-EUR", AHORA, LIBRO)])
+    rl.guardar(conn, [rl.fila("BTC-EUR", AHORA, LIBRO)])          # repetida: no se duplica
+    conn.close()
+    assert sorted(cl.leer(ruta)) == [("BTC-EUR", AHORA), ("ETH-EUR", AHORA)]
+    assert cl.leer(tmp_path / "no-existe.db") == []
 
 
 def test_se_para_solo_al_final():

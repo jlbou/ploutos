@@ -6,8 +6,7 @@ empezo). Lo pasa `jueces_diarios.py` cada noche.
 """
 from __future__ import annotations
 
-import gzip
-import json
+import sqlite3
 import sys
 import time
 from datetime import UTC, datetime
@@ -15,17 +14,22 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "scripts"))
-from recolector_libros import DESTINO, FIN, PARES  # noqa: E402
+from recolector_libros import BASE, FIN, PARES  # noqa: E402
 
 H = 3600_000
 
 
-def leer(directorio: Path) -> list[tuple[str, int]]:
-    out = []
-    for f in sorted(directorio.glob("libros-*.jsonl.gz")):
-        with gzip.open(f, "rt", encoding="utf-8") as g:
-            out += [(d["par"], int(d["ms"])) for d in map(json.loads, filter(None, g.read().splitlines()))]
-    return out
+def leer(ruta: Path) -> list[tuple[str, int]]:
+    """Los (par, ms) guardados, en solo lectura; sin base, ninguno."""
+    if not ruta.exists():
+        return []
+    conn = sqlite3.connect(f"file:{ruta}?mode=ro", uri=True, timeout=30)
+    try:
+        return [(p, int(ms)) for p, ms in conn.execute("SELECT par, ms FROM libros")]
+    except sqlite3.OperationalError:
+        return []
+    finally:
+        conn.close()
 
 
 def juzgar(libros: list[tuple[str, int]], ahora_ms: int) -> tuple[int, str]:
@@ -51,7 +55,7 @@ def juzgar(libros: list[tuple[str, int]], ahora_ms: int) -> tuple[int, str]:
 
 
 def main() -> int:
-    codigo, texto = juzgar(leer(DESTINO), int(time.time() * 1000))
+    codigo, texto = juzgar(leer(BASE), int(time.time() * 1000))
     print(f"Libros de ordenes (V5, hasta el {FIN}): {texto}")
     return codigo
 

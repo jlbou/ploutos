@@ -54,6 +54,7 @@ TABLA_POR_FAMILIA = {
     "ploutos-exec-": ("exec_journal", "peticiones a OKX"),
     "ploutos-medios-": ("medios_titulares", "titulares de medios"),
     "ploutos-embudo-": ("casos", "casos del embudo de noticias"),
+    "ploutos-libros-": ("libros", "libros de ordenes (V5)"),
     "ploutos-": ("candles", "velas"),
 }
 

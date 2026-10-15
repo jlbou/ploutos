@@ -27,8 +27,9 @@ def main() -> int:
                        input=carga, capture_output=True, text=True, timeout=60)
     print(r.stdout.strip() or r.stderr.strip()[-300:])
     ok = r.returncode == 0
+    lineas = {ln.split(": ", 1)[0]: ln for ln in r.stdout.splitlines() if ": " in ln}
     for k in claves:
-        igual = f"{k}: " in r.stdout and f"huella {huella(locales[k])}" in r.stdout.split(f"{k}: ", 1)[1].splitlines()[0]
+        igual = lineas.get(k, "").endswith(f"huella {huella(locales[k])}")
         print(f"  {k}: {'la huella COINCIDE con la del portatil' if igual else 'NO coincide'}")
         ok &= igual
     return 0 if ok else 1

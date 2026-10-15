@@ -27,3 +27,26 @@ def test_nunca_vacia_ni_la_del_portatil_ni_un_nombre_raro():
 
 def test_la_huella_no_es_el_valor():
     assert ef.huella("secreto") != "secreto" and len(ef.huella("secreto")) == 12
+
+
+def test_el_temporal_nace_con_permisos_600(tmp_path, monkeypatch):
+    """Revision del 16/10: con write_text + chmod habia un instante legible por otros."""
+    import io
+    import os
+    import stat
+    ruta = tmp_path / ".env"
+    ruta.write_text("A=1\n", encoding="utf-8")
+    vistos = []
+    real = os.replace
+
+    def espia(origen, destino):
+        if os.name != "nt":
+            vistos.append(stat.S_IMODE(os.stat(origen).st_mode))
+        real(origen, destino)
+
+    monkeypatch.setattr(os, "replace", espia)
+    monkeypatch.setattr(sys, "argv", ["x", str(ruta)])
+    monkeypatch.setattr(sys, "stdin", io.StringIO("B=2\n"))
+    assert ef.main() == 0
+    assert ruta.read_text(encoding="utf-8") == "A=1\nB=2\n"
+    assert all(m == 0o600 for m in vistos)

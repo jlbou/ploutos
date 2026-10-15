@@ -41,7 +41,11 @@ def campos(respuesta: dict[str, Any]) -> dict[str, Any]:
 
 
 def pct(valor: Any) -> float | None:
-    return None if valor in (None, "") else -float(valor) * 100.0
+    """En % positivo; None si no viene o no es un numero (revision del 16/10: antes rompia y parecia un error de OKX)."""
+    try:
+        return None if valor in (None, "") else -float(valor) * 100.0
+    except (TypeError, ValueError):
+        return None
 
 
 async def main() -> int:
@@ -70,7 +74,7 @@ async def main() -> int:
             grupos = c.pop("feeGroup")
             print(f"\n{par}: grupo {', '.join(str(g['groupId']) for g in grupos) or '?'}")
             for k, v in c.items():
-                print(f"  {k:12} {v:>10}  ->  {pct(v):.3f} %")
+                print(f"  {k:12} {v!s:>10}  ->  " + ("(no es un numero)" if pct(v) is None else f"{pct(v):.3f} %"))
             for g in grupos:
                 print(f"  grupo {g['groupId']}: maker {pct(g['maker'])} %, taker {pct(g['taker'])} %")
         return 0

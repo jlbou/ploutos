@@ -98,6 +98,7 @@ class Secrets(BaseSettings):
             "telegram_bot_token": self.has_telegram,
             "telegram_chat_id": self.has_telegram_chat,
             "okx": self.has_okx,
+            "okx_lectura": all((self.okx_lectura_api_key, self.okx_lectura_api_secret, self.okx_lectura_password)),
             "claude": self.has_claude,
             **{n: getattr(self, n) is not None for n in (
                 "healthcheck_ingesta", "healthcheck_papel", "healthcheck_papel_ia", "healthcheck_copia",
