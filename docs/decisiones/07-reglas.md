@@ -68,3 +68,88 @@ debajo del stop no se suma aparte: con BTC y ETH suele ser pequenyo y lo cubre e
 **En % del capital de referencia** (opcion a): **−10 %** -> riesgo por operacion a la mitad + Telegram; **−20 %** ->
 maximo 1 posicion; **−30 %** -> maximo 1 posicion y riesgo a la mitad. **El estudio los simula:** lo que se mide es la
 estrategia CON los escalones (una de tendencia puede caer un 20-30 % en un anyo normal).
+
+## Regla 10 — el limite diario
+
+**El 6 % del capital de referencia** (opcion a), contando lo cerrado Y lo abierto desde las 00:00 UTC (como el
+simulador de L) -> `CLOSE_ONLY_DAILY` hasta las 00:00 UTC. El estudio lo simula.
+
+## Regla 11 — operaciones al dia
+
+**Igual: maximo 6 al dia** (opcion a), cerradas mas vivas. Es un freno contra un bot desbocado, no parte de la
+estrategia.
+
+## Regla 12 — el riesgo por operacion
+
+**Lo fija el estudio antes de medir, con un techo duro: 5 % del equity hasta el stop por posicion y 10 % entre las
+dos** (opcion a). El deslizador del panel solo puede reducirlo, nunca subirlo. Con un 1 % y stops de tendencia (3 ATR,
+~12-18 %), una posicion seria el 6-8 % del capital: casi imposible ganar a BTC (decision 1).
+
+## Regla 13 — la proteccion en el exchange
+
+**El stop, siempre en el exchange desde que se llena la entrada, y nunca un momento sin el** (opcion a). El objetivo,
+en el exchange si la estrategia lo tiene (sale a mercado, taker: `51094`). Las salidas por senyal: cancelar la
+proteccion y vender a mercado (verificado en el demo). Si la estrategia mueve el stop: primero el nuevo, despues quitar
+el viejo. **Sin comprobar:** si OKX spot deja tener dos stops de venta a la vez sobre la misma cantidad (pueden bloquear
+el saldo dos veces); si no, se usa la modificacion de la orden algoritmica (`amend-algos`), comprobada antes en el demo.
+
+## Regla 14 — cooldown y pausa tras perdidas
+
+**Fuera** (opcion c; el propietario: innecesaria). Ya frenan los escalones (regla 9), el limite diario (regla 10) y el
+suelo. Si una estrategia quiere esperar antes de volver a entrar, lo lleva en su propia definicion, escrita antes de
+medir.
+
+## Regla 15 — exposicion y correlacion
+
+**Se queda la exposicion maxima del 90 % del equity; sale la parte de la correlacion** (opcion a): BTC y ETH siempre
+estan muy correlacionadas y, con 2 posiciones como mucho, el limite nunca frenaria; ese riesgo junto ya lo limita el
+techo del 10 % de la regla 12.
+
+## Regla 16 — spread y coste
+
+**Se queda el limite de spread: no se entra con un spread > 0,10 %** (opcion a; en BTC/EUR y ETH/EUR suele ser
+0,00-0,02 %, asi que solo salta en un momento raro del mercado). **El "objetivo >= 3 veces el coste de ida y vuelta"
+solo se aplica si la estrategia tiene un objetivo fijo;** si sale por senyal, lo cubre que el estudio la mide neta de
+costes.
+
+## Regla 17 — la paridad de USDC
+
+**Fuera** (opcion a): operando contra euro, el dinero son euros en OKX, no un token que pueda perder la paridad.
+
+## Regla 18 — el presupuesto de la IA
+
+**Igual** (opcion a): como mucho 40 llamadas al dia y 8 por ventana de 5 h, todas las del bot juntas (configurable).
+Agotado -> `CLOSE_ONLY_QUOTA`.
+
+## Regla 19 — las claves
+
+**Igual** (opcion a): solo lectura y trading, nunca retirada, lista de IP del VPS, fuera del repositorio; la IA nunca
+ve claves ni variables de entorno. La clave real, limitada a BTC, ETH y EUR. En el repositorio (publico), un test
+comprueba que nada tenga forma de clave.
+
+## Resumen
+
+| # | Queda asi |
+|---|---|
+| 1 | Spot, sin apalancamiento ni cortos (condiciones de la decision 4) |
+| 2 | OKX EU via ccxt |
+| 3 | Solo BTC/EUR y ETH/EUR, validado en 4 puntos; la clave, con BTC, ETH y EUR |
+| 4 | 1 posicion por moneda (2 en total), pendientes cuentan; nunca promediar a la baja ni martingala; piramide solo si la estrategia la lleva escrita |
+| 5 | Capital de referencia en euros a mano; suelo al 50 %; en el estudio, ninguna estrategia que se acerque al suelo en su peor caida |
+| 6 | Equity en euros cada 15 s con datos del exchange |
+| 7 | Suelo dos lecturas -> `CLOSE_ONLY_CAPITAL` enclavado |
+| 8 | Preventiva con stops y comision de salida; colchon del 2 % |
+| 9 | Escalones −10 / −20 / −30 % (riesgo a la mitad; max. 1 posicion; las dos cosas), simulados en el estudio |
+| 10 | Limite diario del 6 %, cerrado y abierto |
+| 11 | Max. 6 operaciones al dia |
+| 12 | Riesgo hasta el stop: lo fija el estudio, techo 5 % por posicion y 10 % en total; el deslizador solo reduce |
+| 13 | El stop siempre en el exchange; objetivo si la estrategia lo tiene; salidas por senyal cancelando y vendiendo |
+| 14 | **Fuera** |
+| 15 | Exposicion max. 90 %; **fuera** la correlacion |
+| 16 | Spread max. 0,10 %; el 3x el coste solo con objetivo fijo |
+| 17 | **Fuera** |
+| 18 | Presupuesto de la IA: 40 al dia, 8 por 5 h |
+| 19 | Claves sin retirada, IP del VPS, fuera del repo |
+
+Quedan **17 reglas**. Cuando se construya (paso 3): tests primero en `risk/` y la prueba de mutacion, con las reglas
+nuevas.
