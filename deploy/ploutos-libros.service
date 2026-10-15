@@ -1,0 +1,24 @@
+[Unit]
+# V5 del paso 2 (propietario, 15/10/2026): el libro de ordenes de BTC-EUR y ETH-EUR cada hora, de la API PUBLICA de OKX
+# (sin claves, solo lee), hasta el 30/10/2026. Escribe solo en var/libros/.
+Description=Ploutos - recolector de libros de ordenes (V5)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/recolector_libros.py
+TimeoutStartSec=120
+MemoryMax=200M
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+SyslogIdentifier=ploutos-libros

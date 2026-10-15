@@ -41,6 +41,8 @@ JUECES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("papel de L", ("scripts/check_papel_l.py",)),
     # 11/10: el embudo de noticias para L, en sombra (y la regla 18 con el analista).
     ("embudo de noticias", ("scripts/check_embudo.py",)),
+    # 16/10: el recolector de libros de ordenes del paso 2 (V5), hasta el 30/10/2026.
+    ("libros de ordenes (V5)", ("scripts/check_libros.py",)),
 )
 
 log = logging.getLogger("ploutos.jueces")

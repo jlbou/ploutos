@@ -1,0 +1,10 @@
+[Unit]
+Description=Ploutos - recolector de libros de ordenes (V5)
+
+[Timer]
+# Cada hora a los :07 (lejos de :00, de los cierres de vela, y de :20/:50, el embudo).
+OnCalendar=*-*-* *:07:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

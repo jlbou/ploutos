@@ -171,6 +171,9 @@ install -m 644 "${APP_DIR}/deploy/ploutos-papel-l.timer"   /etc/systemd/system/
 # El embudo de noticias para L, en sombra (el propietario, 11/10/2026): cada 30 min.
 install -m 644 "${APP_DIR}/deploy/ploutos-embudo.service" /etc/systemd/system/
 install -m 644 "${APP_DIR}/deploy/ploutos-embudo.timer"   /etc/systemd/system/
+# El recolector de libros de ordenes del paso 2 (V5; el propietario, 15/10/2026): cada hora, hasta el 30/10/2026.
+install -m 644 "${APP_DIR}/deploy/ploutos-libros.service" /etc/systemd/system/
+install -m 644 "${APP_DIR}/deploy/ploutos-libros.timer"   /etc/systemd/system/
 # Revision semanal: Tailscale se instala solo; lo demas solo se avisa (el propietario, 26/09).
 install -m 644 "${APP_DIR}/deploy/ploutos-actualizaciones.service" /etc/systemd/system/
 install -m 644 "${APP_DIR}/deploy/ploutos-actualizaciones.timer"   /etc/systemd/system/
@@ -188,6 +191,8 @@ systemctl enable ploutos-papel-l.timer >/dev/null
 systemctl start  ploutos-papel-l.timer
 systemctl enable ploutos-embudo.timer >/dev/null
 systemctl start  ploutos-embudo.timer
+systemctl enable ploutos-libros.timer >/dev/null
+systemctl start  ploutos-libros.timer
 systemctl enable ploutos-actualizaciones.timer >/dev/null
 systemctl start  ploutos-actualizaciones.timer
 

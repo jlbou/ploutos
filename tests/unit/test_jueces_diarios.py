@@ -34,24 +34,24 @@ def falsos(codigos):
     return correr
 
 
-def test_estan_los_cuatro_jueces():
-    """15/10: retiradas las carteras de la fase 6 y el demo, quedan cuatro (sin los suyos)."""
+def test_estan_los_cinco_jueces():
+    """15/10: retiradas las carteras de la fase 6 y el demo, quedan cuatro; 16/10, el de los libros (V5)."""
     nombres = [n for n, _a in jd.JUECES]
-    assert len(nombres) == 4
+    assert len(nombres) == 5
     scripts = {a[0] for _n, a in jd.JUECES}
     assert scripts == {"scripts/check_news.py", "scripts/check_control.py", "scripts/check_papel_l.py",
-                       "scripts/check_embudo.py"}
+                       "scripts/check_embudo.py", "scripts/check_libros.py"}
     for _n, args in jd.JUECES:
         assert (Path(__file__).resolve().parents[2] / args[0]).exists()
 
 
 def test_si_todo_va_bien_o_aun_no_no_se_manda_nada():
-    assert jd.mensaje(jd.juzgar(falsos([0, 2, 2, 2]))) is None
-    assert jd.mensaje(jd.juzgar(falsos([2, 2, 2, 2]))) is None
+    assert jd.mensaje(jd.juzgar(falsos([0, 2, 2, 2, 2]))) is None
+    assert jd.mensaje(jd.juzgar(falsos([2, 2, 2, 2, 2]))) is None
 
 
 def test_una_falla_se_avisa_con_lo_que_falla():
-    texto = jd.mensaje(jd.juzgar(falsos([2, 2, 1, 2])))
+    texto = jd.mensaje(jd.juzgar(falsos([2, 2, 1, 2, 2])))
     assert texto is not None
     assert "papel de L" in texto and "FALLA" in texto
     assert "d-20260926T0400-btc-pb" in texto
@@ -59,7 +59,7 @@ def test_una_falla_se_avisa_con_lo_que_falla():
 
 
 def test_un_juez_que_no_corre_tambien_se_avisa():
-    texto = jd.mensaje(jd.juzgar(falsos([2, 3, 2, 2])))
+    texto = jd.mensaje(jd.juzgar(falsos([2, 3, 2, 2, 2])))
     assert "comandos" in texto and "no se pudo ejecutar" in texto and "ValueError" in texto
     colgado = jd.mensaje([jd.Veredicto("noticias", None, "no termino en 600 s")])
     assert "no se pudo ejecutar" in colgado and "600 s" in colgado
