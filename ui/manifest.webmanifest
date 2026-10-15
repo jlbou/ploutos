@@ -1,0 +1,11 @@
+{
+  "name": "Ploutos",
+  "short_name": "Ploutos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09151B",
+  "theme_color": "#1F5E7A",
+  "icons": [
+    {"src": "apple-touch-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

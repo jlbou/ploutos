@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "panel-revision",
+      "runtimeExecutable": ".venv/Scripts/python.exe",
+      "runtimeArgs": ["scripts/run_panel.py", "--host", "127.0.0.1", "--puerto", "8765", "--var", "var/revision-panel"],
+      "port": 8765
+    }
+  ]
+}

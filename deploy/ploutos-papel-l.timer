@@ -1,0 +1,10 @@
+[Unit]
+Description=Ploutos - papel de L (estudio)
+
+[Timer]
+# 00:20 UTC: con la vela de las 20:00 ya cerrada y antes de los jueces (00:30), que lo juzgan.
+OnCalendar=*-*-* 00:20:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

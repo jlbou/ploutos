@@ -1,0 +1,29 @@
+Anyo USDC, 2025-09-01 - 2026-09-27 (392 dias)
+BTC mantenido: 50 $ -> 38.86 $ (-22.3 %), caida max 53.1 % (2/3 = 35.4 %), Sharpe -0.31; BTC + ETH -30.7 %
+
+=== L (CUENTA): 50 $ -> 46.54 $ (-6.9 %), caida max 20.5 %, Sharpe -0.41, 13 operaciones
+    NO  no pierde (>= 0)
+    si  caida <= 2/3 de la de BTC
+    -> NO PASA
+
+=== M (CUENTA): 50 $ -> 49.99 $ (-0.0 %), caida max 13.0 %, Sharpe 0.06, 61 operaciones
+    NO  no pierde (>= 0)
+    si  caida <= 2/3 de la de BTC
+    -> NO PASA
+
+=== H (informacion): 50 $ -> 45.77 $ (-8.5 %), caida max 20.2 %, Sharpe -0.46, 3 operaciones
+    NO  no pierde (>= 0)
+    si  caida <= 2/3 de la de BTC
+    -> NO PASA
+
+=== 2 + D (informacion): 50 $ -> 51.54 $ (+3.1 %), caida max 15.5 %, Sharpe 0.27, 43 operaciones
+    si  no pierde (>= 0)
+    si  caida <= 2/3 de la de BTC
+    -> PASA
+
+=== K (informacion): 50 $ -> 48.45 $ (-3.1 %), caida max 15.3 %, Sharpe -0.15, 18 operaciones
+    NO  no pierde (>= 0)
+    si  caida <= 2/3 de la de BTC
+    -> NO PASA
+
+VEREDICTO: NO PASA NINGUNA de las dos. No se retoca nada.

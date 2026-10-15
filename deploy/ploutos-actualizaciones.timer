@@ -1,0 +1,11 @@
+[Unit]
+Description=Ploutos - revision semanal de actualizaciones
+
+[Timer]
+# Domingos 07:30 UTC: entre los cierres de las 04:00 y las 08:00, y despues del reinicio de las 07:15.
+OnCalendar=Sun *-*-* 07:30:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

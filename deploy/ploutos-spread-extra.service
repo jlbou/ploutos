@@ -1,0 +1,40 @@
+[Unit]
+# TEMPORAL (28/09 -> 09/10/2026): mide el spread de ADA y LINK, que no estan en la whitelist, junto a AVAX, DOGE
+# y NEAR, con el MISMO metodo, para decidir la whitelist el 09/10 con los dos lados medidos igual (el propietario, 28/09;
+# docs/archivo/decision-whitelist-0910.md). Solo datos PUBLICOS de OKX; ni claves, ni bases, ni el bot.
+#
+# NO lo instala install.sh (es de un solo uso): se copia a mano y se para y borra el 09/10.
+# Si el VPS se reinicia, vuelve a arrancar y sigue anyadiendo al mismo CSV (se abre en modo anyadir).
+Description=Ploutos - medicion temporal del spread (ADA y LINK frente a AVAX, DOGE y NEAR)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+# 15700 min = hasta el 09/10 ~08:00 UTC si arranca el 28/09 a las 10:20. Una muestra de cada par cada 30 s.
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/verify_okx_pairs.py --symbols ADA LINK AVAX DOGE NEAR --minutes 15700 --interval 30 --no-correlation --csv /opt/ploutos/var/spread/extra-20260928.csv
+
+Restart=on-failure
+RestartSec=60
+
+# Que no moleste nunca al bot: poca prioridad, poca memoria y el primero en caer si falta memoria.
+Nice=15
+MemoryMax=250M
+OOMScoreAdjust=900
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

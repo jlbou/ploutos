@@ -1,0 +1,50 @@
+[Unit]
+# Bucle de papel: velas cerradas -> filtros -> candidatos -> baseline ->
+# motor de riesgo -> simulador. Criterio de avance ampliado de la fase 2.
+#
+# NO DEPENDE de ploutos-ingest con Requires=, solo con Wants=. Es deliberado:
+# si la ingesta se cae, este proceso NO debe caer con ella. Se queda esperando
+# velas nuevas, que es exactamente lo que tiene que hacer cuando no hay datos
+# frescos, y ademas el filtro de frescura ya descarta por su cuenta.
+#
+# Al reves tambien importa: que este servicio falle no puede arrastrar a la
+# ingesta, que es lo que se esta midiendo en las 72 h de la fase 1.
+Description=Ploutos - bucle de papel (baseline sin IA)
+After=network-online.target ploutos-ingest.service
+Wants=network-online.target ploutos-ingest.service
+# En [Unit], no en [Service] (ahi systemd lo ignora: visto en el despliegue del 25/09).
+# Sin limite de intentos: nunca rendirse (con RestartSec=10 el de por defecto tampoco saltaba).
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/run_paper.py
+
+# Igual que la ingesta: reiniciar siempre y sin limite de intentos. Sin
+# StartLimitIntervalSec=0, systemd se rinde tras varios fallos seguidos y el
+# criterio de 72 h se vuelve inalcanzable justo cuando mas falta hace.
+Restart=always
+RestartSec=10
+
+# El estado vive en la base de papel, asi que un reinicio continua donde
+# estaba. SIGTERM lo para limpiamente despues de la pasada en curso.
+KillSignal=SIGTERM
+TimeoutStopSec=90
+
+# Endurecimiento. Este proceso no habla con el exchange ni ve secretos: solo
+# lee velas de la base principal y escribe en la suya.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,396 @@
+<title>Panel de Ploutos</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22Ploutos%22%3E%3Ctitle%3EPloutos%3C/title%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%231F5E7A%22/%3E%3Cg%20transform%3D%22translate%28-8%20-8%29%20scale%281.16%29%22%3E%3Cg%20transform%3D%22translate%280%203%29%22%3E%3Cg%20fill%3D%22%23F3F6F5%22%3E%3Crect%20x%3D%2222%22%20y%3D%2222%22%20width%3D%2256%22%20height%3D%229%22%20rx%3D%222%22/%3E%3Crect%20x%3D%2229.5%22%20y%3D%2242%22%20width%3D%2212%22%20height%3D%2220%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2258.5%22%20y%3D%2235%22%20width%3D%2212%22%20height%3D%2225%22%20rx%3D%221.5%22/%3E%3C/g%3E%3Cg%20stroke%3D%22%23F3F6F5%22%20stroke-width%3D%225.5%22%20stroke-linecap%3D%22round%22%3E%3Cline%20x1%3D%2235.5%22%20y1%3D%2231%22%20x2%3D%2235.5%22%20y2%3D%2242%22/%3E%3Cline%20x1%3D%2235.5%22%20y1%3D%2262%22%20x2%3D%2235.5%22%20y2%3D%2270%22/%3E%3Cline%20x1%3D%2264.5%22%20y1%3D%2231%22%20x2%3D%2264.5%22%20y2%3D%2235%22/%3E%3Cline%20x1%3D%2264.5%22%20y1%3D%2260%22%20x2%3D%2264.5%22%20y2%3D%2272%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EEF2F0; --surface:#FFFFFF; --surface-2:#F6F8F7; --line:#D5DEDA; --ink:#15201D; --ink-2:#4B5B56; --ink-3:#7A8A85;
+  --accent:#1F5E7A; --accent-soft:#DCEAF0;
+  --good:#2C7A4B; --good-soft:#DDF0E4; --warn:#9A6414; --warn-soft:#F6E9D2; --bad:#B0302A; --bad-soft:#F7DEDC;
+  --ia:#1F5E7A; --base:#8A6A2E; --hold:#8C9994;
+  --shadow:0 1px 2px rgba(21,32,29,.06),0 4px 16px rgba(21,32,29,.05);
+  --f-label:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0E1513; --surface:#151E1B; --surface-2:#1A2521; --line:#2A3833; --ink:#E3ECE8; --ink-2:#A9BAB4; --ink-3:#768882;
+    --accent:#72B6D3; --accent-soft:#1B3440;
+    --good:#6CC592; --good-soft:#173826; --warn:#E0AE5C; --warn-soft:#3A2C12; --bad:#EE8A83; --bad-soft:#3F1B18;
+    --ia:#72B6D3; --base:#D2AE67; --hold:#6F7F7A;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0E1513; --surface:#151E1B; --surface-2:#1A2521; --line:#2A3833; --ink:#E3ECE8; --ink-2:#A9BAB4; --ink-3:#768882;
+  --accent:#72B6D3; --accent-soft:#1B3440;
+  --good:#6CC592; --good-soft:#173826; --warn:#E0AE5C; --warn-soft:#3A2C12; --bad:#EE8A83; --bad-soft:#3F1B18;
+  --ia:#72B6D3; --base:#D2AE67; --hold:#6F7F7A;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--ground);color:var(--ink);font:14px/1.5 var(--f-body);}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.label{font-family:var(--f-label);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:11.5px;color:var(--ink-3)}
+h1,h2{font-family:var(--f-label);font-weight:700;margin:0;text-wrap:balance}
+h2{font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* banda de maqueta */
+.maqueta{background:var(--accent-soft);color:var(--ink);padding:8px 16px;font-size:12.5px;display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between}
+.maqueta b{font-family:var(--f-label);letter-spacing:.05em;text-transform:uppercase}
+
+/* barra de estado */
+.estado{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.estado-in{max-width:1240px;margin:0 auto;padding:10px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:10px 22px;align-items:center}
+.marca{display:flex;align-items:baseline;gap:10px}
+.marca h1{font-size:20px;letter-spacing:.02em}
+.fresco{font-size:12px;color:var(--ink-3)}
+.fresco::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--good);margin-right:6px;vertical-align:1px}
+.cifras{display:flex;flex-wrap:wrap;gap:6px 22px}
+.cifra{display:flex;flex-direction:column;min-width:0}
+.cifra .v{font-family:var(--f-num);font-size:15px;font-weight:500}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+.modo{font-family:var(--f-label);font-weight:700;letter-spacing:.06em;font-size:13px;padding:5px 10px;border-radius:4px;background:var(--good-soft);color:var(--good);border:1px solid color-mix(in srgb,var(--good) 35%,transparent);white-space:nowrap}
+.suelo{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.suelo-barra{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--bad-soft) 0 33.3%,var(--warn-soft) 33.3% 66.7%,var(--surface-2) 66.7%);border:1px solid var(--line)}
+.suelo-barra i{position:absolute;top:-4px;width:3px;height:16px;background:var(--ink);border-radius:2px}
+.suelo-barra span{position:absolute;top:13px;font-size:10.5px;color:var(--ink-3);transform:translateX(-50%);font-family:var(--f-num)}
+
+/* rejilla principal */
+main{max-width:1240px;margin:0 auto;padding-block:18px 40px;padding-inline:16px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.col{display:grid;gap:18px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+.panel-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.panel-cab small{color:var(--ink-3);font-size:12px}
+
+/* grafico */
+.leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2)}
+.leyenda span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:3px;background:var(--c)}
+.grafico{width:100%;height:auto;display:block}
+.juez{margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);border-top:1px dashed var(--line);padding-top:10px}
+.chip{font-family:var(--f-label);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:11px;padding:2px 8px;border-radius:3px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.chip.ok{background:var(--good-soft);color:var(--good);border-color:transparent}
+.chip.aviso{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.mal{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.chip.ia{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+
+/* tablas */
+.tabla-caja{overflow-x:auto;margin-inline:-4px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+th{text-align:left;font-family:var(--f-label);font-weight:600;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n{font-family:var(--f-num);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+th.n{text-align:right}
+tr:last-child td{border-bottom:0}
+.par{font-weight:600}
+.rango{display:block;height:4px;border-radius:2px;background:var(--surface-2);position:relative;margin-top:5px;min-width:90px}
+.rango b{position:absolute;top:-3px;width:2px;height:10px;background:var(--ink)}
+.rango i{position:absolute;inset:0 auto 0 0;border-radius:2px}
+
+/* linea de decisiones */
+.filtro{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filtro button{border:1px solid var(--line);background:var(--surface-2);border-radius:3px;padding:3px 9px;font-size:12px;font-family:var(--f-num)}
+.filtro button[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.nota-ia{font-size:12px;color:var(--ink-3);margin:-4px 0 12px}
+.vela{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.vela:first-of-type{border-top:0}
+.vela time{font-family:var(--f-num);font-size:13px;color:var(--ink-2)}
+.vela time small{display:block;font-size:11px;color:var(--ink-3)}
+.pasos{display:grid;gap:8px}
+.paso{display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:start;font-size:13px}
+.paso .label{padding-top:2px}
+.cands{display:flex;gap:6px;flex-wrap:wrap}
+.cand{font-family:var(--f-num);font-size:12px;padding:2px 7px;border-radius:3px;border:1px solid var(--line);background:var(--surface-2)}
+.cand.abre{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.cand.salta{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--ink-3)}
+.porque{color:var(--ink-2);font-style:italic}
+.veredicto{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* columna lateral */
+.controles{display:grid;gap:8px}
+.ctl{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface-2);border-radius:5px;padding:10px 12px}
+.ctl span{display:block;font-size:12px;color:var(--ink-3)}
+.ctl strong{font-weight:600}
+.ctl.peligro{border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.ctl.peligro strong{color:var(--bad)}
+.confirmar{border:1px solid var(--bad);background:var(--bad-soft);border-radius:5px;padding:12px;display:grid;gap:10px;font-size:13px}
+.confirmar .fila{display:flex;gap:8px;flex-wrap:wrap}
+.confirmar button{border-radius:4px;padding:6px 12px;border:1px solid var(--line);background:var(--surface)}
+.confirmar button.si{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.confirmar button:disabled{opacity:.45;cursor:not-allowed}
+.aviso-accion{font-size:12.5px;color:var(--ink-2);min-height:1.5em}
+
+.slider{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:4px 0 10px}
+.slider button{border:1px solid var(--line);background:var(--surface-2);border-radius:4px;padding:8px 0 6px;display:grid;gap:2px;justify-items:center}
+.slider button b{font-family:var(--f-num);font-size:15px}
+.slider button small{font-size:10px;color:var(--ink-3);font-family:var(--f-label);letter-spacing:.04em;text-transform:uppercase}
+.slider button.hoy{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--ink)}
+.slider button.manana{border-color:var(--accent);background:var(--accent-soft)}
+.nivel dl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-size:13px}
+.nivel dt{color:var(--ink-2)} .nivel dd{margin:0;font-family:var(--f-num);text-align:right}
+.duros{margin-top:10px;font-size:12px;color:var(--ink-3)}
+
+.nodos{display:grid;gap:0}
+.nodo{display:grid;grid-template-columns:12px 1fr auto;gap:10px;align-items:center;padding:6px 0;font-size:13px;position:relative}
+.nodo::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c,var(--good));box-shadow:0 0 0 3px color-mix(in srgb,var(--c,var(--good)) 20%,transparent)}
+.nodo:not(:last-child)::after{content:"";position:absolute;left:4.5px;top:24px;height:14px;width:1px;background:var(--line)}
+.nodo small{font-family:var(--f-num);font-size:11.5px;color:var(--ink-3)}
+.fase8{font-size:13px;color:var(--ink-2)}
+.progreso{height:6px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line);margin:8px 0 4px;overflow:hidden}
+.progreso i{display:block;height:100%;background:var(--accent)}
+
+@media (max-width: 980px){
+  main{grid-template-columns:1fr}
+  .estado-in{grid-template-columns:1fr auto}
+  .cifras{grid-column:1/-1;order:3}
+}
+@media (max-width: 520px){
+  .cifras{gap:6px 16px}
+  .cifra .v{font-size:14px}
+  .paso{grid-template-columns:1fr;gap:2px}
+  .vela{grid-template-columns:1fr;gap:6px}
+}
+@media (prefers-reduced-motion: no-preference){
+  .fresco::before{animation:latido 2s ease-in-out infinite}
+  @keyframes latido{50%{opacity:.35}}
+}
+</style>
+
+<div class="maqueta"><span><b>Maqueta de la fase 5</b> &middot; datos de EJEMPLO, no son del bot</span><span>Los botones no hacen nada: ensenyan como se comportaria el panel real</span></div>
+
+<header class="estado" aria-label="Estado del bot">
+  <div class="estado-in">
+    <div class="marca" style="align-items:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="26" height="26" style="display:block" role="img" aria-label="Ploutos"><title>Ploutos</title><circle cx="50" cy="50" r="50" fill="#1F5E7A"/><g transform="translate(0 3)"><g fill="#F3F6F5"><rect x="22" y="22" width="56" height="9" rx="2"/><rect x="29.5" y="42" width="12" height="20" rx="1.5"/><rect x="58.5" y="35" width="12" height="25" rx="1.5"/></g><g stroke="#F3F6F5" stroke-width="3.0" stroke-linecap="round"><line x1="35.5" y1="31" x2="35.5" y2="42"/><line x1="35.5" y1="62" x2="35.5" y2="70"/><line x1="64.5" y1="31" x2="64.5" y2="35"/><line x1="64.5" y1="60" x2="64.5" y2="72"/></g></g></svg><h1>Ploutos</h1><span class="fresco" id="fresco">actualizado hace 2 s</span></div>
+    <div class="cifras">
+      <div class="cifra"><span class="label">Equity</span><span class="v">50,84 $</span></div>
+      <div class="cifra"><span class="label">Hoy</span><span class="v pos">+0,42 $</span></div>
+      <div class="cifra"><span class="label">Caida desde maximo</span><span class="v">1,9 %</span></div>
+      <div class="cifra"><span class="label">Operaciones hoy</span><span class="v">1 / 6</span></div>
+      <div class="cifra"><span class="label">Posiciones</span><span class="v">2 / 3</span></div>
+      <div class="cifra"><span class="label">IA hoy</span><span class="v">3 / 40</span></div>
+    </div>
+    <span class="modo" title="Modo efectivo: el mas restrictivo de los activos">NORMAL</span>
+    <div class="suelo" aria-label="Distancia al suelo de 25 dolares">
+      <span class="label">Suelo</span>
+      <div class="suelo-barra">
+        <i style="left:calc(( 50.84 - 25) / (55 - 25) * 100%)"></i>
+        <span style="left:0">25</span><span style="left:calc((35 - 25)/30*100%)">35</span><span style="left:calc((40 - 25)/30*100%)">40</span><span style="left:calc((45 - 25)/30*100%)">45</span><span style="left:calc((50 - 25)/30*100%)">50</span>
+      </div>
+      <span class="num" style="font-size:12.5px;color:var(--ink-2)">+25,84 $ sobre el suelo</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="col">
+    <section class="panel" aria-labelledby="t-curva">
+      <div class="panel-cab">
+        <h2 id="t-curva">Curva comparada</h2>
+        <div class="leyenda"><span style="--c:var(--ia)">IA</span><span style="--c:var(--base)">Baseline sin IA</span><span style="--c:var(--hold)">Comprar BTC y esperar</span></div>
+      </div>
+      <svg class="grafico" id="grafico" viewBox="0 0 720 260" role="img" aria-label="Equity de las dos carteras y de comprar BTC, en dolares, durante 30 dias"></svg>
+      <div class="juez">
+        <span class="chip">Juez de la fase 6</span>
+        <span>Veredicto: <b>todavia no</b> &middot; faltan 12 dias y 21 velas en que discrepan (9 de 30)</span>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-pos">
+      <div class="panel-cab"><h2 id="t-pos">Posiciones abiertas</h2><small>la OCO vive en OKX: protege aunque el VPS caiga</small></div>
+      <div class="tabla-caja">
+        <table>
+          <thead><tr><th>Par</th><th class="n">Entrada</th><th class="n">Ahora</th><th>Stop &middot; objetivo</th><th class="n">Resultado</th><th class="n">Edad</th><th>OCO</th></tr></thead>
+          <tbody>
+            <tr><td class="par">SOL/USDC</td><td class="n">142,10</td><td class="n">144,02</td>
+              <td><span class="num" style="font-size:12px">139,90 &middot; 147,50</span><span class="rango"><i style="width:56%;background:var(--good-soft)"></i><b style="left:56%"></b></span></td>
+              <td class="n pos">+0,20 $ &middot; +0,40 R</td><td class="n">14 h</td><td><span class="chip ok">viva en OKX</span></td></tr>
+            <tr><td class="par">TRX/USDC</td><td class="n">0,34160</td><td class="n">0,33980</td>
+              <td><span class="num" style="font-size:12px">0,33765 &middot; 0,36148</span><span class="rango"><i style="width:9%;background:var(--bad-soft)"></i><b style="left:9%"></b></span></td>
+              <td class="n neg">&minus;0,08 $ &middot; &minus;0,46 R</td><td class="n">5 h</td><td><span class="chip ok">viva en OKX</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-ia">
+      <div class="panel-cab"><h2 id="t-ia">Que esta pensando la IA</h2><small>la IA propone; el motor de riesgo dispone</small></div>
+      <p class="nota-ia">Lo que se ve es la justificacion que el modelo escribe en su salida, no su razonamiento interno.</p>
+      <div class="filtro" role="group" aria-label="Filtrar por moneda" id="filtro">
+        <button aria-pressed="true" data-m="*">todas</button><button aria-pressed="false" data-m="SOL">SOL</button><button aria-pressed="false" data-m="ETH">ETH</button><button aria-pressed="false" data-m="DOGE">DOGE</button><button aria-pressed="false" data-m="NEAR">NEAR</button>
+      </div>
+      <div id="velas">
+        <article class="vela" data-m="SOL DOGE NEAR">
+          <time>16:00<small>hoy</small></time>
+          <div class="pasos">
+            <div class="paso"><span class="label">Candidatos</span><div class="cands"><span class="cand abre">SOL pullback R:R 2,4 &middot; x0,8</span><span class="cand salta">DOGE ruptura R:R 3,1</span><span class="cand salta">NEAR pullback R:R 2,2</span></div></div>
+            <div class="paso"><span class="label">IA</span><span class="porque">&laquo;Tendencia limpia en SOL con ADX 31; DOGE rompe con poco volumen. Reduzco SOL por la correlacion con ETH abierta.&raquo;</span></div>
+            <div class="paso"><span class="label">Motor</span><div class="veredicto"><span class="chip ok">aprobado</span><span class="num" style="font-size:12.5px">0,106 SOL &middot; riesgo 0,40 $</span></div></div>
+            <div class="paso"><span class="label">Baseline</span><span style="color:var(--ink-2)">habria abierto DOGE (mejor R:R). Esta vela cuenta como discrepancia.</span></div>
+          </div>
+        </article>
+        <article class="vela" data-m="ETH">
+          <time>12:00<small>hoy</small></time>
+          <div class="pasos">
+            <div class="paso"><span class="label">Candidatos</span><div class="cands"><span class="cand abre">ETH pullback R:R 2,6 &middot; x1,0</span></div></div>
+            <div class="paso"><span class="label">IA</span><span class="porque">&laquo;Rebote en la EMA de 50 con el regimen alcista intacto.&raquo;</span></div>
+            <div class="paso"><span class="label">Motor</span><div class="veredicto"><span class="chip mal">vetado</span><span style="font-size:12.5px">regla 15: ya hay 2 posiciones con correlacion &gt; 0,8</span></div></div>
+          </div>
+        </article>
+        <article class="vela" data-m="">
+          <time>08:00<small>hoy</small></time>
+          <div class="pasos">
+            <div class="paso"><span class="label">Candidatos</span><span style="color:var(--ink-3)">ninguno: 6 monedas cribadas por los filtros (spread, hueco, cooldown)</span></div>
+            <div class="paso"><span class="label">IA</span><span style="color:var(--ink-3)">no se la llama: sin candidatos no se gasta cuota</span></div>
+          </div>
+        </article>
+        <article class="vela" data-m="NEAR">
+          <time>04:00<small>hoy</small></time>
+          <div class="pasos">
+            <div class="paso"><span class="label">Candidatos</span><div class="cands"><span class="cand">NEAR ruptura R:R 2,9</span></div></div>
+            <div class="paso"><span class="label">IA</span><div class="veredicto"><span class="chip aviso">sin llamada</span><span style="font-size:12.5px">CLOSE_ONLY_QUOTA desde las 02:10: solo sondas</span></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-hist">
+      <div class="panel-cab"><h2 id="t-hist">Operaciones cerradas</h2><button class="chip" type="button" id="csv">Exportar CSV fiscal</button></div>
+      <div class="tabla-caja">
+        <table>
+          <thead><tr><th>Cierre</th><th>Par</th><th>Setup</th><th class="n">Neto</th><th class="n">R</th><th class="n">Comisiones</th><th class="n">Duracion</th><th>Salida</th><th class="n">Confianza IA</th></tr></thead>
+          <tbody>
+            <tr><td class="num">24/09 08:00</td><td class="par">AVAX/USDC</td><td>pullback</td><td class="n pos">+1,02 $</td><td class="n pos">+2,04</td><td class="n">0,05 $</td><td class="n">1 d 4 h</td><td><span class="chip ok">objetivo</span></td><td class="n">0,68</td></tr>
+            <tr><td class="num">23/09 20:00</td><td class="par">XRP/USDC</td><td>ruptura</td><td class="n neg">&minus;0,53 $</td><td class="n neg">&minus;1,06</td><td class="n">0,05 $</td><td class="n">12 h</td><td><span class="chip mal">stop</span></td><td class="n">0,61</td></tr>
+            <tr><td class="num">22/09 16:00</td><td class="par">BTC/USDC</td><td>pullback</td><td class="n pos">+0,97 $</td><td class="n pos">+1,94</td><td class="n">0,05 $</td><td class="n">2 d</td><td><span class="chip ok">objetivo</span></td><td class="n">0,72</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="aviso-accion" id="csv-aviso" aria-live="polite"></p>
+    </section>
+  </div>
+
+  <aside class="col" aria-label="Controles y sistema">
+    <section class="panel" aria-labelledby="t-ctl">
+      <div class="panel-cab"><h2 id="t-ctl">Controles</h2><small>pasan por el motor y quedan auditados</small></div>
+      <div class="controles">
+        <button class="ctl" type="button" data-accion="pausa"><div><strong>Pausar entradas</strong><span>las posiciones siguen con su OCO</span></div><span class="chip">Pausar</span></button>
+        <button class="ctl" type="button" data-accion="cierre"><div><strong>Forzar solo cierre</strong><span>cancela entradas pendientes</span></div><span class="chip">Activar</span></button>
+        <button class="ctl peligro" type="button" id="cerrar-todo"><div><strong>Cerrar todo</strong><span>vende a mercado todas las posiciones</span></div><span class="chip mal">Doble confirmacion</span></button>
+        <div class="confirmar" id="confirmar" hidden>
+          <div><b>¿Cerrar las 2 posiciones a mercado?</b><br>Se paga el spread y la comision taker. No se puede deshacer.</div>
+          <label style="display:flex;gap:8px;align-items:center;font-size:12.5px"><input type="checkbox" id="entiendo"> Entiendo que se venden YA, sin esperar al stop ni al objetivo</label>
+          <div class="fila"><button type="button" class="si" id="confirmar-si" disabled>Cerrar todo</button><button type="button" id="confirmar-no">Cancelar</button></div>
+        </div>
+        <button class="ctl peligro" type="button" data-accion="halted"><div><strong>Parada total (HALTED)</strong><span>no cierra nada: las OCO siguen en OKX</span></div><span class="chip mal">Parar</span></button>
+        <p class="aviso-accion" id="aviso" aria-live="polite"></p>
+      </div>
+      <div class="duros">Acceso de la IA: caduca en <span class="num">363</span> dias (~22/09/2027).</div>
+    </section>
+
+    <section class="panel nivel" aria-labelledby="t-slider">
+      <div class="panel-cab"><h2 id="t-slider">Agresividad</h2><small>se aplica desde manana</small></div>
+      <div class="slider" id="slider" role="group" aria-label="Nivel de agresividad">
+        <button type="button" data-n="1"><b>1</b><small>prudente</small></button>
+        <button type="button" data-n="2"><b>2</b><small>&nbsp;</small></button>
+        <button type="button" data-n="3" class="hoy manana"><b>3</b><small>normal</small></button>
+        <button type="button" data-n="4"><b>4</b><small>&nbsp;</small></button>
+        <button type="button" data-n="5"><b>5</b><small>agresivo</small></button>
+      </div>
+      <dl id="nivel-datos"></dl>
+      <p class="duros" id="nivel-nota"></p>
+      <p class="duros">Nunca cambia: 3 posiciones, suelo de 25 $, perdida diaria de 3 $, solo spot y solo X/USDC.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="t-nodos">
+      <div class="panel-cab"><h2 id="t-nodos">Sistema</h2><small>ultimo evento</small></div>
+      <div class="nodos">
+        <div class="nodo"><span>Exchange (WebSocket)</span><small>0,4 s</small></div>
+        <div class="nodo"><span>Indicadores</span><small>16:00:03</small></div>
+        <div class="nodo"><span>Filtros</span><small>16:00:03</small></div>
+        <div class="nodo"><span>Candidatos</span><small>3 &middot; 16:00:04</small></div>
+        <div class="nodo" style="--c:var(--accent)"><span>Analista (IA)</span><small>14 s &middot; 16:00:18</small></div>
+        <div class="nodo"><span>Motor de riesgo</span><small>16:00:18</small></div>
+        <div class="nodo"><span>Ejecucion (OKX)</span><small>16:00:19</small></div>
+        <div class="nodo" style="--c:var(--warn)"><span>Noticias</span><small>fuente caida 18 min</small></div>
+        <div class="nodo"><span>Vigilante externo</span><small>latido 16:02</small></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-apr">
+      <div class="panel-cab"><h2 id="t-apr">Hipotesis y aprendido</h2><span class="chip">fase 8</span></div>
+      <p class="fase8">El bucle de aprendizaje se activa con 100 operaciones cerradas (papel y real).</p>
+      <div class="progreso" aria-hidden="true"><i style="width:14%"></i></div>
+      <p class="label" style="margin:0">14 de 100</p>
+    </section>
+  </aside>
+</main>
+
+<script>
+(function(){
+  // Curva comparada: series de ejemplo, deterministas (misma forma en cada carga).
+  var svg=document.getElementById('grafico'), NS='http://www.w3.org/2000/svg';
+  function serie(semilla,deriva,ruido){var s=semilla,v=50,out=[50];for(var i=1;i<=30;i++){s=(s*9301+49297)%233280;v+=deriva+(s/233280-0.5)*ruido;out.push(v);}return out;}
+  var ia=serie(7,0.035,0.9), base=serie(21,0.0,0.9), hold=serie(3,0.06,2.2);
+  var todos=ia.concat(base,hold);
+  var min=Math.floor(Math.min.apply(null,todos)/2)*2, max=Math.ceil(Math.max.apply(null,todos)/2)*2;
+  var W=720,H=260,L=44,R=64,T=12,B=30, marcas=[];
+  for(var m=min;m<=max;m+=2)marcas.push(m);
+  function x(i){return L+(W-L-R)*i/30} function y(v){return T+(H-T-B)*(1-(v-min)/(max-min))}
+  function el(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e}
+  marcas.forEach(function(v){
+    svg.appendChild(el('line',{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:'var(--line)','stroke-width':v===50?1.2:0.7,'stroke-dasharray':v===50?'':'3 4'}));
+    var t=el('text',{x:L-8,y:y(v)+4,'text-anchor':'end','font-size':11,fill:'var(--ink-3)','font-family':'IBM Plex Mono, monospace'});t.textContent=v+' $';svg.appendChild(t);
+  });
+  [0,7,14,21,28].forEach(function(d){var t=el('text',{x:x(d),y:H-10,'text-anchor':'middle','font-size':11,fill:'var(--ink-3)','font-family':'IBM Plex Mono, monospace'});t.textContent='dia '+d;svg.appendChild(t);});
+  // Etiquetas finales sin pisarse: se ordenan por altura y se separan 14 px como minimo.
+  var finales=[[ia,'var(--ia)'],[base,'var(--base)'],[hold,'var(--hold)']].map(function(p){return {v:p[0][30],c:p[1],y:y(p[0][30])}}).sort(function(a,b){return a.y-b.y});
+  for(var k=1;k<finales.length;k++){if(finales[k].y-finales[k-1].y<14)finales[k].y=finales[k-1].y+14}
+  function linea(vals,color,ancho,area){
+    var d=vals.map(function(v,i){return (i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)}).join(' ');
+    if(area){svg.appendChild(el('path',{d:d+' L'+x(30)+' '+y(min)+' L'+x(0)+' '+y(min)+' Z',fill:color,opacity:0.08}))}
+    svg.appendChild(el('path',{d:d,fill:'none',stroke:color,'stroke-width':ancho,'stroke-linejoin':'round','stroke-linecap':'round'}));
+    svg.appendChild(el('circle',{cx:x(30),cy:y(vals[30]),r:3.5,fill:color}));
+  }
+  linea(hold,'var(--hold)',1.4,false); linea(base,'var(--base)',1.8,false); linea(ia,'var(--ia)',2.4,true);
+  finales.forEach(function(f){var t=el('text',{x:x(30)+8,y:f.y+4,'font-size':11.5,fill:f.c,'font-family':'IBM Plex Mono, monospace'});t.textContent=f.v.toFixed(2).replace('.',',')+' $';svg.appendChild(t)});
+
+  // Filtro de la linea de decisiones
+  var botones=document.querySelectorAll('#filtro button');
+  botones.forEach(function(b){b.addEventListener('click',function(){
+    botones.forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});
+    var m=b.dataset.m;document.querySelectorAll('#velas .vela').forEach(function(v){v.hidden=!(m==='*'||v.dataset.m.split(' ').indexOf(m)>=0)});
+  })});
+
+  // Controles: en la maqueta solo explican que harian
+  var aviso=document.getElementById('aviso');
+  var textos={pausa:'En el panel real: el bot deja de abrir; las 2 posiciones siguen con su OCO. Queda en el registro de auditoria.',
+    cierre:'En el panel real: entra en solo cierre, cancela la entrada pendiente y verifica cada OCO.',
+    halted:'En el panel real: HALTED. No cierra posiciones (decision 4 de la fase 4): las OCO siguen en OKX.'};
+  document.querySelectorAll('[data-accion]').forEach(function(b){b.addEventListener('click',function(){aviso.textContent=textos[b.dataset.accion]})});
+  var caja=document.getElementById('confirmar'),chk=document.getElementById('entiendo'),si=document.getElementById('confirmar-si');
+  document.getElementById('cerrar-todo').addEventListener('click',function(){caja.hidden=false;chk.checked=false;si.disabled=true;aviso.textContent=''});
+  chk.addEventListener('change',function(){si.disabled=!chk.checked});
+  document.getElementById('confirmar-no').addEventListener('click',function(){caja.hidden=true});
+  si.addEventListener('click',function(){caja.hidden=true;aviso.textContent='Maqueta: no se ha cerrado nada. En el panel real, segunda confirmacion superada y orden enviada al motor.'});
+  document.getElementById('csv').addEventListener('click',function(){document.getElementById('csv-aviso').textContent='En el panel real: descarga el CSV con fecha, par, cantidad, precios, comisiones y resultado en EUR para la renta.'});
+
+  // Slider: niveles del informe 4.6 recortados al tope del PRD (6 operaciones/dia)
+  var niveles={1:['0,5 %','0,70','3','solo pullback'],2:['0,75 %','0,65','4','+ reversion en rango'],3:['1,0 %','0,60','6','todos'],4:['1,25 %','0,57','6','todos'],5:['1,5 %','0,55','6','todos']};
+  var dl=document.getElementById('nivel-datos'),nota=document.getElementById('nivel-nota'),hoy=3;
+  function pinta(n){var d=niveles[n];dl.innerHTML='<dt>Riesgo por operacion</dt><dd>'+d[0]+'</dd><dt>Confianza minima</dt><dd>'+d[1]+'</dd><dt>Operaciones al dia</dt><dd>'+d[2]+' / 6</dd><dt>Setups</dt><dd>'+d[3]+'</dd>';
+    nota.textContent=n===hoy?'Nivel de hoy. Un cambio se aplica desde las 00:00 UTC de manana: nunca para recuperar perdidas en caliente.':'Programado para manana: nivel '+n+'. Hoy sigue el '+hoy+'.';}
+  document.querySelectorAll('#slider button').forEach(function(b){b.addEventListener('click',function(){
+    document.querySelectorAll('#slider button').forEach(function(o){o.classList.remove('manana')});b.classList.add('manana');pinta(+b.dataset.n);})});
+  pinta(3);
+
+  // Frescura
+  var t=2,f=document.getElementById('fresco');setInterval(function(){t=t>=4?1:t+1;f.textContent='actualizado hace '+t+' s'},1000);
+})();
+</script>

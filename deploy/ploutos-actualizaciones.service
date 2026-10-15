@@ -1,0 +1,10 @@
+[Unit]
+# Revision semanal de actualizaciones: Tailscale se instala solo; lo demas solo se avisa (el propietario, 26/09).
+Description=Ploutos - revision semanal de actualizaciones
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/ploutos/deploy/actualizar-semanal.sh
+SyslogIdentifier=ploutos-actualizaciones

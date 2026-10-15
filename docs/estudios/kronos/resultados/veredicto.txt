@@ -1,0 +1,13 @@
+predicciones: 2450 en 336 dias, de 8 monedas
+Spearman del conjunto: -0.0423 (IC 90 %: -0.1060 a +0.0211)
+  AVAX/USDC   287 predicciones  Spearman +0.0068
+  BTC/USDC    336 predicciones  Spearman -0.0736
+  DOGE/USDC   336 predicciones  Spearman -0.0465
+  ETH/USDC    336 predicciones  Spearman -0.0333
+  NEAR/USDC   147 predicciones  Spearman -0.0286
+  SOL/USDC    336 predicciones  Spearman -0.0567
+  TRX/USDC    336 predicciones  Spearman +0.0129
+  XRP/USDC    336 predicciones  Spearman -0.0271
+monedas con correlacion positiva: 2 de 8
+informativo: acierta la direccion el 46.8 % de las veces (sube de verdad el 47.6 %)
+VEREDICTO paso 1: NO PASA: se cierra el tema

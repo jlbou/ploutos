@@ -1,0 +1,933 @@
+{
+ "inicio": {
+  "sello": "20261002T2035",
+  "ccxt": "4.5.84",
+  "saldo": {
+   "BTC": 1.0,
+   "XRP": 50000.0,
+   "EUR": 4600.0,
+   "USD": 5000.0,
+   "USDC": 5000.0,
+   "ETH": 1.0
+  }
+ },
+ "6_feetype_cantidad_exacta": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "4.687",
+    "sz": "2.139",
+    "clOrdId": "d20261002T2035nearpa"
+   },
+   "respuesta": {
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261002T2035nearpa",
+       "ordId": "3975224714523623429",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1790973328505"
+      }
+     ],
+     "inTime": "1790973328435864",
+     "msg": "",
+     "outTime": "1790973328575536"
+    }
+   }
+  },
+  "orden": {
+   "ordId": "3975224714523623429",
+   "clOrdId": "d20261002T2035nearpa",
+   "state": "filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "2.139",
+   "px": "4.687",
+   "accFillSz": "2.139",
+   "fillSz": "1.067",
+   "avgPx": "4.6734988312295466",
+   "fee": "-0.034988149",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1790973328505",
+   "uTime": "1790973328506"
+  },
+  "delta_NEAR": 2.139,
+  "delta_USDC": -10.03160214899981,
+  "nota": "con feeType = 1: accFillSz == sz, delta_NEAR == accFillSz y feeCcy == USDC"
+ },
+ "5_clordid_reutilizado": {
+  "primera": {
+   "ordId": "3975224714523623429",
+   "clOrdId": "d20261002T2035nearpa",
+   "state": "filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "2.139",
+   "px": "4.687",
+   "accFillSz": "2.139",
+   "fillSz": "1.067",
+   "avgPx": "4.6734988312295466",
+   "fee": "-0.034988149",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1790973328505",
+   "uTime": "1790973328506"
+  },
+  "reenvio": {
+   "ok": true,
+   "resp": {
+    "code": "0",
+    "data": [
+     {
+      "clOrdId": "d20261002T2035nearpa",
+      "ordId": "3975224812502564864",
+      "sCode": "0",
+      "sMsg": "Order placed",
+      "subCode": "",
+      "tag": "",
+      "ts": "1790973331425"
+     }
+    ],
+    "inTime": "1790973331355734",
+    "msg": "",
+    "outTime": "1790973331494775"
+   }
+  },
+  "detalle_tras_reenvio": {
+   "ordId": "3975224812502564864",
+   "clOrdId": "d20261002T2035nearpa",
+   "state": "filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "2.139",
+   "px": "4.687",
+   "accFillSz": "2.139",
+   "fillSz": "1.067",
+   "avgPx": "4.6734988312295466",
+   "fee": "-0.034988149",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1790973331425",
+   "uTime": "1790973331425"
+  },
+  "nota": "si el reenvio da otro ordId, OKX crea una orden NUEVA: hay que consultar antes de reenviar"
+ },
+ "9a_entrada_con_tradequoteccy": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "4.687",
+    "sz": "2.139",
+    "clOrdId": "d20261002T2035nearpb",
+    "tradeQuoteCcy": "USDC"
+   },
+   "respuesta": {
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261002T2035nearpb",
+       "ordId": "3975224903200194560",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1790973334128"
+      }
+     ],
+     "inTime": "1790973334058956",
+     "msg": "",
+     "outTime": "1790973334198412"
+    }
+   }
+  },
+  "orden": {
+   "ordId": "3975224903200194560",
+   "clOrdId": "d20261002T2035nearpb",
+   "state": "filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "2.139",
+   "px": "4.687",
+   "accFillSz": "2.139",
+   "fillSz": "1.067",
+   "avgPx": "4.6734988312295466",
+   "fee": "-0.034988149",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1790973334128",
+   "uTime": "1790973334128"
+  },
+  "sin_el": {
+   "ordId": "3975224714523623429",
+   "clOrdId": "d20261002T2035nearpa",
+   "state": "filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "2.139",
+   "px": "4.687",
+   "accFillSz": "2.139",
+   "fillSz": "1.067",
+   "avgPx": "4.6734988312295466",
+   "fee": "-0.034988149",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1790973328505",
+   "uTime": "1790973328506"
+  }
+ },
+ "1_oco_cash": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "side": "sell",
+    "ordType": "oco",
+    "sz": "2.139",
+    "tdMode": "cash",
+    "tpTriggerPx": "5.841",
+    "tpOrdPx": "-1",
+    "tpTriggerPxType": "last",
+    "slTriggerPx": "3.953",
+    "slOrdPx": "-1",
+    "slTriggerPxType": "last",
+    "algoClOrdId": "d20261002T2035nearpcOCO"
+   },
+   "como_la_dio_la_guardia": null,
+   "respuesta": {
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "algoClOrdId": "d20261002T2035nearpcOCO",
+       "algoId": "3975225005687803904",
+       "clOrdId": "",
+       "sCode": "0",
+       "sMsg": "",
+       "tag": ""
+      }
+     ],
+     "msg": ""
+    }
+   }
+  },
+  "pendiente": {
+   "algoId": "3975225005687803904",
+   "algoClOrdId": "d20261002T2035nearpcOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "2.139",
+   "tdMode": "cash",
+   "tpTriggerPx": "5.841",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "3.953",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  }
+ },
+ "8_cancelar_y_recrear_oco": {
+  "cancelar": {
+   "por": "algoClOrdId",
+   "ok": true,
+   "resp": {
+    "code": "0",
+    "data": [
+     {
+      "algoClOrdId": "d20261002T2035nearpcOCO",
+      "algoId": "3975225005687803904",
+      "clOrdId": "",
+      "sCode": "0",
+      "sMsg": "",
+      "tag": ""
+     }
+    ],
+    "msg": ""
+   }
+  },
+  "pendiente_tras_cancelar": null,
+  "recrear_mismo_id": {
+   "ok": true,
+   "resp": {
+    "code": "0",
+    "data": [
+     {
+      "algoClOrdId": "d20261002T2035nearpcOCO",
+      "algoId": "3975225199598866432",
+      "clOrdId": "",
+      "sCode": "0",
+      "sMsg": "",
+      "tag": ""
+     }
+    ],
+    "msg": ""
+   }
+  },
+  "pendiente_tras_recrear": {
+   "algoId": "3975225199598866432",
+   "algoClOrdId": "d20261002T2035nearpcOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "2.139",
+   "tdMode": "cash",
+   "tpTriggerPx": "5.841",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "3.953",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  }
+ },
+ "9b_oco_con_tradequoteccy": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "side": "sell",
+    "ordType": "oco",
+    "sz": "2.139",
+    "tdMode": "cash",
+    "tpTriggerPx": "5.841",
+    "tpOrdPx": "-1",
+    "tpTriggerPxType": "last",
+    "slTriggerPx": "3.953",
+    "slOrdPx": "-1",
+    "slTriggerPxType": "last",
+    "algoClOrdId": "d20261002T2035nearpdOCO",
+    "tradeQuoteCcy": "USDC"
+   },
+   "como_la_dio_la_guardia": {
+    "instId": "NEAR-USDC",
+    "side": "sell",
+    "ordType": "oco",
+    "sz": "2.139",
+    "tdMode": "cash",
+    "tpTriggerPx": "5.841",
+    "tpOrdPx": "-1",
+    "tpTriggerPxType": "last",
+    "slTriggerPx": "3.953",
+    "slOrdPx": "-1",
+    "slTriggerPxType": "last",
+    "algoClOrdId": "d20261002T2035nearpdOCO"
+   },
+   "respuesta": {
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "algoClOrdId": "d20261002T2035nearpdOCO",
+       "algoId": "3975225313214173184",
+       "clOrdId": "",
+       "sCode": "0",
+       "sMsg": "",
+       "tag": ""
+      }
+     ],
+     "msg": ""
+    }
+   }
+  },
+  "pendiente": {
+   "algoId": "3975225313214173184",
+   "algoClOrdId": "d20261002T2035nearpdOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "2.139",
+   "tdMode": "cash",
+   "tpTriggerPx": "5.841",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "3.953",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  }
+ },
+ "7_objetivo_limit": {
+  "variante_a_sin_tpTriggerPx": {
+   "envio": {
+    "peticion": {
+     "instId": "NEAR-USDC",
+     "side": "sell",
+     "ordType": "oco",
+     "sz": "2.139",
+     "tdMode": "cash",
+     "tpOrdPx": "-1",
+     "tpTriggerPxType": "last",
+     "slTriggerPx": "3.954",
+     "slOrdPx": "-1",
+     "slTriggerPxType": "last",
+     "algoClOrdId": "d20261002T2035nearpeOCO",
+     "tpOrdKind": "limit"
+    },
+    "como_la_dio_la_guardia": {
+     "instId": "NEAR-USDC",
+     "side": "sell",
+     "ordType": "oco",
+     "sz": "2.139",
+     "tdMode": "cash",
+     "tpTriggerPx": "5.843",
+     "tpOrdPx": "-1",
+     "tpTriggerPxType": "last",
+     "slTriggerPx": "3.954",
+     "slOrdPx": "-1",
+     "slTriggerPxType": "last",
+     "algoClOrdId": "d20261002T2035nearpeOCO"
+    },
+    "respuesta": {
+     "ok": false,
+     "error": "BadRequest: okx {\"code\":\"51000\",\"data\":[],\"msg\":\"Parameter tpOrdPx error\"}"
+    }
+   },
+   "pendiente": null
+  },
+  "variante_b_con_tpTriggerPx_y_tpOrdPx": {
+   "envio": {
+    "peticion": {
+     "instId": "NEAR-USDC",
+     "side": "sell",
+     "ordType": "oco",
+     "sz": "2.139",
+     "tdMode": "cash",
+     "tpTriggerPx": "5.843",
+     "tpOrdPx": "5.843",
+     "tpTriggerPxType": "last",
+     "slTriggerPx": "3.955",
+     "slOrdPx": "-1",
+     "slTriggerPxType": "last",
+     "algoClOrdId": "d20261002T2035nearpfOCO",
+     "tpOrdKind": "limit"
+    },
+    "como_la_dio_la_guardia": {
+     "instId": "NEAR-USDC",
+     "side": "sell",
+     "ordType": "oco",
+     "sz": "2.139",
+     "tdMode": "cash",
+     "tpTriggerPx": "5.843",
+     "tpOrdPx": "-1",
+     "tpTriggerPxType": "last",
+     "slTriggerPx": "3.955",
+     "slOrdPx": "-1",
+     "slTriggerPxType": "last",
+     "algoClOrdId": "d20261002T2035nearpfOCO"
+    },
+    "respuesta": {
+     "ok": false,
+     "error": "InvalidOrder: okx {\"code\":\"51094\",\"data\":[],\"msg\":\"You can't place TP limit orders in spot, margin, or options trading.\"}"
+    }
+   },
+   "pendiente": null
+  }
+ },
+ "2_oco_sin_tdmode": {
+  "enviada": false,
+  "por_que": "seria una orden de margen (regla 1): no se envia ni en el demo",
+  "tdMode_que_pone_ccxt": "cross",
+  "ordType": "oco",
+  "guardia": "rechazada por la guardia: [\"regla 1: tdMode 'cross', tiene que ser 'cash' (spot, sin margen)\", 'parametro no permitido: tag', 'algoClOrdId None: tiene que ser el de d-20261002T2035-near-pg', 'una OCO no lleva clOrdId (seria el de broker de ccxt)']",
+  "acctLv_cuenta": "1",
+  "nota": "acctLv 1 = modo spot (sin margen): OKX la rechazaria; 2-4 = con margen: seria margen de verdad"
+ },
+ "3_adjuntos_llenada_entera": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "4.69",
+    "sz": "2.138",
+    "clOrdId": "d20261002T2035nearph",
+    "attachAlgoOrds": [
+     {
+      "attachAlgoClOrdId": "d20261002T2035nearphOCO",
+      "tpTriggerPx": "5.845",
+      "tpOrdPx": "-1",
+      "slTriggerPx": "3.955",
+      "slOrdPx": "-1"
+     }
+    ]
+   },
+   "respuesta": {
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261002T2035nearph",
+       "ordId": "3975225663073861632",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1790973356774"
+      }
+     ],
+     "inTime": "1790973356704886",
+     "msg": "",
+     "outTime": "1790973356844831"
+    }
+   }
+  },
+  "orden": {
+   "ordId": "3975225663073861632",
+   "clOrdId": "d20261002T2035nearph",
+   "state": "filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "2.138",
+   "px": "4.69",
+   "accFillSz": "2.138",
+   "fillSz": "2.138",
+   "avgPx": "4.676",
+   "fee": "-0.034990508",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [
+    {
+     "activePx": "",
+     "amendPxOnTriggerType": "0",
+     "attachAlgoClOrdId": "d20261002T2035nearphOCO",
+     "attachAlgoId": "3975225663052681216",
+     "callbackRatio": "",
+     "callbackSpread": "",
+     "failCode": "",
+     "failReason": "",
+     "percent": "",
+     "slOrdPx": "-1",
+     "slTriggerPx": "3.955",
+     "slTriggerPxType": "last",
+     "slTriggerRatio": "",
+     "sz": "",
+     "tpOrdKind": "condition",
+     "tpOrdPx": "-1",
+     "tpTriggerPx": "5.845",
+     "tpTriggerPxType": "last",
+     "tpTriggerRatio": ""
+    }
+   ],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1790973356774",
+   "uTime": "1790973356775"
+  },
+  "algo_creada": {
+   "algoId": "3975225663086235648",
+   "algoClOrdId": "d20261002T2035nearphOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "2.138",
+   "tdMode": "cash",
+   "tpTriggerPx": "5.845",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "3.955",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  },
+  "algos_pendientes_del_par": [
+   {
+    "algoId": "3975225663086235648",
+    "algoClOrdId": "d20261002T2035nearphOCO",
+    "ordType": "oco",
+    "state": "live",
+    "side": "sell",
+    "sz": "2.138",
+    "tdMode": "cash",
+    "tpTriggerPx": "5.845",
+    "tpOrdPx": "-1",
+    "slTriggerPx": "3.955",
+    "slOrdPx": "-1",
+    "tradeQuoteCcy": "USDC",
+    "linkedOrd": {
+     "ordId": ""
+    },
+    "ordId": "",
+    "ordIdList": []
+   }
+  ]
+ },
+ "4_adjuntos_parcial": {
+  "hecha": true,
+  "simbolo": "BTC/USDC",
+  "nivel_ask": {
+   "precio": 84400.0,
+   "tamanyo": 0.00012135
+  },
+  "envio": {
+   "peticion": {
+    "instId": "BTC-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "84400",
+    "sz": "0.00018202",
+    "clOrdId": "d20261002T2035btcpi",
+    "attachAlgoOrds": [
+     {
+      "attachAlgoClOrdId": "d20261002T2035btcpiOCO",
+      "tpTriggerPx": "105500",
+      "tpOrdPx": "-1",
+      "slTriggerPx": "71726",
+      "slOrdPx": "-1"
+     }
+    ]
+   },
+   "respuesta": {
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261002T2035btcpi",
+       "ordId": "3975225867755896832",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1790973362874"
+      }
+     ],
+     "inTime": "1790973362804522",
+     "msg": "",
+     "outTime": "1790973362944211"
+    }
+   }
+  },
+  "antes_de_cancelar": {
+   "ordId": "3975225867755896832",
+   "clOrdId": "d20261002T2035btcpi",
+   "state": "partially_filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "0.00018202",
+   "px": "84400",
+   "accFillSz": "0.00012135",
+   "fillSz": "0.00012135",
+   "avgPx": "84400",
+   "fee": "-0.02048388",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [
+    {
+     "activePx": "",
+     "amendPxOnTriggerType": "0",
+     "attachAlgoClOrdId": "d20261002T2035btcpiOCO",
+     "attachAlgoId": "3975225867734716416",
+     "callbackRatio": "",
+     "callbackSpread": "",
+     "failCode": "",
+     "failReason": "",
+     "percent": "",
+     "slOrdPx": "-1",
+     "slTriggerPx": "71726",
+     "slTriggerPxType": "last",
+     "slTriggerRatio": "",
+     "sz": "",
+     "tpOrdKind": "condition",
+     "tpOrdPx": "-1",
+     "tpTriggerPx": "105500",
+     "tpTriggerPxType": "last",
+     "tpTriggerRatio": ""
+    }
+   ],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1790973362874",
+   "uTime": "1790973362874"
+  },
+  "cancelar": {
+   "ok": true,
+   "resp": {
+    "code": "0",
+    "data": [
+     {
+      "clOrdId": "d20261002T2035btcpi",
+      "ordId": "3975225867755896832",
+      "sCode": "0",
+      "sMsg": "",
+      "ts": "1790973365576"
+     }
+    ],
+    "inTime": "1790973365507098",
+    "msg": "",
+    "outTime": "1790973365646248"
+   }
+  },
+  "tras_cancelar": {
+   "ordId": "3975225867755896832",
+   "clOrdId": "d20261002T2035btcpi",
+   "state": "canceled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "0.00018202",
+   "px": "84400",
+   "accFillSz": "0.00012135",
+   "fillSz": "0.00012135",
+   "avgPx": "84400",
+   "fee": "-0.02048388",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [
+    {
+     "activePx": "",
+     "amendPxOnTriggerType": "0",
+     "attachAlgoClOrdId": "d20261002T2035btcpiOCO",
+     "attachAlgoId": "3975225867734716416",
+     "callbackRatio": "",
+     "callbackSpread": "",
+     "failCode": "",
+     "failReason": "",
+     "percent": "",
+     "slOrdPx": "-1",
+     "slTriggerPx": "71726",
+     "slTriggerPxType": "last",
+     "slTriggerRatio": "",
+     "sz": "",
+     "tpOrdKind": "condition",
+     "tpOrdPx": "-1",
+     "tpTriggerPx": "105500",
+     "tpTriggerPxType": "last",
+     "tpTriggerRatio": ""
+    }
+   ],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "1",
+   "cTime": "1790973362874",
+   "uTime": "1790973365576"
+  },
+  "algo_pendiente_para_lo_llenado": {
+   "algoId": "3975225958432346112",
+   "algoClOrdId": "d20261002T2035btcpiOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "0.00012135",
+   "tdMode": "cash",
+   "tpTriggerPx": "105500",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "71726",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  },
+  "consulta_por_algoClOrdId": {
+   "ok": true,
+   "resp": {
+    "code": "0",
+    "data": [
+     {
+      "activePx": "",
+      "actualPx": "",
+      "actualSide": "",
+      "actualSz": "0",
+      "advChaseParams": [],
+      "advanceOrdType": "",
+      "aggressiveness": "",
+      "algoClOrdId": "d20261002T2035btcpiOCO",
+      "algoId": "3975225958432346112",
+      "amendPxOnTriggerType": "0",
+      "attachAlgoOrds": [],
+      "cTime": "1790973365577",
+      "callbackRatio": "",
+      "callbackSpread": "",
+      "ccy": "BTC",
+      "chaseType": "",
+      "chaseVal": "",
+      "clOrdId": "",
+      "closeFraction": "",
+      "failCode": "0",
+      "instId": "BTC-USDC",
+      "instType": "SPOT",
+      "isTradeBorrowMode": "",
+      "last": "84400",
+      "lever": "",
+      "linkedOrd": {
+       "ordId": ""
+      },
+      "lmtOrderNumber": "",
+      "maxChaseType": "",
+      "maxChaseVal": "",
+      "moveTriggerPx": "",
+      "ordId": "",
+      "ordIdList": [],
+      "ordPx": "",
+      "ordType": "oco",
+      "posSide": "net",
+      "pxLimit": "",
+      "pxSpread": "",
+      "pxVar": "",
+      "quickMgnType": "",
+      "reduceOnly": "false",
+      "side": "sell",
+      "slOrdPx": "-1",
+      "slTriggerPx": "71726",
+      "slTriggerPxType": "last",
+      "state": "live",
+      "subAlgoIdList": [],
+      "sz": "0.00012135",
+      "szLimit": "",
+      "tag": "",
+      "tdMode": "cash",
+      "tgtCcy": "",
+      "timeInterval": "",
+      "tpOrdPx": "-1",
+      "tpTriggerPx": "105500",
+      "tpTriggerPxType": "last",
+      "tradeQuoteCcy": "USDC",
+      "triggerParams": [],
+      "triggerPx": "",
+      "triggerPxType": "",
+      "triggerTime": "",
+      "uTime": "1790973365577"
+     }
+    ],
+    "msg": ""
+   }
+  }
+ },
+ "limpieza": {
+  "canceladas": [],
+  "algos_canceladas": [],
+  "ventas": [
+   {
+    "simbolo": "BTC/USDC",
+    "cantidad": 0.00012134,
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261002T2035btcpz",
+       "ordId": "3975226280475410432",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1790973375174"
+      }
+     ],
+     "inTime": "1790973375104784",
+     "msg": "",
+     "outTime": "1790973375243524"
+    }
+   },
+   {
+    "simbolo": "NEAR/USDC",
+    "cantidad": 8.555,
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261002T2035nearpz",
+       "ordId": "3975226311244824576",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1790973376091"
+      }
+     ],
+     "inTime": "1790973376021942",
+     "msg": "",
+     "outTime": "1790973376161940"
+    }
+   }
+  ]
+ },
+ "fin": {
+  "saldo": {
+   "BTC": 1.00000001,
+   "XRP": 50000.0,
+   "EUR": 4600.0,
+   "USD": 5000.0,
+   "USDC": 4999.51306788374,
+   "ETH": 1.0
+  },
+  "delta": {
+   "EUR": 0.0,
+   "XRP": 0.0,
+   "BTC": 1e-08,
+   "USDC": -0.48693212,
+   "ETH": 0.0,
+   "USD": 0.0
+  }
+ }
+}

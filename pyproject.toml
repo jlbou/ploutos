@@ -1,0 +1,67 @@
+[project]
+name = "ploutos"
+version = "0.1.0"
+description = "Bot de trading spot autonomo con IA, dentro de reglas deterministas"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "ccxt==4.5.85",  # fijada (10/10, tras la semana del demo): la probada el 07/10; ver docs/archivo/parada-mantenimiento-fase-4.md 10
+    "pydantic>=2.9",
+    "pydantic-settings>=2.5",
+    "pyyaml>=6.0",
+    "pandas>=2.2",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "hypothesis>=6.112",
+    "ruff==0.16.9",     # version fija: una nueva puede traer reglas nuevas y romper los tests
+]
+
+# El panel (fase 5; decision del propietario del 25/09: FastAPI + uvicorn, los que nombra el PRD). Versiones
+# fijas. Hoy solo en el portatil; al VPS, con el despliegue de la fase 5.
+panel = [
+    "fastapi==0.141.1",
+    "uvicorn==0.54.0",
+    "websockets==17.1",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+    "core", "data", "data.store", "data.ingest", "data.news", "data.medios", "features",
+    "strategy", "strategy.setups", "risk", "ai", "execution", "portfolio", "learning", "notify", "api",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+# Un DeprecationWarning en nuestro propio codigo es un fallo, no un aviso.
+# Los de terceros (ccxt, pandas) se dejan pasar: no los controlamos.
+filterwarnings = [
+    "error::DeprecationWarning:core.*",
+    "error::DeprecationWarning:data.*",
+    "error::DeprecationWarning:features.*",
+    "error::DeprecationWarning:strategy.*",
+    "error::DeprecationWarning:risk.*",
+]
+
+# Revisor de codigo (decision del propietario del 25/09/2026): SOLO errores probables, sin formato.
+# Solo en el portatil (extra `dev`); el VPS no lo instala. Lo pasa `tests/unit/test_ruff.py`.
+[tool.ruff]
+target-version = "py312"
+extend-exclude = ["docs", "claude_runtime"]
+
+[tool.ruff.lint]
+# E9: errores de sintaxis. F (pyflakes): nombres que no existen, imports y variables sobrantes.
+# B (bugbear): trampas tipicas (argumentos mutables por defecto, excepciones tragadas...).
+select = ["E9", "F", "B"]
+# B905 (zip sin strict=): el codigo recorre A PROPOSITO una lista contra ella misma desplazada
+# (`zip(xs, xs[1:])`), con longitudes distintas; con strict=True reventaria.
+ignore = ["B905"]

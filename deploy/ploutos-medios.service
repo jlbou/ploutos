@@ -1,0 +1,39 @@
+[Unit]
+# Medios de cripto EN SOMBRA (docs/diseno-medios-sombra.md, decision del propietario del 07/10/2026): lee RSS cada 10 min y
+# guarda los titulares en SU base (var/ploutos-medios.db). Nadie que decide la lee: ni las carteras, ni el
+# ejecutor, ni la IA. No manda nada por Telegram.
+#
+# Sin Requires= con nadie: si un medio o este servicio fallan, nada mas se entera. Y al reves.
+Description=Ploutos - medios en sombra (RSS)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/run_medios.py
+
+Restart=always
+RestartSec=30
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Endurecimiento: solo habla con los RSS publicos y con Healthchecks. Lee .env solo por su latido.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+MemoryMax=200M
+# Que una fuente gigante no le quite memoria a la ingesta (la ultima en caer).
+OOMScoreAdjust=500
+
+[Install]
+WantedBy=multi-user.target

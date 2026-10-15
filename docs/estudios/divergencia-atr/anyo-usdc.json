@@ -1,0 +1,63 @@
+{
+ "desde": "2025-08-21",
+ "velas": 2310,
+ "dias": 385.0,
+ "operaciones_cerradas": 161,
+ "candidatos_referencia": 198,
+ "por_factor": {
+  "0.9966": {
+   "pierde": 0,
+   "gana": 0,
+   "pierde_pct": 0.0,
+   "gana_pct": 0.0
+  },
+  "0.99": {
+   "pierde": 0,
+   "gana": 0,
+   "pierde_pct": 0.0,
+   "gana_pct": 0.0
+  },
+  "0.95": {
+   "pierde": 0,
+   "gana": 0,
+   "pierde_pct": 0.0,
+   "gana_pct": 0.0
+  },
+  "0.9": {
+   "pierde": 1,
+   "gana": 0,
+   "pierde_pct": 0.5,
+   "gana_pct": 0.0
+  },
+  "0.5": {
+   "pierde": 17,
+   "gana": 0,
+   "pierde_pct": 8.6,
+   "gana_pct": 0.0
+  },
+  "1.0034": {
+   "pierde": 0,
+   "gana": 0,
+   "pierde_pct": 0.0,
+   "gana_pct": 0.0
+  },
+  "1.01": {
+   "pierde": 0,
+   "gana": 0,
+   "pierde_pct": 0.0,
+   "gana_pct": 0.0
+  },
+  "1.05": {
+   "pierde": 0,
+   "gana": 1,
+   "pierde_pct": 0.0,
+   "gana_pct": 0.5
+  },
+  "1.1": {
+   "pierde": 0,
+   "gana": 3,
+   "pierde_pct": 0.0,
+   "gana_pct": 1.5
+  }
+ }
+}

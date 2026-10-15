@@ -1,0 +1,13 @@
+cortos A' (con financiacion pesimista): {"n": 166, "aciertos_pct": 38.0, "r_medio": 0.056, "ic90": [-0.176, 0.283], "neto_usd": 7.31}
+  por anyo: 2021 20 op. -0.456, 2022 127 op. +0.199, 2023 19 op. -0.363
+  informativo, objetivo taker: {"n": 166, "aciertos_pct": 38.0, "r_medio": 0.049, "ic90": [-0.182, 0.274], "neto_usd": 7.31}
+largos en la combinacion: {"n": 284, "aciertos_pct": 30.3, "r_medio": 0.268, "ic90": [0.046, 0.509], "neto_usd": 58.49}
+idea 2 sola: {"n": 293, "aciertos_pct": 30.4, "r_medio": 0.278, "ic90": [0.057, 0.514], "neto_usd": 59.96}
+combinacion entera: {"n": 450, "aciertos_pct": 33.1, "r_medio": 0.19, "ic90": [0.024, 0.36], "neto_usd": 65.8}
+emparejada (R total de la combinacion menos la idea 2 sola): +3.8 R (IC 90 %: -38.4 a +46.4)
+  si  cortos: al menos 100 operaciones
+  NO  cortos: IC 90 % entero por encima de 0
+  NO  cortos: R medio >= +0,13
+  si  cortos: 2022 positivo
+  NO  combinacion mejor que la idea 2 sola (IC de la diferencia entero > 0)
+VEREDICTO A': NO PASA

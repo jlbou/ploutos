@@ -1,0 +1,116 @@
+{
+ "estrategia": "idea 4: pullback 2,5 ATR",
+ "idea": "4",
+ "argumentos": [
+  "--idea",
+  "4",
+  "--setup",
+  "pullback_trend",
+  "--mult",
+  "2.5"
+ ],
+ "desde": "2020-12-02",
+ "datos": "USDT como sustituto de USDC, exploracion 12/2020-06/2024",
+ "candidatos": 529,
+ "todo": {
+  "n": 410,
+  "aciertos_pct": 31.5,
+  "r_medio": 0.154,
+  "ic90": [
+   -0.011,
+   0.326
+  ],
+  "neto_usd": 50.72
+ },
+ "por_anyo": {
+  "2020": {
+   "n": 15,
+   "aciertos_pct": 33.3,
+   "r_medio": 0.105,
+   "ic90": [
+    -0.576,
+    0.894
+   ],
+   "neto_usd": 1.28
+  },
+  "2021": {
+   "n": 133,
+   "aciertos_pct": 36.1,
+   "r_medio": 0.334,
+   "ic90": [
+    0.041,
+    0.649
+   ],
+   "neto_usd": 32.6
+  },
+  "2022": {
+   "n": 104,
+   "aciertos_pct": 22.1,
+   "r_medio": -0.233,
+   "ic90": [
+    -0.505,
+    0.066
+   ],
+   "neto_usd": -13.56
+  },
+  "2023": {
+   "n": 95,
+   "aciertos_pct": 36.8,
+   "r_medio": 0.414,
+   "ic90": [
+    0.036,
+    0.794
+   ],
+   "neto_usd": 31.43
+  },
+  "2024": {
+   "n": 63,
+   "aciertos_pct": 28.6,
+   "r_medio": 0.033,
+   "ic90": [
+    -0.375,
+    0.463
+   ],
+   "neto_usd": -1.02
+  }
+ },
+ "por_setup": {
+  "mean_reversion": {
+   "n": 80,
+   "aciertos_pct": 16.2,
+   "r_medio": -0.493,
+   "ic90": [
+    -0.794,
+    -0.151
+   ],
+   "neto_usd": -12.13
+  },
+  "pullback_trend": {
+   "n": 224,
+   "aciertos_pct": 34.4,
+   "r_medio": 0.342,
+   "ic90": [
+    0.106,
+    0.593
+   ],
+   "neto_usd": 50.32
+  },
+  "range_breakout": {
+   "n": 106,
+   "aciertos_pct": 36.8,
+   "r_medio": 0.244,
+   "ic90": [
+    -0.027,
+    0.529
+   ],
+   "neto_usd": 12.53
+  }
+ },
+ "periodo": "Periodo: 2020-12-02 a 2024-06-30 (1307 dias, 7842 velas)",
+ "equity": "equity             50.00 $ -> 101.83 $",
+ "drawdown": "drawdown maximo    27.15 %",
+ "baseline": "baseline            +103.7 %",
+ "btc": "comprar y esperar BTC   +237.2 %",
+ "cesta": "comprar y esperar las 8  +1595.3 %",
+ "muertas_0_1_velas": 63
+}

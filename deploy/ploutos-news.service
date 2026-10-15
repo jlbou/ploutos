@@ -1,0 +1,43 @@
+[Unit]
+# Servicio de noticias: anuncios de OKX -> flags por moneda -> avisos de Telegram
+# (docs/diseno-noticias.md). Escribe SOLO en su base (var/ploutos-news.db); las carteras
+# la leen en mode=ro y aplican ellas el filtro y la salida a mercado.
+#
+# Sin Requires= con nadie, a proposito (opcion B del propietario, 22/09): si este servicio o la
+# fuente de noticias falla, ni la ingesta ni las carteras se enteran. Y al reves.
+Description=Ploutos - noticias (anuncios de OKX)
+After=network-online.target
+Wants=network-online.target
+# En [Unit], no en [Service] (ahi systemd lo ignora: visto en el despliegue del 25/09).
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/run_news.py
+
+Restart=always
+RestartSec=30
+
+# Todo lo que importa vive en su base (anuncios, levantadas, lecturas, avisos): un
+# reinicio continua donde estaba y las flags se derivan otra vez de lo guardado.
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Endurecimiento: solo habla con la API PUBLICA de anuncios de OKX, con Telegram y con
+# Healthchecks. Lee .env (credenciales de Telegram y su latido), nunca claves de OKX.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+MemoryMax=200M
+
+[Install]
+WantedBy=multi-user.target

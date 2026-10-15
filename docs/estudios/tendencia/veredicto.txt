@@ -1,0 +1,24 @@
+
+=== F: 50 $ -> 289.75 $ (+479.5 %), caida max 49.9 %, Sharpe 1.30, 158 operaciones ({'rotacion': 114, 'stop': 30, 'objetivo': 14}), comisiones 23.56 $, invertido el 83 % del tiempo
+    BTC mantenido: 50 $ -> 163.01 $ (+226.0 %), caida max 76.6 %, Sharpe 0.84; BTC + ETH: +352.9 %, caida 77.1 %, Sharpe 0.95
+    por anyo (estrategia / BTC): 2020 +8.8 % / +50.2 %, 2021 +206.9 % / +59.8 %, 2022 -33.9 % / -64.2 %, 2023 +153.5 % / +155.6 %, 2024 +3.6 % / +48.5 %
+    Sharpe deflactado 0.942 (Sharpe por suerte 0.47 al anyo)
+    si  1. gana dinero
+    si  2. caida <= 2/3 de la de BTC
+    si  3. Sharpe >= el de BTC
+    NO  4. en 2022 pierde <= 1/3 de BTC
+    NO  5. Sharpe deflactado >= 0,95
+    -> NO PASA
+
+=== H: 50 $ -> 130.14 $ (+160.3 %), caida max 42.3 %, Sharpe 1.00, 22 operaciones ({'rotacion': 6, 'stop': 10, 'objetivo': 6}), comisiones 2.63 $, invertido el 57 % del tiempo
+    BTC mantenido: 50 $ -> 163.01 $ (+226.0 %), caida max 76.6 %, Sharpe 0.84; BTC + ETH: +352.9 %, caida 77.1 %, Sharpe 0.95
+    por anyo (estrategia / BTC): 2020 +24.0 % / +50.2 %, 2021 +12.4 % / +59.8 %, 2022 +1.9 % / -64.2 %, 2023 +46.2 % / +155.6 %, 2024 +25.4 % / +48.5 %
+    Sharpe deflactado 0.839 (Sharpe por suerte 0.47 al anyo)
+    si  1. gana dinero
+    si  2. caida <= 2/3 de la de BTC
+    si  3. Sharpe >= el de BTC
+    si  4. en 2022 pierde <= 1/3 de BTC
+    NO  5. Sharpe deflactado >= 0,95
+    -> NO PASA
+
+VEREDICTO: NO PASA NINGUNA: no se retocan

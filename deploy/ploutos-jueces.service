@@ -1,0 +1,19 @@
+[Unit]
+# Los jueces, una vez al dia; un Telegram SOLO si alguno da FALLA o no corre (el propietario, 26/09).
+Description=Ploutos - revision diaria de los jueces
+After=ploutos-paper.service ploutos-paper-ai.service
+
+[Service]
+Type=oneshot
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/jueces_diarios.py
+# Los jueces solo LEEN (mode=ro): nada que escribir.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+SyslogIdentifier=ploutos-jueces

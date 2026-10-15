@@ -1,0 +1,39 @@
+[Unit]
+# El ejecutor del demo de OKX (fase 4): espeja la cartera de la IA en papel con ordenes de verdad en el DEMO.
+# El UNICO servicio que lee las claves de OKX. Servicio APARTE: si falla, las posiciones siguen protegidas por
+# sus OCO en el exchange (regla 13) y el resto del bot sigue como si nada.
+#
+# NO se arranca solo: install.sh copia este fichero pero no lo habilita. Antes hacen falta la clave del demo
+# en .env (sin retirada, IP del VPS), feeType 1 en la cuenta, HEALTHCHECK_EJECUTOR y el OK del propietario.
+# Si la cuenta no esta en orden (clave real, retirada, feeType), run_exec.py sale con 1 y NO opera.
+Description=Ploutos - ejecutor del demo de OKX (fase 4)
+After=network-online.target ploutos-ingest.service ploutos-paper-ai.service
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/run_exec.py
+
+Restart=always
+RestartSec=10
+KillSignal=SIGTERM
+TimeoutStopSec=60
+MemoryMax=300M
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target

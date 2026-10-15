@@ -1,0 +1,28 @@
+[Unit]
+# El embudo de noticias para L (docs/diseno-embudo-noticias.md, el propietario, 11/10), EN SOMBRA: palabras clave, confirmacion
+# por fuentes o por precio, y la IA da el veredicto final. No toca nada del bot; escribe solo en var/ploutos-embudo.db.
+Description=Ploutos - embudo de noticias para L (en sombra)
+After=ploutos-medios.service
+
+[Service]
+Type=oneshot
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/embudo_noticias.py
+# Una llamada a la IA puede tardar hasta 90 s; como mucho 6 al dia.
+TimeoutStartSec=900
+# Como ploutos-paper-ai: el CLI de la IA ocupa 400-500 MB; con este tope, si se dispara, systemd mata ESTE servicio.
+MemoryMax=900M
+# Como ploutos-paper-ai: ProtectHome=read-only (el CLI vive en /home/ploutos/.local) y SIN MemoryDenyWriteExecute
+# (el CLI tiene compilador JIT). La IA nunca ve este entorno: ai/invoke.py le construye uno desde cero (regla 19).
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+SyslogIdentifier=ploutos-embudo

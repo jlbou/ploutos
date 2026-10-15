@@ -1,0 +1,37 @@
+{
+ "desde": "2020-12-02",
+ "velas": 7842,
+ "dias": 1307.0,
+ "velas_con_la_cartera_llena": 3020,
+ "operaciones_cerradas": 497,
+ "candidatos_reales": 622,
+ "candidatos_sombra": 1979,
+ "por_dia": {
+  "reales": 0.48,
+  "sombra": 1.51,
+  "juntos": 1.99
+ },
+ "llamadas_por_dia": {
+  "hoy": 0.35,
+  "con_sombra": 1.35
+ },
+ "distintos": {
+  "reales": 618,
+  "sombra": 711
+ },
+ "sombra_por_setup": {
+  "pullback_trend": 1814,
+  "range_breakout": 120,
+  "mean_reversion": 45
+ },
+ "sombra_por_moneda": {
+  "ETH/USDC": 308,
+  "XRP/USDC": 226,
+  "NEAR/USDC": 322,
+  "SOL/USDC": 226,
+  "BTC/USDC": 155,
+  "DOGE/USDC": 279,
+  "AVAX/USDC": 242,
+  "TRX/USDC": 221
+ }
+}

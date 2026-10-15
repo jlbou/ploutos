@@ -1,0 +1,39 @@
+Robustez de L (10/10/2026 12:08 UTC). Solo informacion: ninguna variante sustituye a L.
+validacion exploracion: L sin cambios IGUAL a L-ampliada.json
+validacion anyo-usdc: L sin cambios IGUAL a L-usdc.json
+
+== Exploracion ampliada (14/12/2020 - 20/08/2025)
+                   50 $ ->   caida  Sharpe    2022   tramo   op.  1-5
+L                   421.36   44.5%    1.46  -11.0%  +30.5%   130  pasa
+dia martes          632.91   43.9%    1.69   -5.1%  +11.5%   133  pasa
+dia miercoles       460.28   43.6%    1.52   -5.3%   +1.8%   133  pasa
+dia jueves          522.64   35.8%    1.62   -6.1%  +21.8%   118  pasa
+dia viernes        1077.04   32.8%    2.09   +0.3%  +74.6%   115  pasa
+dia sabado          655.58   33.5%    1.72   -6.1%   +9.5%   122  pasa
+dia domingo         450.32   42.3%    1.50   -5.2%   +1.3%   124  pasa
+plazos x0,8         397.41   39.8%    1.39  -12.3%  +12.7%   138  pasa
+plazos x0,9         424.01   41.9%    1.45   -6.2%  +14.4%   137  pasa
+plazos x1,1         483.98   44.6%    1.54  -10.8%  +23.3%   124  pasa
+plazos x1,25        386.47   41.3%    1.45   -7.8%  +32.7%   118  pasa
+BTC >= 1            342.05   43.5%    1.30  -16.3%  +29.8%   138  pasa
+BTC >= 3            542.04   48.0%    1.65  -11.1%  +25.7%   123  pasa
+pasan 1-5: 12 de 12; Sharpe de L 1.46; mediana de las 12 1.53 (105 % del de L); L queda por encima de 4 de 12
+
+== Anyo USDC (01/09/2025 - 27/09/2026), se ensenya, no puntua
+BTC mantenido -22.3 %, caida 53.1 %
+L                  -6.9%  caida  20.5%   13 op.
+dia martes         +0.5%  caida  23.9%   12 op.
+dia miercoles      -1.2%  caida  21.3%   13 op.
+dia jueves        +12.9%  caida  20.9%   13 op.
+dia viernes        +0.5%  caida  22.2%   13 op.
+dia sabado         +1.2%  caida  18.7%   11 op.
+dia domingo        -1.6%  caida  17.2%   12 op.
+plazos x0,8        +2.6%  caida  22.4%   15 op.
+plazos x0,9        -5.3%  caida  19.2%   13 op.
+plazos x1,1        -7.0%  caida  20.6%   13 op.
+plazos x1,25       +1.4%  caida  24.2%   13 op.
+BTC >= 1           -4.3%  caida  27.7%   13 op.
+BTC >= 3           -5.7%  caida  19.5%   10 op.
+pierden: 6 de 12
+
+LECTURA (fijada antes): L es SOLIDA (pasan 12 de 12, hace falta 9; mediana del Sharpe 105 % del de L, hace falta 80 %)

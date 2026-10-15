@@ -1,0 +1,11 @@
+[Unit]
+Description=Ploutos - revision diaria de los jueces
+
+[Timer]
+# 00:30 UTC: despues del cambio de dia y del resumen de las 00:10, y lejos de la copia (03:15).
+OnCalendar=*-*-* 00:30:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

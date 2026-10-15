@@ -1,0 +1,117 @@
+{
+ "compra": {
+  "ordId": "3976853566677106688",
+  "clOrdId": "d20261003T1004btcpn",
+  "state": "filled",
+  "ordType": "limit",
+  "side": "buy",
+  "sz": "0.0001182",
+  "px": "84853",
+  "accFillSz": "0.0001182",
+  "fillSz": "0.0001182",
+  "avgPx": "84596",
+  "fee": "-0.0199984944",
+  "feeCcy": "USDC",
+  "rebate": "0",
+  "rebateCcy": "USDC",
+  "tdMode": "cash",
+  "tradeQuoteCcy": "USDC",
+  "attachAlgoOrds": [],
+  "attachAlgoClOrdId": "",
+  "cancelSource": "",
+  "cTime": "1791021872082",
+  "uTime": "1791021872083"
+ },
+ "oco": {
+  "last": 84596.0,
+  "bid": 84573.0,
+  "ask": 84595.0,
+  "ask_sz": 0.01923801,
+  "peticion": {
+   "instId": "BTC-USDC",
+   "side": "sell",
+   "ordType": "oco",
+   "sz": "0.0001182",
+   "tdMode": "cash",
+   "tpTriggerPx": "84595",
+   "tpOrdPx": "-1",
+   "tpTriggerPxType": "last",
+   "slTriggerPx": "82036",
+   "slOrdPx": "-1",
+   "slTriggerPxType": "last",
+   "algoClOrdId": "d20261003T1004btcpoOCO",
+   "tradeQuoteCcy": "USDC"
+  },
+  "respuesta": {
+   "ok": false,
+   "error": "InvalidOrder: okx {\"code\":\"1\",\"data\":[{\"algoClOrdId\":\"\",\"algoId\":\"\",\"clOrdId\":\"\",\"sCode\":\"51279\",\"sMsg\":\"TP trigger price cannot be lower than the last price \",\"tag\":\"\"}],\"msg\":\"\"}"
+  }
+ },
+ "empujon": {
+  "orden": {
+   "ordId": "3976853738542907392",
+   "clOrdId": "d20261003T1004btcpp",
+   "state": "filled",
+   "ordType": "limit",
+   "side": "buy",
+   "sz": "0.00002",
+   "px": "84595",
+   "accFillSz": "0.00002",
+   "fillSz": "0.00002",
+   "avgPx": "84595",
+   "fee": "-0.0033838",
+   "feeCcy": "USDC",
+   "rebate": "0",
+   "rebateCcy": "USDC",
+   "tdMode": "cash",
+   "tradeQuoteCcy": "USDC",
+   "attachAlgoOrds": [],
+   "attachAlgoClOrdId": "",
+   "cancelSource": "",
+   "cTime": "1791021877204",
+   "uTime": "1791021877205"
+  },
+  "last_despues": 84595.0
+ },
+ "algo_final": null,
+ "limpieza": {
+  "canceladas": [],
+  "algos_canceladas": [],
+  "ventas": [
+   {
+    "simbolo": "BTC/USDC",
+    "cantidad": 0.0001382,
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261003T1004btcpz",
+       "ordId": "3976860059057045504",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1791022065570"
+      }
+     ],
+     "inTime": "1791022065500488",
+     "msg": "",
+     "outTime": "1791022065639755"
+    }
+   }
+  ]
+ },
+ "saldo_final": {
+  "BTC": 1.00000001,
+  "XRP": 50000.0,
+  "EUR": 4600.0,
+  "USD": 5000.0,
+  "USDC": 4999.36490196452,
+  "ETH": 1.0
+ },
+ "al_acabar": {
+  "pendientes": 0,
+  "oco_vivas": 0
+ }
+}

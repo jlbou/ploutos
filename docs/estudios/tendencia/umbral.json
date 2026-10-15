@@ -1,0 +1,58 @@
+{
+ "DECIDIDO": {
+  "N": 6,
+  "familia": [
+   "idea 2",
+   "2 + 3",
+   "2 + D",
+   "A' (largos + cortos)",
+   "F",
+   "H"
+  ],
+  "V_sharpe_diario": 0.0003532820844713172,
+  "SR0_diario": 0.02443718576472015,
+  "SR0_anual": 0.4668717784962976,
+  "nota": "el propietario, 09/10, antes de medir: solo la familia de tendencia (opcion b)"
+ },
+ "descartado_N27": {
+  "N": 27,
+  "variantes_en_V": 11,
+  "sin_operaciones_guardadas": [
+   "idea 1",
+   "idea 4 pb 1,5",
+   "idea 4 pb 2,5",
+   "idea 4 rb 1,5",
+   "idea 4 rb 2,5",
+   "idea 5"
+  ],
+  "V_sharpe_diario": 0.001982946436808835,
+  "SR0_diario": 0.09037869846298956,
+  "SR0_anual": 1.726682609685508
+ },
+ "sharpes_diarios": {
+  "idea 2": 0.05295,
+  "idea 3": 0.04614,
+  "2 + 3": 0.02248,
+  "H1 (1 h)": -0.05541,
+  "H2 (1 h)": -0.05113,
+  "C siempre": -0.00377,
+  "C sin avance": -0.00694,
+  "D": 0.06762,
+  "2 + D": 0.06735,
+  "espejo (largos + cortos)": 0.04337,
+  "A' (largos + cortos)": 0.05127
+ },
+ "sharpes_anuales": {
+  "idea 2": 1.012,
+  "idea 3": 0.882,
+  "2 + 3": 0.43,
+  "H1 (1 h)": -1.059,
+  "H2 (1 h)": -0.977,
+  "C siempre": -0.072,
+  "C sin avance": -0.133,
+  "D": 1.292,
+  "2 + D": 1.287,
+  "espejo (largos + cortos)": 0.829,
+  "A' (largos + cortos)": 0.98
+ }
+}

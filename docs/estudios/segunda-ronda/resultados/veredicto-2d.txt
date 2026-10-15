@@ -1,0 +1,15 @@
+Validacion: la idea 2 sola (maker) REPRODUCE la primera ronda (293 op., R +0.278; entonces 293 op., R +0.278)
+
+2 + D, objetivo maker: 256 op., aciertos 32.0 %, R +0.371 (IC +0.134 a +0.625); equity 50.00 $ -> 117.62 $; caida 17.99 %
+  por anyo: 2020 13 op. +0.07, 2021 100 op. +0.74, 2023 78 op. +0.20, 2024 65 op. +0.06
+  por setup: pullback_trend 179 op. +0.51, range_breakout 77 op. +0.04
+  (1) IC sobre +0,13: si; (2) >= 100 op.: si; (3) anyos con >= 20 op. todos > 0 y al menos 3: si (3 anyos) -> PASA
+  [informativo: la idea 2 sola, 293 op., R +0.278 (IC +0.057 a +0.514)]
+
+2 + D, objetivo taker: 256 op., aciertos 32.0 %, R +0.363 (IC +0.128 a +0.616); equity 50.00 $ -> 115.90 $; caida 18.13 %
+  por anyo: 2020 13 op. +0.06, 2021 100 op. +0.74, 2023 78 op. +0.19, 2024 65 op. +0.06
+  por setup: pullback_trend 179 op. +0.50, range_breakout 77 op. +0.04
+  (1) IC sobre +0,13: no; (2) >= 100 op.: si; (3) anyos con >= 20 op. todos > 0 y al menos 3: si (3 anyos) -> no pasa
+  [informativo: la idea 2 sola, 292 op., R +0.263 (IC +0.036 a +0.493)]
+
+VEREDICTO 2 + D: NO PASA  (maker si, taker no)

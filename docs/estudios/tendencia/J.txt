@@ -1,0 +1,10 @@
+J (un tercio a 2 + D, F y H; 1295 dias): 50 $ -> 179.00 $ (+258.0 %), caida max 29.9 %, Sharpe 1.32
+  por anyo (J / BTC): 2020 +13.0 % / +50.2 %, 2021 +100.2 % / +59.8 %, 2022 -16.3 % / -64.2 %, 2023 +77.4 % / +155.6 %, 2024 +6.6 % / +48.5 %
+  BTC mantenido: 50 $ -> 163.01 $, caida 76.6 %, Sharpe 0.84
+  Sharpe deflactado 0.939 (N = 7, Sharpe por suerte 0.50 al anyo)
+  si  1. gana dinero
+  si  2. caida <= 2/3 de la de BTC
+  si  3. Sharpe >= el de BTC
+  si  4. en 2022 pierde <= 1/3 de BTC
+  NO  5. Sharpe deflactado >= 0,95
+VEREDICTO J: NO PASA

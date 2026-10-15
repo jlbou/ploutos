@@ -1,0 +1,13 @@
+[Unit]
+Description=Ploutos - copia diaria de la base de datos
+
+[Timer]
+# 03:15 UTC: lejos de las 00:00, cuando se resetean los limites diarios
+# (reglas 10 y 11), para no mezclar la copia con el cambio de dia.
+OnCalendar=*-*-* 03:15:00 UTC
+# Si el servidor estuvo apagado a esa hora, se hace al arrancar.
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,183 @@
+{
+ "inicio": {
+  "sello": "20261002T1414",
+  "ccxt": "4.5.84",
+  "saldo": {
+   "BTC": 1.0,
+   "XRP": 50000.0,
+   "EUR": 4600.0,
+   "USD": 5000.0,
+   "USDC": 5000.0,
+   "ETH": 1.0
+  }
+ },
+ "6_feetype_cantidad_exacta": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "4.884",
+    "sz": "2.053",
+    "clOrdId": "d20261002T1414nearpa"
+   },
+   "respuesta": {
+    "ok": false,
+    "error": "ExchangeError: okx {\"msg\":\"This API Key does not have trading permission for the Crypto\",\"code\":\"50123\"}"
+   }
+  },
+  "orden": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  },
+  "delta_NEAR": 0,
+  "delta_USDC": 0.0,
+  "nota": "con feeType = 1: accFillSz == sz, delta_NEAR == accFillSz y feeCcy == USDC"
+ },
+ "5_clordid_reutilizado": {
+  "primera": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  },
+  "reenvio": {
+   "ok": false,
+   "error": "ExchangeError: okx {\"msg\":\"This API Key does not have trading permission for the Crypto\",\"code\":\"50123\"}"
+  },
+  "detalle_tras_reenvio": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  },
+  "nota": "si el reenvio da otro ordId, OKX crea una orden NUEVA: hay que consultar antes de reenviar"
+ },
+ "9a_entrada_con_tradequoteccy": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "4.884",
+    "sz": "2.053",
+    "clOrdId": "d20261002T1414nearpb",
+    "tradeQuoteCcy": "USDC"
+   },
+   "respuesta": {
+    "ok": false,
+    "error": "ExchangeError: okx {\"msg\":\"This API Key does not have trading permission for the Crypto\",\"code\":\"50123\"}"
+   }
+  },
+  "orden": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  },
+  "sin_el": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  }
+ },
+ "error_1-8": "Traceback (most recent call last):\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 389, in main\n    paso()\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 215, in p1_p8_oco\n    did, envio, estado = self._oco(\"pc\")\n                         ^^^^^^^^^^^^^^^\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 199, in _oco\n    cantidad = float(self.sz(SIMBOLO, min(self.comprado(SIMBOLO), NOCIONAL / ask)))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nccxt.base.errors.InvalidOrder: okx amount of NEAR/USDC must be greater than minimum amount precision of 0.001\n",
+ "error_9b": "Traceback (most recent call last):\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 389, in main\n    paso()\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 230, in p9_oco\n    did, envio, estado = self._oco(\"pd\", cambiar={\"tradeQuoteCcy\": \"USDC\"})\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 199, in _oco\n    cantidad = float(self.sz(SIMBOLO, min(self.comprado(SIMBOLO), NOCIONAL / ask)))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nccxt.base.errors.InvalidOrder: okx amount of NEAR/USDC must be greater than minimum amount precision of 0.001\n",
+ "error_7": "Traceback (most recent call last):\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 389, in main\n    paso()\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 235, in p7_objetivo_limit\n    did, envio, estado = self._oco(\"pe\", quitar=(\"tpTriggerPx\",),\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 199, in _oco\n    cantidad = float(self.sz(SIMBOLO, min(self.comprado(SIMBOLO), NOCIONAL / ask)))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nccxt.base.errors.InvalidOrder: okx amount of NEAR/USDC must be greater than minimum amount precision of 0.001\n",
+ "2_oco_sin_tdmode": {
+  "enviada": false,
+  "por_que": "seria una orden de margen (regla 1): no se envia ni en el demo",
+  "tdMode_que_pone_ccxt": "cross",
+  "ordType": "oco",
+  "guardia": "rechazada por la guardia: [\"regla 1: tdMode 'cross', tiene que ser 'cash' (spot, sin margen)\", 'parametro no permitido: tag', 'algoClOrdId None: tiene que ser el de d-20261002T1414-near-pg', 'una OCO no lleva clOrdId (seria el de broker de ccxt)']",
+  "acctLv_cuenta": "1",
+  "nota": "acctLv 1 = modo spot (sin margen): OKX la rechazaria; 2-4 = con margen: seria margen de verdad"
+ },
+ "3_adjuntos_llenada_entera": {
+  "envio": {
+   "peticion": {
+    "instId": "NEAR-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "4.885",
+    "sz": "2.053",
+    "clOrdId": "d20261002T1414nearph",
+    "attachAlgoOrds": [
+     {
+      "attachAlgoClOrdId": "d20261002T1414nearphOCO",
+      "tpTriggerPx": "6.088",
+      "tpOrdPx": "-1",
+      "slTriggerPx": "4.123",
+      "slOrdPx": "-1"
+     }
+    ]
+   },
+   "respuesta": {
+    "ok": false,
+    "error": "ExchangeError: okx {\"msg\":\"This API Key does not have trading permission for the Crypto\",\"code\":\"50123\"}"
+   }
+  },
+  "orden": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  },
+  "algo_creada": null,
+  "algos_pendientes_del_par": []
+ },
+ "4_adjuntos_parcial": {
+  "hecha": true,
+  "simbolo": "ETH/USDC",
+  "nivel_ask": {
+   "precio": 2736.0,
+   "tamanyo": 0.020714
+  },
+  "envio": {
+   "peticion": {
+    "instId": "ETH-USDC",
+    "tdMode": "cash",
+    "side": "buy",
+    "ordType": "limit",
+    "px": "2736",
+    "sz": "0.031071",
+    "clOrdId": "d20261002T1414ethpi",
+    "attachAlgoOrds": [
+     {
+      "attachAlgoClOrdId": "d20261002T1414ethpiOCO",
+      "tpTriggerPx": "3420",
+      "tpOrdPx": "-1",
+      "slTriggerPx": "2323",
+      "slOrdPx": "-1"
+     }
+    ]
+   },
+   "respuesta": {
+    "ok": false,
+    "error": "ExchangeError: okx {\"msg\":\"This API Key does not have trading permission for the Crypto\",\"code\":\"50123\"}"
+   }
+  },
+  "antes_de_cancelar": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  },
+  "cancelar": {
+   "ok": false,
+   "error": "OrderNotFound: okx {\"code\":\"1\",\"data\":[{\"clOrdId\":\"d20261002T1414ethpi\",\"ordId\":\"\",\"sCode\":\"51400\",\"sMsg\":\"Order cancellation failed as the order has been filled, canceled or does not exist.\",\"ts\":\"1790950489638\"}],\"inTime\":\"1790950489568546\",\"msg\":\"All operations failed\",\"outTime\":\"1790950489708475\"}"
+  },
+  "tras_cancelar": {
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  },
+  "algo_pendiente_para_lo_llenado": null,
+  "consulta_por_algoClOrdId": {
+   "ok": false,
+   "error": "OrderNotFound: okx {\"code\":\"51603\",\"data\":[],\"msg\":\"Order does not exist\"}"
+  }
+ },
+ "error_limpieza": "Traceback (most recent call last):\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 395, in main\n    p.limpiar()\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 341, in limpiar\n    vender = float(self.sz(s, self.comprado(s)))\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/pruebas-demo/scripts/pruebas_demo.py\", line 67, in sz\n    return self.ex.amount_to_precision(simbolo, valor)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nccxt.base.errors.InvalidOrder: okx amount of BTC/USDC must be greater than minimum amount precision of 0.00000001\n",
+ "fin": {
+  "saldo": {
+   "BTC": 1.0,
+   "XRP": 50000.0,
+   "EUR": 4600.0,
+   "USD": 5000.0,
+   "USDC": 5000.0,
+   "ETH": 1.0
+  },
+  "delta": {
+   "EUR": 0.0,
+   "ETH": 0.0,
+   "BTC": 0.0,
+   "XRP": 0.0,
+   "USDC": 0.0,
+   "USD": 0.0
+  }
+ }
+}

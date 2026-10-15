@@ -1,0 +1,38 @@
+# Secretos — NUNCA en git (regla dura 19)
+.env
+.env.*
+!.env.example
+
+# Datos y estado local
+var/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+
+# Directorio de ejecución de claude -p: debe estar vacío
+claude_runtime/*
+!claude_runtime/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.hypothesis/
+*.egg-info/
+build/
+dist/
+.coverage
+htmlcov/
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Lo personal (repositorio que sera publico, 15/10/2026)
+CLAUDE.local.md
+privado/

@@ -1,0 +1,15 @@
+
+=== objetivo maker: referencia 497 op., R +0.130 (IC -0.037 a +0.301)
+C-siempre     879 op., R +0.003; diferencia -0.127 (IC -0.267 a +0.006); por anyo 2021 -0.38, 2022 +0.11, 2023 -0.25, 2024 -0.10 (1/4); cortadas 320 a 0.562 R; equity 50.00 $ -> 64.32 $; no pasa
+C-sin-avance  875 op., R -0.009; diferencia -0.139 (IC -0.275 a -0.009); por anyo 2021 -0.39, 2022 +0.11, 2023 -0.25, 2024 -0.15 (1/4); cortadas 305 a 0.445 R; equity 50.00 $ -> 58.05 $; no pasa
+D             399 op., R +0.288 (IC +0.099 a +0.482); por anyo 2021 +0.79, 2022 -0.31, 2023 +0.48, 2024 +0.06 (3/4); equity 50.00 $ -> 142.40 $; caida 22.45 %; no pasa  [informativo: diferencia con la referencia +0.158, IC +0.083 a +0.235]
+
+=== objetivo taker: referencia 497 op., R +0.122 (IC -0.044 a +0.292)
+C-siempre     878 op., R -0.008; diferencia -0.130 (IC -0.264 a +0.001); por anyo 2021 -0.38, 2022 +0.11, 2023 -0.24, 2024 -0.13 (1/4); cortadas 318 a 0.554 R; equity 50.00 $ -> 59.46 $; no pasa
+C-sin-avance  875 op., R -0.015; diferencia -0.136 (IC -0.271 a -0.007); por anyo 2021 -0.39, 2022 +0.11, 2023 -0.24, 2024 -0.15 (1/4); cortadas 305 a 0.444 R; equity 50.00 $ -> 55.91 $; no pasa
+D             398 op., R +0.284 (IC +0.095 a +0.478); por anyo 2021 +0.80, 2022 -0.31, 2023 +0.47, 2024 +0.06 (3/4); equity 50.00 $ -> 140.91 $; caida 22.71 %; no pasa  [informativo: diferencia con la referencia +0.162, IC +0.087 a +0.239]
+
+=== VEREDICTO (tiene que pasar en las dos contabilidades)
+C-siempre     NO PASA  (maker no, taker no)
+C-sin-avance  NO PASA  (maker no, taker no)
+D             NO PASA  (maker no, taker no)

@@ -1,0 +1,11 @@
+[Unit]
+Description=Ploutos - embudo de noticias para L (en sombra)
+
+[Timer]
+# A las :20 y :50: lejos de los cierres de vela de 4 h (00, 04, 08...), cuando llama el analista de la fase 6, para
+# que no coincidan dos CLI de la IA en memoria.
+OnCalendar=*-*-* *:20,50:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

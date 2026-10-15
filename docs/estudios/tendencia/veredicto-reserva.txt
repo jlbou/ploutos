@@ -1,0 +1,5 @@
+reserva: F 50 $ -> 60.26 $ (+20.5 %), caida max 33.6 %, Sharpe 0.60, 57 operaciones ({'rotacion': 40, 'stop': 15, 'objetivo': 2}), invertido el 85 % del tiempo
+    BTC mantenido: 50 $ -> 89.54 $ (+79.1 %), caida max 28.1 % (2/3 = 18.7 %), Sharpe 1.32; BTC + ETH +48.6 %
+    si  gana dinero (> 0)
+    NO  caida <= 2/3 de la de BTC
+VEREDICTO reserva: NO PASA

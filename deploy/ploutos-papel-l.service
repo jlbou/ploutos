@@ -1,0 +1,20 @@
+[Unit]
+# El papel de L hacia adelante (docs/diseno-papel-l.md, el propietario, 10/10): rehace L cada noche y avisa de cada operacion.
+Description=Ploutos - papel de L (estudio)
+After=ploutos-ingest.service
+
+[Service]
+Type=oneshot
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/papel_l.py
+# Lee la ingesta en mode=ro; solo escribe en var/papel-l.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+MemoryMax=600M
+SyslogIdentifier=ploutos-papel-l

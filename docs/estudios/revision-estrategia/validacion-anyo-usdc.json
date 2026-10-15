@@ -1,0 +1,77 @@
+{
+ "estrategia": "validacion-anyo-usdc",
+ "desde": "2025-08-21",
+ "datos": "USDT como sustituto de USDC, exploracion 12/2020-06/2024",
+ "candidatos": 197,
+ "todo": {
+  "n": 159,
+  "aciertos_pct": 18.9,
+  "r_medio": -0.379,
+  "ic90": [
+   -0.651,
+   -0.079
+  ],
+  "neto_usd": -12.14
+ },
+ "por_anyo": {
+  "2025": {
+   "n": 43,
+   "aciertos_pct": 14.0,
+   "r_medio": -0.709,
+   "ic90": [
+    -1.121,
+    -0.203
+   ],
+   "neto_usd": -5.84
+  },
+  "2026": {
+   "n": 116,
+   "aciertos_pct": 20.7,
+   "r_medio": -0.256,
+   "ic90": [
+    -0.587,
+    0.112
+   ],
+   "neto_usd": -6.3
+  }
+ },
+ "por_setup": {
+  "mean_reversion": {
+   "n": 43,
+   "aciertos_pct": 18.6,
+   "r_medio": -0.498,
+   "ic90": [
+    -1.087,
+    0.15
+   ],
+   "neto_usd": -1.9
+  },
+  "pullback_trend": {
+   "n": 73,
+   "aciertos_pct": 13.7,
+   "r_medio": -0.471,
+   "ic90": [
+    -0.811,
+    -0.074
+   ],
+   "neto_usd": -10.16
+  },
+  "range_breakout": {
+   "n": 43,
+   "aciertos_pct": 27.9,
+   "r_medio": -0.102,
+   "ic90": [
+    -0.556,
+    0.376
+   ],
+   "neto_usd": -0.09
+  }
+ },
+ "periodo": "Periodo: 2025-09-08 a 2026-09-25 (382 dias, 2290 velas)",
+ "equity": "equity             50.00 $ -> 37.74 $",
+ "drawdown": "drawdown maximo    32.02 %",
+ "baseline": "baseline            -24.5 %",
+ "btc": "comprar y esperar BTC   -25.0 %",
+ "cesta": "comprar y esperar las 8  +2.6 %",
+ "muertas_0_1_velas": 43
+}

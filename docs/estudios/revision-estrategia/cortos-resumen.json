@@ -1,0 +1,144 @@
+{
+ "referencia_r": 0.13,
+ "combinacion": {
+  "n": 513,
+  "aciertos_pct": 30.6,
+  "r_medio": 0.17,
+  "ic90": [
+   0.008,
+   0.335
+  ],
+  "neto_usd": 65.9
+ },
+ "combinacion_con_financiacion": {
+  "n": 513,
+  "aciertos_pct": 30.6,
+  "r_medio": 0.157,
+  "ic90": [
+   -0.004,
+   0.322
+  ],
+  "neto_usd": 65.9
+ },
+ "largos": {
+  "n": 293,
+  "aciertos_pct": 30.4,
+  "r_medio": 0.278,
+  "ic90": [
+   0.057,
+   0.514
+  ],
+  "neto_usd": 59.96
+ },
+ "cortos": {
+  "n": 220,
+  "aciertos_pct": 30.9,
+  "r_medio": 0.025,
+  "ic90": [
+   -0.217,
+   0.271
+  ],
+  "neto_usd": 5.94
+ },
+ "cortos_con_financiacion": {
+  "n": 220,
+  "aciertos_pct": 30.9,
+  "r_medio": -0.005,
+  "ic90": [
+   -0.245,
+   0.242
+  ],
+  "neto_usd": 5.94
+ },
+ "por_anyo_con_financiacion": {
+  "2020": {
+   "n": 16,
+   "aciertos_pct": 25.0,
+   "r_medio": -0.167,
+   "ic90": [
+    -0.837,
+    0.699
+   ],
+   "neto_usd": -0.87
+  },
+  "2021": {
+   "n": 169,
+   "aciertos_pct": 36.1,
+   "r_medio": 0.423,
+   "ic90": [
+    0.118,
+    0.735
+   ],
+   "neto_usd": 47.23
+  },
+  "2022": {
+   "n": 146,
+   "aciertos_pct": 33.6,
+   "r_medio": 0.079,
+   "ic90": [
+    -0.204,
+    0.366
+   ],
+   "neto_usd": 15.65
+  },
+  "2023": {
+   "n": 109,
+   "aciertos_pct": 22.9,
+   "r_medio": -0.011,
+   "ic90": [
+    -0.358,
+    0.359
+   ],
+   "neto_usd": 6.37
+  },
+  "2024": {
+   "n": 73,
+   "aciertos_pct": 24.7,
+   "r_medio": 0.02,
+   "ic90": [
+    -0.379,
+    0.465
+   ],
+   "neto_usd": -2.47
+  }
+ },
+ "cortos_por_setup": {
+  "mean_reversion": {
+   "n": 48,
+   "aciertos_pct": 22.9,
+   "r_medio": -0.295,
+   "ic90": [
+    -0.691,
+    0.148
+   ],
+   "neto_usd": -3.22
+  },
+  "pullback_trend": {
+   "n": 109,
+   "aciertos_pct": 29.4,
+   "r_medio": 0.041,
+   "ic90": [
+    -0.298,
+    0.395
+   ],
+   "neto_usd": 3.01
+  },
+  "range_breakout": {
+   "n": 63,
+   "aciertos_pct": 39.7,
+   "r_medio": 0.138,
+   "ic90": [
+    -0.199,
+    0.477
+   ],
+   "neto_usd": 6.15
+  }
+ },
+ "criterio": {
+  "ic90_entero_sobre_la_referencia": false,
+  "al_menos_100_operaciones": true,
+  "no_pierde_en_2022": true,
+  "aguanta_la_financiacion_pesimista": false
+ },
+ "pasa_la_exploracion": false
+}

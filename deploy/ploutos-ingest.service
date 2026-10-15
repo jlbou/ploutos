@@ -1,0 +1,59 @@
+[Unit]
+# Ploutos fase 1: ingesta continua de datos de mercado.
+# No opera, no tiene claves, no envia ordenes.
+Description=Ploutos - ingesta de datos de mercado
+Documentation=file:///opt/ploutos/README.md
+After=network-online.target chrony.service
+Wants=network-online.target
+# En [Unit], no en [Service] (ahi systemd lo ignora: visto en el despliegue del 25/09).
+# Sin limite de intentos: nunca rendirse (con RestartSec=10 el de por defecto tampoco saltaba).
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+# Si falta memoria, el kernel mata un proceso: que la ingesta sea la ULTIMA de la
+# lista (decision 2 del propietario del 23/09/2026). El VPS tiene 2 GB y una llamada a
+# Claude ocupa 400-500 MB; la ingesta es la base de todo lo demas.
+OOMScoreAdjust=-900
+WorkingDirectory=/opt/ploutos
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/run_ingest.py
+EnvironmentFile=-/opt/ploutos/.env
+
+# El criterio de avance de la fase 1 son 72 h sin huecos: si el proceso muere,
+# tiene que volver solo. RestartSec da margen para que la red se recupere.
+Restart=always
+RestartSec=10s
+
+# Sin limite de reinicios: preferimos que siga intentandolo a que se rinda de
+# madrugada y perdamos el dia entero de datos.
+
+# Parada limpia: run_ingest.py atiende SIGTERM y cierra WebSocket y base de datos.
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# --- Endurecimiento (regla 19: proteger las claves) ---
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+
+# Journal: los logs ya salen en JSON desde la aplicacion.
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ploutos-ingest
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,44 @@
+[Unit]
+# Servicio de comandos de Telegram: /status, /pause, /kill, /resume
+# (docs/diseno-comandos-telegram.md). Escribe SOLO en su base (var/ploutos-control.db); las
+# carteras la leen en mode=ro y aplican ellas la pausa y la parada, al cierre de cada vela.
+#
+# Sin Requires= con nadie, a proposito: si este servicio cae, las carteras siguen como estaban
+# (una pausa guardada sigue siendo una pausa). Y al reves.
+Description=Ploutos - comandos de Telegram
+After=network-online.target
+Wants=network-online.target
+# En [Unit], no en [Service] (ahi systemd lo ignora: visto en el despliegue del 25/09).
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/run_telegram.py
+
+Restart=always
+RestartSec=30
+
+# Todo lo que importa vive en su base (comandos, ignorados, vueltas, respuestas): un reinicio
+# continua donde estaba y la pausa y la parada se derivan otra vez de lo guardado.
+KillSignal=SIGTERM
+TimeoutStopSec=40
+
+# Endurecimiento: solo habla con Telegram y con Healthchecks. Lee .env (credenciales de
+# Telegram y su latido), nunca claves de OKX. Lee las bases de las carteras y de noticias en
+# mode=ro para /status.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+MemoryMax=200M
+
+[Install]
+WantedBy=multi-user.target

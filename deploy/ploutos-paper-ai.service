@@ -1,0 +1,60 @@
+[Unit]
+# La cartera de papel de la IA (pieza 9 de la fase 3): el MISMO bucle que el
+# baseline, decidiendo con el analista. Servicio APARTE a proposito (decision de
+# el propietario del 23/09/2026): si la IA falla, se cuelga o se come la memoria, el grupo
+# de control (ploutos-paper) y la ingesta siguen como si nada.
+#
+# NO se arranca solo: install.sh copia este fichero pero no lo habilita. Antes
+# hacen falta el CLI (deploy/install-claude.sh), el token en .env, las
+# protecciones de memoria (deploy/swap.sh y el OOMScoreAdjust de la ingesta) y
+# el OK del propietario para la fase 3.
+Description=Ploutos - bucle de papel de la IA (analista Claude)
+After=network-online.target ploutos-ingest.service
+Wants=network-online.target ploutos-ingest.service
+# En [Unit], no en [Service] (ahi systemd lo ignora: visto en el despliegue del 25/09).
+# Sin limite de intentos: nunca rendirse (con RestartSec=10 el de por defecto tampoco saltaba).
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ploutos
+Group=ploutos
+WorkingDirectory=/opt/ploutos
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/ploutos/.venv/bin/python /opt/ploutos/scripts/run_paper_ai.py
+
+# Como el baseline: reiniciar siempre y sin limite de intentos...
+Restart=always
+RestartSec=10
+# ...salvo sin token (salida 2): reintentarlo cada 10 s no lo arregla, solo
+# llena el log. Se arregla poniendo el token y arrancandolo a mano.
+RestartPreventExitStatus=2
+
+KillSignal=SIGTERM
+# Una llamada a Claude puede tardar hasta 90 s: se le da tiempo a terminar.
+TimeoutStopSec=120
+
+# MEMORIA (decision 2 del propietario del 23/09/2026). Una llamada al CLI ocupa 400-500 MB
+# (medido en el portatil). Con este tope, si se dispara, systemd mata ESTE
+# servicio (y lo relanza), no la ingesta.
+MemoryMax=900M
+
+# Endurecimiento, como el baseline, con dos diferencias OBLIGATORIAS:
+# - ProtectHome=read-only (no "true"): el CLI vive en /home/ploutos/.local
+#   (deploy/install-claude.sh). Con "true" no se podria ni leer.
+# - SIN MemoryDenyWriteExecute: el CLI es un binario con compilador JIT, que
+#   necesita memoria escribible y ejecutable. Con esa opcion no arranca.
+# El CLI escribe su configuracion en var/claude_home_ai (su HOME), dentro de
+# ReadWritePaths. La IA nunca ve este entorno: el proceso de Claude se lanza con
+# uno construido desde cero (ai/invoke.py, regla 19).
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/ploutos/var
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

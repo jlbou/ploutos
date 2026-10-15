@@ -1,0 +1,314 @@
+{
+ "libro": {
+  "bid": 84413.0,
+  "ask": 84424.0,
+  "ask_sz": 0.00012135
+ },
+ "sz": 0.00018202,
+ "orden_a_medias": {
+  "ordId": "3975235344232136704",
+  "clOrdId": "d20261002T2040btcpj",
+  "state": "filled",
+  "ordType": "limit",
+  "side": "buy",
+  "sz": "0.00018202",
+  "px": "84424",
+  "accFillSz": "0.00018202",
+  "fillSz": "0.00006067",
+  "avgPx": "84424",
+  "fee": "-0.02561170888",
+  "feeCcy": "USDC",
+  "rebate": "0",
+  "rebateCcy": "USDC",
+  "tdMode": "cash",
+  "tradeQuoteCcy": "USDC",
+  "attachAlgoOrds": [
+   {
+    "activePx": "",
+    "amendPxOnTriggerType": "0",
+    "attachAlgoClOrdId": "d20261002T2040btcpjOCO",
+    "attachAlgoId": "3975235344210956288",
+    "callbackRatio": "",
+    "callbackSpread": "",
+    "failCode": "",
+    "failReason": "",
+    "percent": "",
+    "slOrdPx": "-1",
+    "slTriggerPx": "71751",
+    "slTriggerPxType": "last",
+    "slTriggerRatio": "",
+    "sz": "",
+    "tpOrdKind": "condition",
+    "tpOrdPx": "-1",
+    "tpTriggerPx": "105530",
+    "tpTriggerPxType": "last",
+    "tpTriggerRatio": ""
+   }
+  ],
+  "attachAlgoClOrdId": "",
+  "cancelSource": "",
+  "cTime": "1790973645295",
+  "uTime": "1790973645959"
+ },
+ "algos_pendientes_a_5s_mas": [
+  {
+   "algoId": "3975235366524653568",
+   "algoClOrdId": "d20261002T2040btcpjOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "0.00018202",
+   "tdMode": "cash",
+   "tpTriggerPx": "105530",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "71751",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  }
+ ],
+ "consulta_por_id_a_5s_mas": {
+  "ok": true,
+  "resp": {
+   "code": "0",
+   "data": [
+    {
+     "activePx": "",
+     "actualPx": "",
+     "actualSide": "",
+     "actualSz": "0",
+     "advChaseParams": [],
+     "advanceOrdType": "",
+     "aggressiveness": "",
+     "algoClOrdId": "d20261002T2040btcpjOCO",
+     "algoId": "3975235366524653568",
+     "amendPxOnTriggerType": "0",
+     "attachAlgoOrds": [],
+     "cTime": "1790973645960",
+     "callbackRatio": "",
+     "callbackSpread": "",
+     "ccy": "BTC",
+     "chaseType": "",
+     "chaseVal": "",
+     "clOrdId": "",
+     "closeFraction": "",
+     "failCode": "0",
+     "instId": "BTC-USDC",
+     "instType": "SPOT",
+     "isTradeBorrowMode": "",
+     "last": "84424",
+     "lever": "",
+     "linkedOrd": {
+      "ordId": ""
+     },
+     "lmtOrderNumber": "",
+     "maxChaseType": "",
+     "maxChaseVal": "",
+     "moveTriggerPx": "",
+     "ordId": "",
+     "ordIdList": [],
+     "ordPx": "",
+     "ordType": "oco",
+     "posSide": "net",
+     "pxLimit": "",
+     "pxSpread": "",
+     "pxVar": "",
+     "quickMgnType": "",
+     "reduceOnly": "false",
+     "side": "sell",
+     "slOrdPx": "-1",
+     "slTriggerPx": "71751",
+     "slTriggerPxType": "last",
+     "state": "live",
+     "subAlgoIdList": [],
+     "sz": "0.00018202",
+     "szLimit": "",
+     "tag": "",
+     "tdMode": "cash",
+     "tgtCcy": "",
+     "timeInterval": "",
+     "tpOrdPx": "-1",
+     "tpTriggerPx": "105530",
+     "tpTriggerPxType": "last",
+     "tradeQuoteCcy": "USDC",
+     "triggerParams": [],
+     "triggerPx": "",
+     "triggerPxType": "",
+     "triggerTime": "",
+     "uTime": "1790973645960"
+    }
+   ],
+   "msg": ""
+  }
+ },
+ "algos_pendientes_a_15s_mas": [
+  {
+   "algoId": "3975235366524653568",
+   "algoClOrdId": "d20261002T2040btcpjOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "0.00018202",
+   "tdMode": "cash",
+   "tpTriggerPx": "105530",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "71751",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  }
+ ],
+ "consulta_por_id_a_15s_mas": {
+  "ok": true,
+  "resp": {
+   "code": "0",
+   "data": [
+    {
+     "activePx": "",
+     "actualPx": "",
+     "actualSide": "",
+     "actualSz": "0",
+     "advChaseParams": [],
+     "advanceOrdType": "",
+     "aggressiveness": "",
+     "algoClOrdId": "d20261002T2040btcpjOCO",
+     "algoId": "3975235366524653568",
+     "amendPxOnTriggerType": "0",
+     "attachAlgoOrds": [],
+     "cTime": "1790973645960",
+     "callbackRatio": "",
+     "callbackSpread": "",
+     "ccy": "BTC",
+     "chaseType": "",
+     "chaseVal": "",
+     "clOrdId": "",
+     "closeFraction": "",
+     "failCode": "0",
+     "instId": "BTC-USDC",
+     "instType": "SPOT",
+     "isTradeBorrowMode": "",
+     "last": "84424",
+     "lever": "",
+     "linkedOrd": {
+      "ordId": ""
+     },
+     "lmtOrderNumber": "",
+     "maxChaseType": "",
+     "maxChaseVal": "",
+     "moveTriggerPx": "",
+     "ordId": "",
+     "ordIdList": [],
+     "ordPx": "",
+     "ordType": "oco",
+     "posSide": "net",
+     "pxLimit": "",
+     "pxSpread": "",
+     "pxVar": "",
+     "quickMgnType": "",
+     "reduceOnly": "false",
+     "side": "sell",
+     "slOrdPx": "-1",
+     "slTriggerPx": "71751",
+     "slTriggerPxType": "last",
+     "state": "live",
+     "subAlgoIdList": [],
+     "sz": "0.00018202",
+     "szLimit": "",
+     "tag": "",
+     "tdMode": "cash",
+     "tgtCcy": "",
+     "timeInterval": "",
+     "tpOrdPx": "-1",
+     "tpTriggerPx": "105530",
+     "tpTriggerPxType": "last",
+     "tradeQuoteCcy": "USDC",
+     "triggerParams": [],
+     "triggerPx": "",
+     "triggerPxType": "",
+     "triggerTime": "",
+     "uTime": "1790973645960"
+    }
+   ],
+   "msg": ""
+  }
+ },
+ "cancelar": {
+  "ok": false,
+  "error": "OrderNotFound: okx {\"code\":\"1\",\"data\":[{\"clOrdId\":\"d20261002T2040btcpj\",\"ordId\":\"\",\"sCode\":\"51400\",\"sMsg\":\"Order cancellation failed as the order has been filled, canceled or does not exist.\",\"ts\":\"1790973668558\"}],\"inTime\":\"1790973668489006\",\"msg\":\"All operations failed\",\"outTime\":\"1790973668628197\"}"
+ },
+ "algos_tras_cancelar": [
+  {
+   "algoId": "3975235366524653568",
+   "algoClOrdId": "d20261002T2040btcpjOCO",
+   "ordType": "oco",
+   "state": "live",
+   "side": "sell",
+   "sz": "0.00018202",
+   "tdMode": "cash",
+   "tpTriggerPx": "105530",
+   "tpOrdPx": "-1",
+   "slTriggerPx": "71751",
+   "slOrdPx": "-1",
+   "tradeQuoteCcy": "USDC",
+   "linkedOrd": {
+    "ordId": ""
+   },
+   "ordId": "",
+   "ordIdList": []
+  }
+ ],
+ "limpieza": {
+  "canceladas": [],
+  "algos_canceladas": [
+   {
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "algoClOrdId": "",
+       "algoId": "3975235366524653568",
+       "clOrdId": "",
+       "sCode": "0",
+       "sMsg": "",
+       "tag": ""
+      }
+     ],
+     "msg": ""
+    }
+   }
+  ],
+  "ventas": [
+   {
+    "simbolo": "BTC/USDC",
+    "cantidad": 0.00018202,
+    "ok": true,
+    "resp": {
+     "code": "0",
+     "data": [
+      {
+       "clOrdId": "d20261002T2040btcpz",
+       "ordId": "3975236374487416832",
+       "sCode": "0",
+       "sMsg": "Order placed",
+       "subCode": "",
+       "tag": "",
+       "ts": "1790973675999"
+      }
+     ],
+     "inTime": "1790973675930329",
+     "msg": "",
+     "outTime": "1790973676068812"
+    }
+   }
+  ]
+ }
+}

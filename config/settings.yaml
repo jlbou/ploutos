@@ -1,0 +1,128 @@
+# Ploutos - limites duros y parametros de operacion.
+#
+# REGLA DE ORO: este fichero solo puede ser MAS conservador que las reglas duras
+# del PRD §4, nunca mas laxo. core/config.py rechaza el arranque si se intenta
+# lo contrario (p. ej. max_positions: 4 o max_trades_per_day: 7).
+#
+# La IA NUNCA modifica este fichero. El bucle de aprendizaje tampoco.
+
+exchange:
+  id: okx
+  quote: USDC          # regla 3: solo X/USDC
+  demo: true           # entorno simulado; el real no se activa hasta la fase 7
+  # Entidad europea (OKX Europe Limited, Malta). NO es www.okx.com: con ese host
+  # las peticiones autenticadas de una cuenta EU fallan con 50119.
+  hostname: eea.okx.com
+  # Comisiones de la cuenta, en %. Decision del propietario del 23/09/2026: las de ccxt
+  # (0,10 / 0,15) son genericas, no las de la cuenta. Cuenta solo spot de la UE,
+  # nivel Regular, desde el 25/09/2026 (anuncio oficial de OKX). En la fase 4 se
+  # comparan con las reales de la cuenta: si las reales son mas caras, no se opera.
+  fees:
+    maker_pct: 0.10
+    taker_pct: 0.20
+
+capital:
+  initial_capital_usd: 50.0    # regla 5
+  floor_usd: 25.0              # regla 5 y 7
+  preventive_buffer_usd: 1.0   # regla 8
+
+# regla 3: exactamente 8 monedas, todas X/USDC.
+# Seleccionadas el 22/09/2026 midiendo spread real en OKX (informe §4.1).
+# ADA (0,067 %) y LINK (0,065 %) descartadas por spread > 0,05 %.
+whitelist:
+  - BTC/USDC
+  - ETH/USDC
+  - SOL/USDC
+  - XRP/USDC
+  - DOGE/USDC
+  - AVAX/USDC
+  - TRX/USDC
+  - NEAR/USDC
+
+risk:
+  risk_per_trade_pct: 1.0          # regla 12
+  risk_per_trade_min_pct: 0.5      # suelo del slider
+  risk_per_trade_max_pct: 1.5      # techo del slider
+  target_notional_usd: 15.0        # decision 22/09/2026
+  max_notional_usd: 20.0           # cinturon adicional
+  max_positions: 3                 # regla 4 (pendientes incluidas)
+  max_positions_per_symbol: 1      # regla 4
+  max_trades_per_day: 6            # regla 11
+  max_exposure_pct: 90.0           # regla 15
+  daily_loss_limit_usd: 3.0        # regla 10
+  max_entry_spread_pct: 0.10       # regla 16
+  min_target_cost_ratio: 3.0       # regla 16
+  max_correlated_positions: 2      # regla 15
+  correlation_threshold: 0.8       # regla 15
+  correlation_window_days: 7       # regla 15
+  cooldown_after_stop_hours: 2     # regla 14
+  consecutive_losses_for_pause: 3  # regla 14
+  pause_after_losses_hours: 4      # regla 14
+  usdc_depeg_pct: 1.5              # regla 17
+
+# regla 9: escalones de drawdown, de menos a mas grave.
+drawdown_tiers:
+  - equity_below_usd: 45.0
+    risk_multiplier: 0.5
+  - equity_below_usd: 40.0
+    risk_multiplier: 0.5
+    max_positions: 2
+  - equity_below_usd: 35.0
+    risk_multiplier: 0.5
+    max_positions: 1
+
+strategy:
+  # Multiplo de ATR para colocar el stop. MEDIDO sobre datos reales de OKX el
+  # 22/09/2026, no elegido a ojo (ATR% medio de las 8 monedas, ~300 velas):
+  #
+  #   tf     ATR% medio   posicion con 1,5xATR   multiplo para 15 $
+  #   5m       0,381 %            87 $                 8,7x
+  #   15m      0,675 %            49 $                 4,9x
+  #   1h       1,009 %            33 $                 3,3x
+  #   4h       1,779 %          18,7 $                 1,9x
+  #
+  # Con 0,50 $ de riesgo, el nocional sale de `riesgo / distancia_al_stop`. En
+  # 4 h, 1,9xATR da un stop del 3,33 % y una posicion de ~15 $, que es lo que
+  # decidio el propietario el 22/09/2026 y lo que hace cuadrar los numeros del PRD.
+  #
+  # OJO: el ATR depende del regimen de mercado. Estos multiplos valen para lo
+  # medido; `risk/sizing.py` es robusto igualmente porque calcula el nocional a
+  # partir del stop REAL, sea cual sea, y el riesgo nunca pasa de 0,50 $.
+  atr_multiple:
+    "4h": 1.9
+    "1h": 3.3
+  min_reward_risk: 2.0
+
+claude:                            # regla 18
+  max_calls_per_day: 40
+  max_calls_per_5h_window: 8
+  timeout_seconds: 90
+  model: sonnet
+  # APROXIMADO: el token no dice cuando caduca. Se regenero el 22/09/2026 y
+  # `claude setup-token` lo da por un anyo. Se avisa 14 dias antes (PRD seccion 6),
+  # en el resumen diario de la cartera de la IA. Al regenerarlo, cambiar esta fecha.
+  token_expires_on: 2027-09-22
+
+data:
+  timeframes: ["1m", "5m", "15m", "1h", "4h"]
+  feature_timeframes: ["5m", "15m", "1h", "4h"]
+  primary_timeframe: "4h"
+  backfill_candles: 300
+  orderbook_depth: 20
+  staleness:
+    ticker_seconds: 30        # informe §1.3[1]
+    candle_1m_seconds: 90     # informe §1.3[1]
+    orderbook_seconds: 60
+  persist:
+    l1_interval_seconds: 5
+    book_metrics_interval_seconds: 10
+  equity_interval_seconds: 15   # regla 6
+  reconcile_interval_seconds: 300
+  clock_skew_max_seconds: 2.0
+
+storage:
+  db_path: "var/ploutos.db"
+
+logging:
+  level: INFO
+  file: "var/ploutos.log"
