@@ -8,9 +8,15 @@ secundaria") y el del PRD v3 archivado.
 
 - **Objetivo: ganar dinero (opcion a).** Una estrategia pasa si **gana mas que mantener BTC**, o **gana lo mismo con
   una caida claramente menor**, siempre **neto de comisiones e impuestos**.
-- **Construido para escalar (anyadido del propietario):** nada se disenya a partir de los 50 $. Lo que importa es
+- **Construido para escalar (anyadido del propietario):** nada se disenya a partir de los 50 $ (o su equivalente en euros). Lo que importa es
   demostrar que la estrategia funciona para poder ponerle mas capital despues; el bot, sus reglas y sus estudios tienen
   que valer igual con 50 $ que con mucho mas.
+
+- **Todo se mide en EUROS (opcion b, anyadido del propietario):** resultados, listones, el BTC de referencia (tambien en
+  euros) y los estudios, con el cambio EUR/USD de cada dia. Mientras se opere contra USDC, el cambio euro/dolar entra
+  en los resultados (es lo que de verdad se gana o se pierde). **Ademas se estudia operar contra euros** (pares X/EUR,
+  sin el riesgo del cambio) en la decision 3 (mercado): sin comprobar que OKX EU los tenga para las 8 monedas, ni con
+  que liquidez y spread; cambiaria la regla 3 ("solo X/USDC").
 
 ## Por que
 
@@ -25,7 +31,7 @@ secundaria") y el del PRD v3 archivado.
 - **Las reglas en importes fijos pasan a porcentajes del capital:** el suelo (25 $), el limite diario (3 $), los
   escalones (45/40/35 $), el colchon de la regla 8 (1 $) y el tope por posicion (20 $). Los numeros de hoy salen de
   50 $; con otro capital no significarian lo mismo.
-- **Los costes que con 50 $ no pesan, con mas capital si:** el deslizamiento y la profundidad del libro (hoy "nunca
+- **Los costes que con 50 € no pesan, con mas capital si:** el deslizamiento y la profundidad del libro (hoy "nunca
   ata con 15 $"), y las comisiones por nivel de volumen de OKX.
 - **Los minimos por orden** (`minSz`, BTC ~8,6 $) dejan de mandar con mas capital: las salidas parciales serian
   posibles.
