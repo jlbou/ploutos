@@ -195,3 +195,14 @@ def test_sin_efectivo_el_30_de_junio_se_vende_lo_justo():
     r = mo.simular({"BTC": s}, {"BTC": fr}, {"BTC": [None] * n}, 1, n - 1, p)
     ventas = [o for o in r.operaciones if o["tipo"] == "impuesto"]
     assert len(ventas) == 1 and ventas[0]["dia"] == r.pagos[0][0]
+
+
+def test_el_minimo_por_orden_es_el_de_okx():
+    """C6, con el minimo comprobado el 16/10 en la cuenta real: BTC 0,0001 (a 100.000 €, 10 €). Una subida de la
+    fraccion que pide menos no se opera."""
+    from dataclasses import replace
+    p = replace(mo.Parametros.validacion(), tope_moneda=0.001)       # 0,1 % del equity: ~10 € por orden
+    s = serie([100_000.0] * 6)
+    fr = [0.5] * 3 + [0.6] * 3                                       # de 5 € a 6 €: menos que el minimo
+    r = mo.simular({"BTC": s}, {"BTC": fr}, {"BTC": [None] * 6}, 1, 5, p)
+    assert r.operaciones == []                                       # ni la primera (5 €) ni la subida

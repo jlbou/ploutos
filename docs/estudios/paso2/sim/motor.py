@@ -24,7 +24,9 @@ class Parametros:
     stop_atr: float = 3.0
     comision: float = 0.002            # taker real de BTC-EUR y ETH-EUR (V2)
     deslizamiento: float = 0.0001      # por lado, hasta V5
-    min_orden: float = 5.0             # euros
+    min_orden: float = 5.0             # euros, si la moneda no tiene minimo de OKX conocido
+    # C6 (16/10, comprobado con la cuenta real): el minimo por orden de OKX, en cantidad de la moneda.
+    min_cantidad: Mapping[str, float] = field(default_factory=lambda: {"BTC": 0.0001, "ETH": 0.001})
     impuestos: bool = True
     reentrada: str = "senyal"          # C1: "senyal" (apagarse y encenderse) o "domingo" (H3)
 
@@ -73,6 +75,10 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
     bajo_suelo, enclavado = 0, False
     suelo = None if p.suelo_pct is None else p.suelo_pct * p.capital
     r = Resultado()
+
+    def minimo(m: str, precio: float) -> float:
+        """El minimo por orden en euros: el de OKX (cantidad x precio), y nunca menos de `min_orden`."""
+        return max(p.min_orden, p.min_cantidad.get(m, 0.0) * precio)
 
     def valor(precios: Mapping[str, float]) -> float:
         return efectivo + sum(qty[m] * precios[m] * (1 - p.comision) for m in monedas)
@@ -149,7 +155,7 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
             if f >= ultima_fraccion[m]:
                 continue
             actual = qty[m] * aperturas[m]
-            if qty[m] > 0 and (f == 0.0 or nocional < actual - p.min_orden):
+            if qty[m] > 0 and (f == 0.0 or nocional < actual - minimo(m, aperturas[m])):
                 vende = qty[m] if f == 0.0 else (actual - nocional) / aperturas[m]
                 vender(m, vende, aperturas[m] * (1 - p.deslizamiento), i, "venta")
             ultima_fraccion[m] = f
@@ -162,7 +168,7 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
             actual = qty[m] * aperturas[m]
             if enclavado:
                 continue
-            if nocional <= actual + p.min_orden:
+            if nocional <= actual + minimo(m, aperturas[m]):
                 ultima_fraccion[m] = f
                 continue
             if qty[m] == 0 and abiertas >= max_pos:
@@ -170,10 +176,10 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
             expuesto = sum(qty[x] * aperturas[x] for x in monedas)
             por_efectivo = efectivo / (1 + p.comision)
             compra = min(nocional - actual, p.exposicion * e_ref - expuesto, por_efectivo)
-            if compra <= p.min_orden:
+            if compra <= minimo(m, aperturas[m]):
                 continue
             # Recortada solo por el efectivo (las comisiones no dejan llegar al 100 %): no hay mas que comprar.
-            completa = compra >= nocional - actual - p.min_orden or compra >= por_efectivo - 1e-9
+            completa = compra >= nocional - actual - minimo(m, aperturas[m]) or compra >= por_efectivo - 1e-9
             precio = aperturas[m] * (1 + p.deslizamiento)
             nuevo_stop = stop[m] if qty[m] > 0 else (precio - p.stop_atr * atr[m][i - 1] if p.stops else 0.0)
             if p.colchon_pct is not None and suelo is not None:                  # regla 8
