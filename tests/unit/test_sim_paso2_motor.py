@@ -170,7 +170,6 @@ def test_el_impuesto_se_paga_el_30_de_junio_del_anyo_siguiente():
     """Decision del 16/10 (opcion a): como en la vida real, con la declaracion; no bloquea las compras de enero."""
     from dataclasses import replace
     from datetime import UTC, datetime
-    from sim import impuestos as imp
     n = 600                                                     # 01/01/2021 .. 23/08/2022
     cierres = [100.0] * 3 + [200.0] * (n - 3)
     abre = [100.0] * 3 + [200.0] * (n - 3)
