@@ -28,7 +28,8 @@ fue con prisa. **Ahora se trabaja como en Ebisu, en este orden y sin saltarse pa
    limpia el codigo de los setups (etiqueta `archivo/antes-de-limpiar`, en el repositorio privado del historial) y se
    arregla el hueco S5 del panel.
 
-**Sigue en marcha, en silencio:** el papel de L (12/10/2026-11/01/2027, `docs/diseno-papel-l.md`), el embudo de
+**Sigue en marcha, en silencio:** el papel de L (12/10/2026-11/01/2027, `docs/diseno-papel-l.md`; **desde el 16/10, solo
+informacion: L ya no es candidata**, `docs/preregistro-papel-l.md` 4), el embudo de
 noticias en sombra (`docs/diseno-embudo-noticias.md`), los medios en sombra, las noticias de OKX, la ingesta,
 Telegram, el panel, las copias y 5 jueces cada noche (desde el 16/10, tambien el de los libros de ordenes). **Retirados el 15/10, sin veredicto:** las dos carteras de la
 fase 6 y el demo (`docs/cierre-fase-6.md`).

@@ -69,6 +69,9 @@ temps, i entenc que em seguira avisant quan faci una operacio"). Lo decidido:
 - b) Con la IA como filtro de noticias (solo puede reducir o vetar, PRD 6): seria otra cosa que no se ha medido; si
   algun dia, como prueba aparte.
 
+**16/10/2026 (propietario):** L ya no es candidata para el bot (`docs/preregistro-papel-l.md` 4); el papel sigue hasta
+el 11/01/2027 solo como informacion.
+
 ## 3. El criterio (fijado antes de arrancar)
 
 **Juez automatico** (`check_papel_l.py`, con los jueces de cada noche; Telegram solo si FALLA el punto 1):

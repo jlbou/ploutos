@@ -44,15 +44,18 @@ monedas) no se pueden demostrar.** Por eso no se busca otra estrategia sobre 12/
 
 ## 4. Que se hara en cada caso (decisiones del propietario, una a una)
 
-- **Si pasa:** _pendiente del propietario_.
-- **Si falla o salta el corte del 25 %:** ya decidido (`docs/diseno-papel-l.md` 4): L se descarta y no se retoca.
-- **Si no se puede juzgar** (huecos de velas, el papel no corrio): _pendiente del propietario_.
+**Cerrado (propietario, 16/10/2026, opcion a): L ya NO es candidata para el bot.** No paso el anyo limpio (-6,9 %) y
+el PRD v3 solo deja operar BTC/EUR y ETH/EUR (regla 3): L, con 8 monedas contra USDC, no podria ir al bot tal cual;
+adaptarla seria un intento nuevo (y la H1 del paso 2 ya es su idea en el mercado nuevo). **Su papel sigue hasta el
+11/01/2027 solo como informacion** (un caso real de tendencia, para compararlo con H1). Pase lo que pase, no va al bot:
+los casos "si pasa" y "si no se puede juzgar" ya no deciden nada.
 
 ## 5. La prueba de L con 2018-2020 (una sola vez)
 
 OKX tiene historia contra USDT de BTC y ETH desde 10/2017, XRP y TRX desde 01/2018 y DOGE desde 07/2019
 (`docs/hallazgos-fase-3-4.md` 5b). Ningun script de `docs/estudios/` la usa (buscado el 15/10; que nadie la haya
-mirado nunca no se puede demostrar). Su criterio se fijara y se subira aqui **antes** de bajarla: _pendiente_.
+mirado nunca no se puede demostrar). **ANULADA (propietario, 16/10/2026, opcion a):** esos datos (03/2018-11/2020) son ahora la **prueba limpia del paso 2**
+(`docs/plan-estudio-paso-2.md`), que se usa UNA vez y solo con su candidata. L no se prueba con ellos.
 
 ## 6. La prueba de oro
 
