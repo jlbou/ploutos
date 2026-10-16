@@ -187,3 +187,10 @@ de venta (bajando por las demandas) frente al precio medio (incluye el medio spr
 **percentil 90**; el simulador usa **el mas caro de los dos pares** como deslizamiento por lado. Una foto sin
 profundidad para 10.000 € en sus 400 niveles cuenta con un 1 % de coste y se dice cuantas hubo. Lo calcula
 `docs/estudios/paso2/calcular_v5.py`, que no corre antes del final del recolector. Etiqueta `criterio-paso2-a3`.
+
+## 14. Aclaracion 4 (propietario, 16/10/2026, opcion a), antes de medir
+
+**El impuesto de cada anyo se paga el 30/06 del anyo siguiente** (como con la declaracion), a la apertura; si ese dia
+no hay efectivo, se vende lo justo de cada posicion, a la apertura y con comision. El ultimo dia del tramo se paga todo
+lo pendiente (igual que BTC mantenido). Antes se pagaba el 31/12 y, con todo invertido, bloqueaba las compras de enero
+(revision final del simulador, hallazgo 6). Etiqueta `criterio-paso2-a4`.

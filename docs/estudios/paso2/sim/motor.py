@@ -40,7 +40,8 @@ class Resultado:
     dias: list[int] = field(default_factory=list)
     equity: list[float] = field(default_factory=list)
     operaciones: list[dict] = field(default_factory=list)
-    impuestos: dict[int, float] = field(default_factory=dict)
+    impuestos: dict[int, float] = field(default_factory=dict)   # la cuota de cada anyo (lo que se debe)
+    pagos: list[tuple[int, float]] = field(default_factory=list)  # (dia, importe) en que se paga
     invertido: list[float] = field(default_factory=list)     # fraccion del equity invertida al cierre
     enclavado: bool = False
 
@@ -68,6 +69,7 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
     bloqueada = dict.fromkeys(monedas, False)
     lotes = {m: imp.Lotes() for m in monedas}
     ganancia_anyo, pendientes = 0.0, []
+    deuda: dict[int, float] = {}          # cuotas por pagar: se pagan el 30/06 del anyo siguiente (decision del 16/10)
     bajo_suelo, enclavado = 0, False
     suelo = None if p.suelo_pct is None else p.suelo_pct * p.capital
     r = Resultado()
@@ -89,6 +91,21 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
     for i in range(desde, hasta + 1):
         aperturas = {m: series[m]["o"][i] for m in monedas}
         e_ref = equity_cierre                                            # C5: el del cierre de i-1
+
+        # El impuesto del anyo anterior, el 30/06 a la apertura (decision del 16/10, opcion a); si no hay efectivo, se
+        # vende lo justo de cada posicion, a la apertura y con comision.
+        hoy = datetime.fromtimestamp(t[i], UTC)
+        if (hoy.month, hoy.day) == (6, 30) and deuda.get(hoy.year - 1, 0.0) > 0:
+            debe = deuda.pop(hoy.year - 1)
+            falta = debe - efectivo
+            invertido = sum(qty[m] * aperturas[m] * (1 - p.deslizamiento) * (1 - p.comision) for m in monedas)
+            if falta > 0 and invertido > 0:
+                parte = min(1.0, falta / invertido)
+                for m in monedas:
+                    if qty[m] > 0:
+                        vender(m, qty[m] * parte, aperturas[m] * (1 - p.deslizamiento), i, "impuesto")
+            efectivo -= debe
+            r.pagos.append((i, debe))
         caida = 1 - e_ref / p.capital
         # Regla 9, tal como se aprobo (decision 7): -10 % la mitad; -20 % maximo 1 posicion; -30 % las dos cosas.
         mitad = p.escalones and (0.10 <= caida < 0.20 or caida >= 0.30)
@@ -189,10 +206,17 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
                 for m in monedas:
                     if qty[m] > 0:
                         ganancia_anyo += lotes[m].vender(qty[m], qty[m] * cierres[m] * (1 - p.comision))
-            cuota, pendientes = imp.anual(datetime.fromtimestamp(t[i], UTC).year, ganancia_anyo, pendientes)
-            efectivo -= cuota
-            r.impuestos[datetime.fromtimestamp(t[i], UTC).year] = cuota
+            anyo = datetime.fromtimestamp(t[i], UTC).year
+            cuota, pendientes = imp.anual(anyo, ganancia_anyo, pendientes)
+            r.impuestos[anyo] = cuota
+            deuda[anyo] = deuda.get(anyo, 0.0) + cuota
             ganancia_anyo = 0.0
+            if i == hasta:                       # el ultimo dia se paga todo lo pendiente (igual que BTC mantenido)
+                total = sum(deuda.values())
+                if total > 0:
+                    efectivo -= total
+                    r.pagos.append((i, total))
+                deuda.clear()
         equity_cierre = valor(cierres)
         if suelo is not None:
             bajo_suelo = bajo_suelo + 1 if equity_cierre <= suelo else 0

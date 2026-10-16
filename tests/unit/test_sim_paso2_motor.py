@@ -164,3 +164,35 @@ def test_una_compra_recortada_se_completa_cuando_hay_sitio():
     compras_b = [o for o in r.operaciones if o["moneda"] == "B" and o["tipo"] == "compra"]
     assert len(compras_b) == 2 and compras_b[1]["dia"] == 4           # A sale el dia 4 y B se completa
     assert math.isclose(sum(o["nocional"] for o in compras_b), 4_500, rel_tol=5e-3)   # 45 % de ~9.980
+
+
+def test_el_impuesto_se_paga_el_30_de_junio_del_anyo_siguiente():
+    """Decision del 16/10 (opcion a): como en la vida real, con la declaracion; no bloquea las compras de enero."""
+    from dataclasses import replace
+    from datetime import UTC, datetime
+    from sim import impuestos as imp
+    n = 600                                                     # 01/01/2021 .. 23/08/2022
+    cierres = [100.0] * 3 + [200.0] * (n - 3)
+    abre = [100.0] * 3 + [200.0] * (n - 3)
+    fr = [1.0] * 4 + [0.0] * (n - 4)                            # gana en 2021 (vende el dia 5)
+    s = serie(cierres, abre=abre)
+    p = replace(mo.Parametros.validacion(), impuestos=True)
+    r = mo.simular({"BTC": s}, {"BTC": fr}, {"BTC": [None] * n}, 1, n - 1, p)
+    (dia, importe), = r.pagos
+    assert datetime.fromtimestamp(s["t"][dia], UTC).date().isoformat() == "2022-06-30"
+    assert math.isclose(importe, r.impuestos[2021]) and importe > 0
+    antes, despues = r.equity[dia - 2], r.equity[dia - 1]       # r.equity[k] es el dia k + 1
+    assert math.isclose(antes - despues, importe, rel_tol=1e-9)
+
+
+def test_sin_efectivo_el_30_de_junio_se_vende_lo_justo():
+    from dataclasses import replace
+    n = 600
+    cierres = [100.0] * 3 + [200.0] * 5 + [100.0] * 2 + [200.0] * (n - 10)
+    abre = [100.0] * 3 + [200.0] * 5 + [100.0] * 2 + [200.0] * (n - 10)
+    fr = [1.0] * 4 + [0.0] * 4 + [1.0] * (n - 8)                # gana en 2021 y vuelve a comprar: sin efectivo en junio
+    s = serie(cierres, abre=abre)
+    p = replace(mo.Parametros.validacion(), impuestos=True)
+    r = mo.simular({"BTC": s}, {"BTC": fr}, {"BTC": [None] * n}, 1, n - 1, p)
+    ventas = [o for o in r.operaciones if o["tipo"] == "impuesto"]
+    assert len(ventas) == 1 and ventas[0]["dia"] == r.pagos[0][0]

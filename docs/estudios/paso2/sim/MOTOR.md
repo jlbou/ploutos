@@ -38,8 +38,9 @@ Del PRD v3 (seccion 4) y del plan (secciones 8 y 11). Cada dia i (vela diaria UT
 10. **Suelo** (regla 7): dos cierres seguidos <= 50 % del capital de referencia -> `CAPITAL`, para siempre.
 11. **Impuestos:** cada venta realiza ganancia o perdida por FIFO; al cierre del 31/12 (y del ultimo dia) se paga el
     impuesto del anyo con los tramos del ahorro y las perdidas de los 4 anyos anteriores. **El ultimo dia, lo abierto
-    paga como si se vendiera** (igual que BTC mantenido, C8). El impuesto sale del efectivo aunque quede negativo: el
-    equity es el correcto (en la vida real se paga en junio del anyo siguiente).
+    paga como si se vendiera** (igual que BTC mantenido, C8). **La cuota se paga el 30/06 del anyo siguiente**, a la
+    apertura (aclaracion 4): si no hay efectivo, se vende lo justo de cada posicion; el ultimo dia se paga todo lo
+    pendiente.
 
 ## Las metricas
 
