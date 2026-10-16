@@ -18,8 +18,9 @@ y la historia honesta de buscarle una estrategia que gane.**
 
 ---
 
-Ploutos (Πλοῦτος, el dios griego de la riqueza) es un **experimento**, no un producto: un bot que opera solo con
-50 $ en OKX, dentro de 19 reglas deterministas que ni la IA ni nadie puede cambiar desde el código.
+Ploutos (Πλοῦτος, el dios griego de la riqueza) es un **experimento**, no un producto: un bot que opera solo en OKX
+(BTC y ETH contra euro), diseñado para escalar a 10.000 €, dentro de unas reglas deterministas que ni la IA ni
+nadie puede cambiar desde el código.
 
 La infraestructura está hecha y probada: ingesta de datos, motor de riesgo, órdenes con su protección en el
 exchange, papel, panel, Telegram, copias y jueces automáticos. **Lo que no hay todavía es una estrategia que haya
@@ -57,7 +58,8 @@ una estrategia con ventaja, y después buscarla con prisa. Ahora se rehace en or
 | Ingesta, motor de riesgo, panel, Telegram, copias | ✅ hechos y en marcha |
 | Ejecución en la cuenta demo de OKX | ✅ probada una semana sin descuadres; retirada al acabar |
 | La IA eligiendo entre setups contra una regla fija | ⏹️ retirada sin veredicto: los setups pierden, así que la pregunta dejó de importar |
-| **L**, rotación semanal de tendencia, en papel | 🔄 del 12/10/2026 al 11/01/2027, sin dinero |
+| **L**, rotación semanal de tendencia, en papel | 🔄 del 12/10/2026 al 11/01/2027, solo como información (ya no es candidata) |
+| El estudio nuevo (BTC y ETH en euros) | 🔄 criterio fijado antes de medir; el simulador, hecho y validado; se mide a partir del 30/10 |
 | Una estrategia que gane | ❌ ninguna todavía |
 | Dinero real | ⏳ solo si una estrategia pasa |
 
@@ -98,27 +100,28 @@ en al menos dos sitios y tiene su test; la prueba de mutación las rompe una a u
 rojo (16/16).
 
 <details>
-<summary><b>Las 19 reglas duras</b></summary>
+<summary><b>Las 17 reglas duras (PRD v3, aprobado el 15/10/2026)</b></summary>
+
+Se conserva la numeración anterior; la 14 y la 17 se retiraron. **El código que corre hoy aún aplica las 19 del PRD v2**
+(en dolares, 8 monedas contra USDC): las nuevas se construyen en el paso 3, solo si una estrategia pasa.
 
 | # | Regla |
 |---|---|
 | 1 | Sin apalancamiento. Solo spot: nunca margen, futuros ni préstamos |
 | 2 | Exchange: OKX EU, vía `ccxt` |
-| 3 | Solo pares `X/USDC` de una whitelist de 8 monedas, validada en 4 puntos |
-| 4 | Máximo 3 posiciones a la vez (las entradas pendientes cuentan), 1 por moneda. Nada de promediar a la baja |
-| 5 | Capital inicial 50 $, suelo 25 $; solo se cambian a mano |
+| 3 | Solo **BTC/EUR y ETH/EUR**, validado en 4 puntos; la clave del exchange, limitada a BTC, ETH y EUR |
+| 4 | Una posición por moneda (las entradas pendientes cuentan). Nada de promediar a la baja ni martingala |
+| 5 | Capital de referencia en euros, puesto a mano; suelo al **50 %** de ese capital |
 | 6 | Equity con datos del exchange cada 15 s, descontando las comisiones de salida |
-| 7 | Equity ≤ 25 $ dos lecturas seguidas → solo cierre, **enclavado** hasta un reset manual |
-| 8 | Solo se abre si, cerrando todo en sus stops (con la comisión de salida), quedan ≥ 26 $ |
-| 9 | Escalones: < 45 $ riesgo a la mitad, < 40 $ máximo 2 posiciones, < 35 $ máximo 1 |
-| 10 | Pérdida del día ≥ 3 $ → solo cierre hasta las 00:00 UTC |
+| 7 | Equity ≤ suelo dos lecturas seguidas → solo cierre, **enclavado** hasta un reset manual |
+| 8 | Solo se abre si, cerrando todo en sus stops (con la comisión de salida), queda el suelo + un 2 % |
+| 9 | Escalones: −10 % riesgo a la mitad, −20 % máximo 1 posición, −30 % las dos cosas |
+| 10 | Pérdida del día (cerrado y abierto) ≥ 6 % → solo cierre hasta las 00:00 UTC |
 | 11 | Máximo 6 operaciones al día |
-| 12 | Riesgo por operación: 1 % del equity, entre 0,5 % y 1,5 % |
-| 13 | Stop y objetivo **siempre en el exchange** (OCO), creados al abrir |
-| 14 | 2 h sin tocar una moneda tras un stop; 4 h de pausa tras 3 pérdidas seguidas |
-| 15 | Exposición máxima del 90 %; como mucho 2 posiciones correlacionadas (> 0,8) |
-| 16 | No entrar con spread > 0,10 % ni con objetivo < 3 veces el coste de ida y vuelta |
-| 17 | USDC desviado más de un 1,5 % de su paridad → sin entradas |
+| 12 | Riesgo hasta el stop: lo fija el estudio, con techo de 5 % por posición y 10 % entre las dos |
+| 13 | El stop **siempre en el exchange**, desde que se llena la entrada |
+| 15 | Exposición máxima del 90 % |
+| 16 | No entrar con spread > 0,10 % (ni, con objetivo fijo, por debajo de 3 veces el coste) |
 | 18 | Presupuesto de la IA: 40 llamadas al día y 8 cada 5 h |
 | 19 | Claves de API sin permiso de retirada, solo desde la IP del servidor, fuera del repositorio. La IA nunca las ve |
 
@@ -211,7 +214,7 @@ core/       configuración, reloj, modos, salud, secretos
 data/       ingesta WS/REST, almacenamiento, paridad de USDC, anuncios de OKX, medios en sombra
 features/   indicadores, régimen, correlaciones, clasificación de noticias
 strategy/   costes, filtros, setups, candidatos, baseline sin IA
-risk/       el motor de riesgo: las 19 reglas (no importa nada de ai/)
+risk/       el motor de riesgo: las reglas (hoy, las 19 del PRD v2; no importa nada de ai/)
 ai/         la IA: contrato, prompt, presupuesto, invocación, clasificador del embudo
 execution/  identificadores, guardia, órdenes, OCO, conciliación, ejecutor, juez
 portfolio/  simulador de papel, bucle, persistencia, juez de papel

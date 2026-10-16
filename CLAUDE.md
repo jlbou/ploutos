@@ -1,7 +1,7 @@
 # Ploutos — memoria del proyecto
 
-Bot de trading **spot** de cripto en OKX EU, 50 $ de capital, dentro de 19 reglas deterministas que ni la IA ni el
-bucle de aprendizaje pueden modificar. Lo personal (nombre del propietario, servidor, rutas, Healthchecks) va en
+Bot de trading **spot** de cripto en OKX EU (BTC/EUR y ETH/EUR), disenyado para escalar a 10.000 €, dentro de 17
+reglas deterministas (PRD v3) que ni la IA ni nadie puede modificar desde el codigo. Lo personal (nombre del propietario, servidor, rutas, Healthchecks) va en
 **`CLAUDE.local.md`** (fuera de git, se carga solo).
 
 **El repositorio se construye para ser PUBLICO** (propietario, 15/10/2026): todo lo que entra en git se puede leer en
@@ -20,10 +20,11 @@ fue con prisa. **Ahora se trabaja como en Ebisu, en este orden y sin saltarse pa
    `criterio-paso2`): Bitstamp en euros, H1 medias / H2 Donchian / H3 momento (+ capa de volatilidad), N = 40, liston
    en dos etapas. **V5 recogiendo libros de ordenes hasta el 30/10** (`ploutos-libros.timer`, juez `check_libros.py`);
    **El simulador, HECHO el 16/10** (`docs/estudios/paso2/sim/`, `estudio.py`; validacion con datos reales:
-   comprar y mantener = BTC mantenido, diferencia 0,00). Aclaraciones 1-3 aprobadas antes de medir (etiquetas
-   `criterio-paso2-a1..a3`). **Lo que sigue, en orden, desde el 30/10:** `calcular_v5.py` con la copia de
+   comprar y mantener = BTC mantenido, diferencia 0,00). Aclaraciones 1-5 aprobadas antes de medir (etiquetas
+   `criterio-paso2-a1..a5`); la revision final del simulador, hecha (8 hallazgos corregidos). **Lo que sigue, en orden, desde el 30/10:** `calcular_v5.py` con la copia de
    `ploutos-libros.db` -> `estudio.py explorar` -> decision 4 (apalancamiento y cortos) con la candidata ->
-   `estudio.py limpia` (una vez; deja un cerrojo) -> veredicto. Ninguna estrategia medida aun.
+   `estudio.py limpia` (una vez; deja un cerrojo) -> veredicto. Ninguna estrategia medida aun. **El 30/10, al acabar
+   V5: desactivar `ploutos-libros.timer`** (el recolector se para solo, pero el temporizador sigue lanzandose).
 3. **Construir solo si una estrategia pasa**, con la prueba de oro (el bot hace lo mismo que el simulador). Aqui se
    limpia el codigo de los setups (etiqueta `archivo/antes-de-limpiar`, en el repositorio privado del historial) y se
    arregla el hueco S5 del panel.
@@ -181,7 +182,7 @@ encendidas por defecto (`--restricted --disable-slash-commands --strict-mcp-conf
 ```bash
 bash deploy/sync.sh <alias>                                   # copia; NO reinicia
 ssh <alias> 'systemctl restart ploutos-panel'                 # reiniciar SOLO lo que toca; la ingesta no
-ssh <alias> 'cd /opt/ploutos && sudo -u ploutos .venv/bin/python scripts/jueces_diarios.py --seco'   # los 4 jueces
+ssh <alias> 'cd /opt/ploutos && sudo -u ploutos .venv/bin/python scripts/jueces_diarios.py --seco'   # los 5 jueces
 ssh <alias> 'cd /opt/ploutos && sudo -u ploutos .venv/bin/python scripts/check_papel_l.py'           # el papel de L
 bash deploy/fetch-backup.sh <alias>                           # bajar y verificar copias
 ```
@@ -192,9 +193,11 @@ bash deploy/fetch-backup.sh <alias>                           # bajar y verifica
 |---|---|
 | `docs/inventario-1510.md` | el paso 0: lo que hay y lo decidido pieza a pieza |
 | `docs/cierre-fase-6.md` | la retirada de las carteras de la fase 6 y el demo, sin veredicto |
-| `docs/preregistro-papel-l.md` | intentos, anyos de datos necesarios y que puede decir el papel de L (en pausa) |
+| `docs/prd-ploutos-v3.md`, `docs/decisiones/` | la fuente de verdad y las 9 decisiones de fondo de las que sale |
+| `docs/plan-estudio-paso-2.md`, `docs/estudios/paso2/` | el criterio congelado del paso 2 (y sus 5 aclaraciones), la literatura, V4/V5 y el simulador |
+| `docs/preregistro-papel-l.md` | intentos, anyos de datos necesarios; L ya no es candidata (su papel, solo informacion) |
 | `docs/diseno-papel-l.md`, `docs/diseno-embudo-noticias.md`, `docs/diseno-medios-sombra.md`, `docs/diseno-noticias.md` | lo que sigue en marcha |
 | `docs/diseno-comandos-telegram.md`, `docs/diseno-api-panel.md`, `docs/propuesta-vigilante.md`, `docs/propuesta-actualizaciones.md` | Telegram, el panel, Healthchecks, actualizaciones |
 | `docs/hallazgos-*.md`, `docs/preparacion-fase-4.md` | lo verificado de OKX, el CLI de la IA y el mercado |
 | `docs/estudios/` | todos los estudios: el registro de los intentos |
-| `docs/archivo/` | lo superado (fases cerradas, propuestas decididas, el PRD v3, el CLAUDE.md anterior) |
+| `docs/archivo/` | lo superado (fases cerradas, propuestas decididas, el PRD v2 y el borrador de v3 del 11/10, el CLAUDE.md anterior) |
