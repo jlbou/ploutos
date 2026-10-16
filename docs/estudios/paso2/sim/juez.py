@@ -21,11 +21,14 @@ def liston(m: dict, btc: dict) -> dict:
 
 
 def tipos(m: dict, btc: dict) -> dict:
-    """En bajista pierde menos que BTC; en alcista gana al menos la mitad; en lateral no pierde mas de un 10 % al anyo."""
+    """Con el rendimiento TOTAL de los dias de cada tipo, sin anualizar (decision del 16/10, opcion a: pocos dias no se
+    inflan): en bajista, mejor que BTC en esos dias; en alcista, al menos la mitad que BTC (si BTC perdio, no peor que
+    el); en lateral, no pierde mas de un 10 % repartido por los dias que hubo (-10 % x dias / 365)."""
     t, b = m["tipos"], btc["tipos"]
-    bajista = t["bajista"]["anual"] > b["bajista"]["anual"]
-    alcista = t["alcista"]["anual"] >= 0.5 * b["alcista"]["anual"]
-    lateral = t["lateral"]["anual"] >= LATERAL_MINIMO
+    bajista = t["bajista"]["total"] > b["bajista"]["total"]
+    ref = b["alcista"]["total"]
+    alcista = t["alcista"]["total"] >= (0.5 * ref if ref > 0 else ref)
+    lateral = t["lateral"]["total"] >= LATERAL_MINIMO * t["lateral"]["dias"] / 365
     return {"pasa": bajista and alcista and lateral, "bajista": bajista, "alcista": alcista, "lateral": lateral}
 
 

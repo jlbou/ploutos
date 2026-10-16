@@ -194,3 +194,11 @@ profundidad para 10.000 € en sus 400 niveles cuenta con un 1 % de coste y se d
 no hay efectivo, se vende lo justo de cada posicion, a la apertura y con comision. El ultimo dia del tramo se paga todo
 lo pendiente (igual que BTC mantenido). Antes se pagaba el 31/12 y, con todo invertido, bloqueaba las compras de enero
 (revision final del simulador, hallazgo 6). Etiqueta `criterio-paso2-a4`.
+
+## 15. Aclaracion 5 (propietario, 16/10/2026, opcion a), antes de medir
+
+**Los tipos de mercado se juzgan con el rendimiento TOTAL de sus dias, sin anualizar** (anualizar pocos dias los
+inflaba: 25 dias con -1,5 % salian -20 % al anyo; revision final del simulador, hallazgo 7). En **bajista**, mejor que
+BTC en esos mismos dias; en **alcista**, al menos la mitad que BTC (si BTC perdio, no peor que el); en **lateral**, no
+pierde mas de un **10 % repartido por los dias que hubo** (-10 % x dias / 365). Lo que se queria decir no cambia.
+Etiqueta `criterio-paso2-a5`.

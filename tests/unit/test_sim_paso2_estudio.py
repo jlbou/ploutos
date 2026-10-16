@@ -31,9 +31,11 @@ def test_los_datos_se_alinean_y_un_hueco_para_todo(tmp_path):
         datos.cargar(tmp_path)
 
 
-def _metricas(anual, caida, alcista=0.5, bajista=-0.1, lateral=0.0):
+def _metricas(anual, caida, alcista=0.5, bajista=-0.1, lateral=0.0, dias_lateral=365):
+    """`alcista`, `bajista` y `lateral`: rendimiento TOTAL de los dias de cada tipo (decision del 16/10: sin anualizar)."""
     return {"anual": anual, "caida": caida,
-            "tipos": {"alcista": {"anual": alcista}, "bajista": {"anual": bajista}, "lateral": {"anual": lateral}}}
+            "tipos": {"alcista": {"total": alcista, "dias": 300}, "bajista": {"total": bajista, "dias": 300},
+                      "lateral": {"total": lateral, "dias": dias_lateral}}}
 
 
 BTC = _metricas(0.30, 0.75, alcista=1.0, bajista=-0.6, lateral=0.0)
@@ -53,6 +55,19 @@ def test_los_tipos_de_mercado():
     assert not juez.tipos(_metricas(0.3, 0.3, alcista=0.4, bajista=-0.3, lateral=0.0), BTC)["pasa"]   # < mitad
     assert not juez.tipos(_metricas(0.3, 0.3, alcista=0.6, bajista=-0.7, lateral=0.0), BTC)["pasa"]   # pierde mas
     assert not juez.tipos(_metricas(0.3, 0.3, alcista=0.6, bajista=-0.3, lateral=-0.11), BTC)["pasa"]  # lateral
+
+
+def test_pocos_dias_laterales_no_se_inflan():
+    """Decision del 16/10 (opcion a): 25 dias con -1,5 % no es -20 % al anyo; el limite es -10 % x 25/365 = -0,68 %."""
+    assert not juez.tipos(_metricas(0.3, 0.3, alcista=0.6, bajista=-0.3, lateral=-0.015, dias_lateral=25), BTC)["pasa"]
+    assert juez.tipos(_metricas(0.3, 0.3, alcista=0.6, bajista=-0.3, lateral=-0.006, dias_lateral=25), BTC)["pasa"]
+    assert juez.tipos(_metricas(0.3, 0.3, alcista=0.6, bajista=-0.3, lateral=-0.019, dias_lateral=73), BTC)["pasa"]
+
+
+def test_alcista_con_btc_negativo_no_peor_que_btc():
+    btc = _metricas(0.0, 0.5, alcista=-0.05, bajista=-0.6)
+    assert juez.tipos(_metricas(0.0, 0.3, alcista=-0.04, bajista=-0.3), btc)["pasa"]
+    assert not juez.tipos(_metricas(0.0, 0.3, alcista=-0.06, bajista=-0.3), btc)["pasa"]
 
 
 def test_la_caida_maxima_35():
