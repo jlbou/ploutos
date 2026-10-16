@@ -46,18 +46,24 @@ def fracciones(s: dict, config: str) -> dict[str, list[float]]:
     return out
 
 
-def medir(s: dict, config: str, desde: int, hasta: int, p: motor.Parametros) -> dict:
-    atr = {m: indicadores.atr(x["h"], x["l"], x["c"], 14) for m, x in s.items()}
+def atrs(s: dict) -> dict:
+    return {m: indicadores.atr(x["h"], x["l"], x["c"], 14) for m, x in s.items()}
+
+
+def medir(s: dict, config: str, desde: int, hasta: int, p: motor.Parametros, atr: dict | None = None) -> dict:
     pc = replace(p, reentrada="domingo" if config.startswith("H3") else "senyal")
-    r = motor.simular(s, fracciones(s, config), atr, desde, hasta, pc)
-    return resumen(r.equity, s["BTC"]["c"], desde, hasta) | {"operaciones": len(r.operaciones), "impuestos": r.impuestos,
-                                                              "invertido_medio": sum(r.invertido) / len(r.invertido)}
+    r = motor.simular(s, fracciones(s, config), atr or atrs(s), desde, hasta, pc)
+    return resumen([p.capital] + r.equity, s["BTC"]["c"], desde, hasta) | {
+        "operaciones": len(r.operaciones), "impuestos": r.impuestos,
+        "invertido_medio": sum(r.invertido) / len(r.invertido)}
 
 
 def resumen(equity: list[float], cierres_btc: list[float], desde: int, hasta: int) -> dict:
+    """`equity` empieza en el CAPITAL INICIAL (el dia desde-1) y sigue con cada cierre de desde..hasta (revision final del
+    16/10: antes empezaba en el primer cierre y la entrada no contaba)."""
     rend = metricas.rendimientos(equity)
     asim, curt = metricas.momentos(rend)
-    tipos = metricas.tipos_de_mercado(cierres_btc)[desde:hasta + 1]
+    tipos = metricas.tipos_de_mercado(cierres_btc)[desde - 1:hasta + 1]
     return {"anual": metricas.anual(equity), "caida": metricas.caida_maxima(equity), "final": equity[-1],
             "sharpe_diario": metricas.sharpe_diario(rend), "asimetria": asim, "curtosis": curt, "n": len(rend),
             "tipos": metricas.por_tipo(equity, tipos), "_rend": rend}
@@ -81,14 +87,22 @@ def validar() -> int:
     return 0 if dif < 1e-6 else 1
 
 
+def elegir(res: dict, pbo: float) -> str | None:
+    """La candidata (plan, seccion 9): entre las que cumplen el liston, los tipos y la caida en la exploracion, la de
+    mayor deflactado; con PBO >= 0,50, ninguna."""
+    cumplen = [c for c in CONFIGURACIONES if res[c]["cumple"]]
+    return max(cumplen, key=lambda c: res[c]["deflactado"]) if cumplen and pbo < 0.5 else None
+
+
 def explorar() -> int:
     if not V5.exists():
         print("NO: falta el resultado de V5 (los costes de verdad). Se mide al acabar el recolector (30/10).")
         return 1
     s, p = datos.cargar(DATOS), parametros()
     d, h = (indice(s["BTC"]["t"], f) for f in EXPLORACION)
-    btc = resumen(motor.mantener(s["BTC"], d, h, p), s["BTC"]["c"], d, h)
-    res = {c: medir(s, c, d, h, p) for c in CONFIGURACIONES}
+    btc = resumen([p.capital] + motor.mantener(s["BTC"], d, h, p), s["BTC"]["c"], d, h)
+    atr = atrs(s)
+    res = {c: medir(s, c, d, h, p, atr) for c in CONFIGURACIONES}
     previos = json.loads(UMBRAL.read_text(encoding="utf-8"))["sharpes_diarios"].values()
     sharpes = list(previos) + [x["sharpe_diario"] for x in res.values()]
     dispersion = math.sqrt(sum((x - sum(sharpes) / len(sharpes)) ** 2 for x in sharpes) / len(sharpes))
@@ -98,8 +112,7 @@ def explorar() -> int:
         x["juez"] = {"liston": juez.liston(x, btc), "tipos": juez.tipos(x, btc), "caida": juez.caida(x)}
         x["cumple"] = all(v["pasa"] for v in x["juez"].values())
     pbo = metricas.pbo([res[c]["_rend"] for c in CONFIGURACIONES])
-    cumplen = [c for c in CONFIGURACIONES if res[c]["cumple"]]
-    candidata = max(cumplen, key=lambda c: res[c]["deflactado"]) if cumplen and pbo < 0.5 else None
+    candidata = elegir(res, pbo)
     for x in [*res.values(), btc]:
         x.pop("_rend")
     salida = {"ventana": EXPLORACION, "btc": btc, "configuraciones": res, "intentos": n_total,
@@ -121,7 +134,7 @@ def limpia() -> int:
     juez.abrir_prueba_limpia(candidata, CERROJO)          # PermissionError si no toca
     s, p = datos.cargar(DATOS), parametros()
     d, h = (indice(s["BTC"]["t"], f) for f in LIMPIA)
-    btc = resumen(motor.mantener(s["BTC"], d, h, p), s["BTC"]["c"], d, h)
+    btc = resumen([p.capital] + motor.mantener(s["BTC"], d, h, p), s["BTC"]["c"], d, h)
     x = medir(s, candidata, d, h, p)
     x["probabilistico"] = metricas.probabilistico(x["sharpe_diario"], x["n"], x["asimetria"], x["curtosis"])
     x["juez"] = {"liston": juez.liston(x, btc), "tipos": juez.tipos(x, btc), "caida": juez.caida(x),

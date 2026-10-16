@@ -142,3 +142,25 @@ def test_una_venta_con_ganancia_paga_el_impuesto_de_su_anyo():
     venta = [o for o in r.operaciones if o["tipo"] == "venta"][0]
     ganancia = venta["nocional"] * (1 - p.comision) - compra["nocional"] * (1 + p.comision)
     assert math.isclose(r.impuestos[2021], imp.cuota(ganancia), rel_tol=1e-9)
+
+
+def test_una_posicion_que_crece_no_pasa_del_riesgo_con_su_stop_de_verdad():
+    """Revision final del 16/10 (2): al crecer, el riesgo se mide con el stop que tiene (no con 3 ATR desde hoy). Si ya
+    va por encima, no se anyade; tampoco se vende por eso."""
+    cierres = [100.0] * 3 + [200.0] * 5
+    abre = [100.0] * 3 + [200.0] * 5
+    fr = [0.25] * 4 + [1.0] * 4                     # sube al 100 % con la senyal del dia 4 (orden el 5)
+    r, _ = _uno(cierres, fr, [5.0] * 8, abre=abre)  # stop de entrada: ~85; a 200, el riesgo hasta el stop ya es ~57 %
+    assert [(o["dia"], o["tipo"]) for o in r.operaciones] == [(1, "compra")]
+
+
+def test_una_compra_recortada_se_completa_cuando_hay_sitio():
+    """Revision final del 16/10 (5): recortada por la exposicion, se reintenta (aclaracion 2)."""
+    from dataclasses import replace
+    p = replace(mo.Parametros(), exposicion=0.50, colchon_pct=None)
+    a, b = serie([100.0] * 8), serie([10.0] * 8)
+    fr = {"A": [1.0] * 3 + [0.0] * 5, "B": [1.0] * 8}
+    r = mo.simular({"A": a, "B": b}, fr, {"A": [0.1] * 8, "B": [0.01] * 8}, 1, 7, p)
+    compras_b = [o for o in r.operaciones if o["moneda"] == "B" and o["tipo"] == "compra"]
+    assert len(compras_b) == 2 and compras_b[1]["dia"] == 4           # A sale el dia 4 y B se completa
+    assert math.isclose(sum(o["nocional"] for o in compras_b), 4_500, rel_tol=5e-3)   # 45 % de ~9.980

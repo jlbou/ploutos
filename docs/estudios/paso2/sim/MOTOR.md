@@ -17,11 +17,16 @@ Del PRD v3 (seccion 4) y del plan (secciones 8 y 11). Cada dia i (vela diaria UT
    encienda; en H3, hasta el domingo siguiente.
 6. **Se ajusta** solo si la diferencia llega al minimo por orden (C6): primero las ventas, despues las compras, a la
    apertura × (1 ± deslizamiento), con la comision taker.
+   **Solo se vende si la fraccion de la senyal BAJA, y solo se compra si SUBE** (revision final del 16/10): una compra
+   que se reintenta nunca acaba en venta.
 6b. **Una compra que una regla no deja hacer** (regla 8, maximo de posiciones, el suelo) **se reintenta cada dia**
    mientras la senyal siga encendida: no se pierde, se retrasa. Una que no pasa por menos del minimo por orden, igual.
    Los escalones solo cambian el tamanyo de las compras nuevas: no obligan a vender lo que ya hay.
 7. **El stop** de una posicion nueva: entrada − 3 ATR(14) del dia i-1, fijo; si se anyade a una posicion, el stop no
    cambia. Riesgo y regla 8 se calculan con ese stop.
+   **Una posicion que crece mide su riesgo con el stop que tiene** (no con 3 ATR desde hoy): si ya pasa del 5 %, no se
+   anyade, y tampoco se vende por eso (revision final del 16/10). Una compra recortada por la exposicion se completa
+   cuando hay sitio; la que solo recorta el efectivo (las comisiones) esta completa.
 
 ## Durante el dia i
 
@@ -35,6 +40,11 @@ Del PRD v3 (seccion 4) y del plan (secciones 8 y 11). Cada dia i (vela diaria UT
     impuesto del anyo con los tramos del ahorro y las perdidas de los 4 anyos anteriores. **El ultimo dia, lo abierto
     paga como si se vendiera** (igual que BTC mantenido, C8). El impuesto sale del efectivo aunque quede negativo: el
     equity es el correcto (en la vida real se paga en junio del anyo siguiente).
+
+## Las metricas
+
+La curva empieza en el **capital inicial** (el dia antes del primero), asi cuentan la entrada y sus costes (revision
+final del 16/10). Lo mismo para BTC mantenido.
 
 ## Validacion (antes de medir nada)
 

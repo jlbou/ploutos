@@ -113,33 +113,50 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
             nocional = f * tope * e_ref
             a = atr[m][i - 1]
             if f > 0 and p.stops:
-                if a is None or a <= 0:
+                if qty[m] > 0:
+                    # Revision final del 16/10: una posicion que crece mide su riesgo con el stop que TIENE (fijo desde
+                    # la entrada). Si ya va por encima del tope, no se anyade; tampoco se vende por eso.
+                    actual = qty[m] * aperturas[m]
+                    if riesgo is not None and aperturas[m] > stop[m]:
+                        tope_riesgo = riesgo * e_ref / ((aperturas[m] - stop[m]) / aperturas[m])
+                        nocional = min(nocional, max(actual, tope_riesgo))
+                elif a is None or a <= 0:
                     nocional = 0.0
                 elif riesgo is not None:
                     nocional = min(nocional, riesgo * e_ref / (p.stop_atr * a / aperturas[m]))
             objetivo[m] = (f, nocional)
 
-        # Primero las ventas.
+        # Primero las ventas: SOLO si la fraccion baja (revision final del 16/10: una compra que se reintenta nunca
+        # acaba en venta, y el riesgo de una posicion que ya tiene no obliga a vender).
         for m, (f, nocional) in objetivo.items():
+            if f >= ultima_fraccion[m]:
+                continue
             actual = qty[m] * aperturas[m]
-            if nocional < actual - p.min_orden or (f == 0.0 and qty[m] > 0):
+            if qty[m] > 0 and (f == 0.0 or nocional < actual - p.min_orden):
                 vende = qty[m] if f == 0.0 else (actual - nocional) / aperturas[m]
                 vender(m, vende, aperturas[m] * (1 - p.deslizamiento), i, "venta")
-            ultima_fraccion[m] = f if nocional <= actual + p.min_orden else ultima_fraccion[m]
+            ultima_fraccion[m] = f
 
-        # Despues las compras.
+        # Despues las compras: solo si la fraccion sube.
         abiertas = sum(1 for m in monedas if qty[m] > 0)
         for m, (f, nocional) in sorted(objetivo.items(), key=lambda x: -x[1][1]):
+            if f <= ultima_fraccion[m]:
+                continue
             actual = qty[m] * aperturas[m]
-            if enclavado or nocional <= actual + p.min_orden:
-                ultima_fraccion[m] = f if not enclavado else ultima_fraccion[m]
+            if enclavado:
+                continue
+            if nocional <= actual + p.min_orden:
+                ultima_fraccion[m] = f
                 continue
             if qty[m] == 0 and abiertas >= max_pos:
                 continue
             expuesto = sum(qty[x] * aperturas[x] for x in monedas)
-            compra = min(nocional - actual, p.exposicion * e_ref - expuesto, efectivo / (1 + p.comision))
+            por_efectivo = efectivo / (1 + p.comision)
+            compra = min(nocional - actual, p.exposicion * e_ref - expuesto, por_efectivo)
             if compra <= p.min_orden:
                 continue
+            # Recortada solo por el efectivo (las comisiones no dejan llegar al 100 %): no hay mas que comprar.
+            completa = compra >= nocional - actual - p.min_orden or compra >= por_efectivo - 1e-9
             precio = aperturas[m] * (1 + p.deslizamiento)
             nuevo_stop = stop[m] if qty[m] > 0 else (precio - p.stop_atr * atr[m][i - 1] if p.stops else 0.0)
             if p.colchon_pct is not None and suelo is not None:                  # regla 8
@@ -153,7 +170,9 @@ def simular(series: Mapping[str, Serie], fracciones: Mapping[str, Sequence[float
             lotes[m].comprar(compra / precio, compra * (1 + p.comision))
             stop[m] = nuevo_stop
             abiertas += 1 if actual == 0 else 0
-            ultima_fraccion[m] = f
+            # Revision final del 16/10: si la compra se quedo corta (exposicion, efectivo), se reintenta (aclaracion 2).
+            if completa:
+                ultima_fraccion[m] = f
             r.operaciones.append({"dia": i, "moneda": m, "tipo": "compra", "precio": precio, "nocional": compra})
 
         # Durante el dia: los stops (C3).
