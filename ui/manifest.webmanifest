@@ -1,11 +1,15 @@
 {
   "name": "Ploutos",
   "short_name": "Ploutos",
+  "lang": "es",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#09151B",
-  "theme_color": "#1F5E7A",
+  "background_color": "#D6E6ED",
+  "theme_color": "#D6E6ED",
   "icons": [
-    {"src": "apple-touch-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+    {"src": "icono-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icono-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ]
 }

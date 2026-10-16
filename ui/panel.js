@@ -10,7 +10,7 @@ const SERVICIO = {
   noticias: "Noticias", telegram: "Comandos de Telegram", ejecutor: "Ejecutor del demo", papel_l: "Papel de L",
   medios: "Medios (en sombra)",
 };
-const OCO = { viva: ["ok", "OCO viva"], sin_oco: ["mal", "SIN OCO"], vendiendo: ["aviso", "vendiendo"] };
+const OCO = { viva: ["ok", "OCO viva"], sin_oco: ["mal", "sin OCO"], vendiendo: ["aviso", "vendiendo"] };
 const ESTADO = { ok: "OK", tarde: "Tarde", caido: "Caído", sin_datos: "Sin datos", retirado: "Retirado" };
 const SETUP = { pullback_trend: "pullback", range_breakout: "ruptura", mean_reversion: "reversión" };
 const MOTIVO = { stop: ["mal", "stop"], target: ["ok", "objetivo"], news: ["aviso", "noticia"], manual: ["aviso", "manual"],
@@ -31,6 +31,16 @@ if (!$("p-bandas") || !$("p-flujo") || !$("pag-resumen") || !$("papel-l")) {
 }
 try { sessionStorage.removeItem("ploutos-recarga"); } catch (e) { /* sin almacen */ }
 
+// Repintar cada foto rehace los nodos: el foco del teclado se perderia. Lo que se puede enfocar lleva `data-foco`
+// (una clave estable) y, tras repintar, se le devuelve el foco al nodo nuevo con la misma clave.
+function conservarFoco(pintarlo) {
+  const clave = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.foco : null;
+  pintarlo();
+  if (!clave) return;
+  const nuevo = document.querySelector(`[data-foco="${CSS.escape(clave)}"]`);
+  if (nuevo && nuevo !== document.activeElement) nuevo.focus({ preventScroll: true });
+}
+
 function el(tag, attrs = {}, ...hijos) {
   const e = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
@@ -41,16 +51,19 @@ function el(tag, attrs = {}, ...hijos) {
   return e;
 }
 
-const usd = (x, signo = false) => x == null ? "–" :
-  (signo && x > 0 ? "+" : "") + x.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " $";
+const DOLARES = new Intl.NumberFormat("es-ES", { style: "currency", currency: "USD", currencyDisplay: "narrowSymbol" });
+const usd = (x, signo = false) => x == null ? "–" : (signo && x > 0 ? "+" : "") + DOLARES.format(x);
 const num = (x, d = 2, signo = false) => x == null ? "–" :
   (signo && x > 0 ? "+" : "") + x.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
 const precio = (x) => x == null ? "–" : Number(x.toPrecision(6)).toLocaleString("es-ES", { maximumFractionDigits: 8 });
+const pc = (x) => [precio(x), "precio"];           // una celda de precio: con cifras de Plex Mono, alineadas
+const json = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
 const signoClase = (x) => x == null ? "gris" : x > 0 ? "pos" : x < 0 ? "neg" : "";
 const base = (s) => (s || "").split("/")[0];
 const hora = (ms) => ms == null ? "–" :
   new Date(ms).toLocaleString("es-ES", { timeZone: "UTC", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) + " UTC";
 const soloHora = (ms) => new Date(ms).toLocaleTimeString("es-ES", { timeZone: "UTC", hour: "2-digit", minute: "2-digit" });
+const soloFecha = (ms) => new Intl.DateTimeFormat("es-ES", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" }).format(ms);
 const soloDia = (ms) => new Date(ms).toLocaleDateString("es-ES", { timeZone: "UTC", day: "2-digit", month: "2-digit" });
 function hace(ms) {
   const s = Math.max(0, Math.round(ms / 1000));
@@ -60,6 +73,8 @@ function hace(ms) {
   return h < 48 ? `${h} h` : `${Math.floor(h / 24)} d ${h % 24} h`;
 }
 const chip = (texto, clase = "") => el("span", { class: "chip " + clase }, texto);
+// Simbolos y nombres propios: que el traductor del navegador no los toque.
+const simbolo = (s, clase = "par") => el("span", { class: clase, translate: "no" }, s);
 const chipCartera = (n) => chip(NOMBRE[n] || n, n === "ai" ? "ia" : n === "baseline" ? "base" : "");
 
 // --- La barra de estado: una fila por cartera ---
@@ -70,8 +85,9 @@ function dato(etiqueta, valor, clase = "", extra = false, otra = "") {
 }
 
 function filaCartera(nombre, c, f) {
-  const fila = el("div", { class: "fila-c", "data-c": nombre });
-  const cab = el("div", { class: "nombre" }, el("i"), NOMBRE[nombre] || nombre);
+  const retirada = (f.servicios[`papel_${nombre}`] || {}).estado === "retirado";
+  const fila = el("div", { class: "fila-c" + (retirada ? " retirada" : ""), "data-c": nombre });
+  const cab = el("div", { class: "nombre" }, el("i", { "aria-hidden": "true" }), el("span", {}, NOMBRE[nombre] || nombre));
   if (!c || !c.disponible) {
     fila.append(cab, el("span", { class: "gris" }, "Sin datos"));
     return fila;
@@ -80,7 +96,7 @@ function filaCartera(nombre, c, f) {
   const modo = el("span", { class: "modo " + modoClase, title: "Modo efectivo: el más restrictivo de los activos" },
     c.modo === "NORMAL" ? "Normal" : c.modo.replace("CLOSE_ONLY_", "Solo cierre: ").replace("HALTED", "Parado"));
   cab.append(modo);
-  if ((f.servicios[`papel_${nombre}`] || {}).estado === "retirado") cab.append(chip("Retirada el 15/10", "gris"));
+  if (retirada) cab.append(chip("Retirada el 15/10", "gris"));
   const lim = f.limites;
   fila.append(cab,
     dato("Equity (vela)", usd(c.equity_usd), "grande"),
@@ -99,8 +115,7 @@ function filaCartera(nombre, c, f) {
     const pct = Math.max(0, Math.min(100, (c.equity_usd - lim.suelo_usd) / rango * 100));
     const marca = el("i"); marca.style.left = `calc(${pct}% - 1.5px)`;
     suelo.append(
-      el("span", { class: "label", style: "color:var(--brand-ink-2);font-size:10.5px" },
-        `Sobre el suelo: ${usd(c.distancia_suelo_usd)}`),
+      el("span", { class: "label" }, `Sobre el suelo: ${usd(c.distancia_suelo_usd)}`),
       el("div", { class: "suelo-barra", role: "img", "aria-label": `${usd(c.distancia_suelo_usd)} por encima del suelo de ${lim.suelo_usd} $` }, marca),
       el("small", {}, el("span", {}, `${lim.suelo_usd}`), el("span", {}, "35"), el("span", {}, "45"),
         el("span", {}, `${lim.capital_inicial_usd}`)));
@@ -132,56 +147,56 @@ function posicionesAgrupadas(f) {
 function barraRango(p) {
   const lo = p.stop_price, hi = p.target_price;
   const pos = (x) => Math.max(0, Math.min(100, (x - lo) / (hi - lo) * 100));
-  const caja = el("div", { class: "rango-caja" });
-  const r = el("div", { class: "rango", role: "img",
+  // Todo con <span>: va dentro de un <button> (solo admite contenido en linea).
+  const caja = el("span", { class: "rango-caja" });
+  const r = el("span", { class: "rango", role: "img",
     "aria-label": `precio ${precio(p.precio)} entre el stop ${precio(lo)} y el objetivo ${precio(hi)}` });
   const pe = pos(p.entry_price);
   if (p.precio != null) {
     const pa = pos(p.precio);
     const relleno = el("span", { class: "relleno" });
     relleno.style.left = `${Math.min(pe, pa)}%`; relleno.style.width = `${Math.abs(pa - pe)}%`;
-    relleno.style.background = `color-mix(in srgb, var(${p.precio >= p.entry_price ? "--good" : "--bad"}) 55%, transparent)`;
+    relleno.style.background = `color-mix(in srgb, var(${p.precio >= p.entry_price ? "--bien" : "--mal"}) 55%, transparent)`;
     const ahora = el("span", { class: "ahora" }); ahora.style.left = `${pa}%`;
     r.append(relleno, ahora);
   }
   const entrada = el("span", { class: "entrada" }); entrada.style.left = `${pe}%`;
   const pct = (x) => num((x / p.entry_price - 1) * 100, 1, true) + " %";
   r.append(entrada);
-  caja.append(el("div", { class: "et-fila" }, el("span", {}, `stop ${precio(lo)} (${pct(lo)})`),
+  caja.append(el("span", { class: "et-fila" }, el("span", {}, `stop ${precio(lo)} (${pct(lo)})`),
     el("span", {}, `objetivo ${precio(hi)} (${pct(hi)})`)), r,
-  el("div", { class: "et-fila" }, el("span", {}, `entrada ${precio(p.entry_price)}`),
+  el("span", { class: "et-fila" }, el("span", {}, `entrada ${precio(p.entry_price)}`),
     el("span", {}, `ahora ${p.precio_aprox ? "≈ " : ""}${precio(p.precio)}`)));
   return caja;
 }
 
 function tarjetaPosicion(p, generado) {
-  const quien = el("div", { class: "quien" }, ...p.carteras.map((c) => chipCartera(c.n)),
+  // La tarjeta es un <article>; lo que se pulsa es su cabecera, un <button> de verdad. El grafico va FUERA del
+  // boton (un grafico que se arrastra no puede vivir dentro de otro control).
+  const quien = el("span", { class: "quien" }, ...p.carteras.map((c) => chipCartera(c.n)),
     p.oco ? chip((OCO[p.oco] || ["", p.oco])[1], (OCO[p.oco] || ["", p.oco])[0]) : null);
-  const izq = el("div", { class: "izq" }, el("div", { class: "par" }, p.symbol,
-    el("small", {}, `${SETUP[p.setup] || p.setup} · hace ${hace(generado - p.opened_ts_ms)}`)), quien);
-  const res = el("div", { class: "resultado" });
+  const izq = el("span", { class: "izq" }, el("span", { class: "par" }, simbolo(p.symbol, ""),
+    el("small", {}, `${SETUP[p.setup] || p.setup}, hace ${hace(generado - p.opened_ts_ms)}`)), quien);
+  const res = el("span", { class: "resultado" });
   if (p.carteras.length === 1) {
     const c = p.carteras[0];
     res.append(el("b", { class: signoClase(c.pnl_usd) }, usd(c.pnl_usd, true)),
       el("small", {}, num(c.pnl_r, 2, true) + " R"));
   } else {
     for (const c of p.carteras) {
-      res.append(el("div", { class: "linea" }, el("span", { class: "gris" }, (NOMBRE[c.n] || c.n) + " "),
-        el("span", { class: signoClase(c.pnl_usd) }, usd(c.pnl_usd, true)), el("span", { class: "gris" }, ` · ${num(c.pnl_r, 2, true)} R`)));
+      res.append(el("span", { class: "linea" }, el("span", { class: "gris" }, (NOMBRE[c.n] || c.n) + " "),
+        el("span", { class: signoClase(c.pnl_usd) }, usd(c.pnl_usd, true)), el("span", { class: "gris" }, `, ${num(c.pnl_r, 2, true)} R`)));
     }
   }
   const clave = clavePos(p);
   const abierta = abiertas.has(clave);
-  const tarjeta = el("div", { class: "posicion" + (abierta ? " abierta" : ""), role: "button", tabindex: "0",
-    "aria-expanded": String(abierta), title: abierta ? "Ocultar el gráfico" : "Ver el gráfico" },
-  izq, barraRango(p), res, abierta ? graficoPosicion(p) : null);
-  const alternar = () => {
-    if (abierta) abiertas.delete(clave); else abiertas.add(clave);
-    pintarTarjetas(ultimaFoto);
+  const cab = el("button", { type: "button", class: "pos-cab", "aria-expanded": String(abierta), "data-foco": "pos-" + clave,
+    title: abierta ? "Ocultar el gráfico" : "Ver el gráfico" }, izq, barraRango(p), res);
+  cab.onclick = () => {
+    if (abiertas.has(clave)) abiertas.delete(clave); else abiertas.add(clave);
+    conservarFoco(() => pintarTarjetas(ultimaFoto));
   };
-  tarjeta.onclick = alternar;
-  tarjeta.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); alternar(); } };
-  return tarjeta;
+  return el("article", { class: "posicion" + (abierta ? " abierta" : "") }, cab, abierta ? graficoPosicion(p) : null);
 }
 
 // --- El grafico de cada posicion abierta (el propietario, 01/10): se abre al tocarla ---
@@ -202,26 +217,26 @@ function graficoPosicion(p) {
   const k = clavePos(p);
   let g = graficosPos.get(k);
   if (!g) {
-    g = { caja: el("div", { class: "pos-grafico" }), chart: null, serie: null, marcas: null, pedido: 0 };
-    g.caja.onclick = (e) => e.stopPropagation();       // mover el grafico no pliega la tarjeta
+    const lienzo = el("div", { class: "lienzo" });
+    g = { caja: el("div", { class: "pos-grafico" }, lienzo), lienzo, nota: null, chart: null, serie: null, marcas: null, pedido: 0 };
     graficosPos.set(k, g);
   }
   if (typeof LightweightCharts === "undefined") {
-    g.caja.textContent = "No se pudo cargar la librería de gráficos.";
+    g.caja.textContent = "No se pudo cargar la librería de gráficos. Recarga la página.";
     return g.caja;
   }
   if (!g.chart) {
-    g.chart = LightweightCharts.createChart(g.caja, {
+    g.chart = LightweightCharts.createChart(g.lienzo, {
       autoSize: true,
-      layout: { background: { color: "transparent" }, textColor: color("--ink-3"), fontFamily: "IBM Plex Mono, monospace", fontSize: 11 },
-      grid: { vertLines: { color: color("--line") }, horzLines: { color: color("--line") } },
-      rightPriceScale: { borderColor: color("--line") },
-      timeScale: { borderColor: color("--line"), timeVisible: true },
+      layout: { background: { color: "transparent" }, textColor: color("--tinta-3"), fontFamily: "IBM Plex Sans, sans-serif", fontSize: 12 },
+      grid: { vertLines: { color: color("--linea") }, horzLines: { color: color("--linea") } },
+      rightPriceScale: { borderColor: color("--linea") },
+      timeScale: { borderColor: color("--linea"), timeVisible: true },
       localization: { priceFormatter: (v) => precio(v) },
     });
     g.serie = g.chart.addSeries(LightweightCharts.CandlestickSeries, {
-      upColor: color("--good"), downColor: color("--bad"), borderVisible: false,
-      wickUpColor: color("--good"), wickDownColor: color("--bad"), priceLineVisible: false,
+      upColor: color("--bien"), downColor: color("--mal"), borderVisible: false,
+      wickUpColor: color("--bien"), wickDownColor: color("--mal"), priceLineVisible: false,
       // La escala incluye SIEMPRE el stop y el objetivo: si no, solo se ven cuando el precio se acerca.
       autoscaleInfoProvider: (original) => {
         const r = original();
@@ -232,9 +247,9 @@ function graficoPosicion(p) {
     });
     const linea = (price, variable, title, discontinua) => g.serie.createPriceLine({ price, color: color(variable), lineWidth: 1,
       lineStyle: discontinua ? LightweightCharts.LineStyle.Dashed : LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title });
-    linea(p.target_price, "--good", "objetivo", true);
-    linea(p.entry_price, "--ink-2", "entrada", false);
-    linea(p.stop_price, "--bad", "stop", true);
+    linea(p.target_price, "--bien", "objetivo", true);
+    linea(p.entry_price, "--tinta-2", "entrada", false);
+    linea(p.stop_price, "--mal", "stop", true);
     g.marcas = LightweightCharts.createSeriesMarkers(g.serie, []);
     // La caja nace sin anchura (se crea antes de entrar en la pagina): al tomar su tamanyo de verdad, o al girar
     // el movil, se vuelven a encajar las velas. Sin esto, en el movil salian apretadas a la derecha.
@@ -245,13 +260,18 @@ function graficoPosicion(p) {
   }
   if (Date.now() - g.pedido > VELAS_CADA_MS) {
     g.pedido = Date.now();
-    fetch(`/api/velas?simbolo=${encodeURIComponent(p.symbol)}&desde=${p.opened_ts_ms}`).then((r) => r.json()).then((v) => {
+    fetch(`/api/velas?simbolo=${encodeURIComponent(p.symbol)}&desde=${p.opened_ts_ms}`).then(json).then((v) => {
       if (!g.serie) return;
+      if (g.nota) { g.nota.remove(); g.nota = null; }
       g.serie.setData(v.map(([t, o, h, l, c]) => ({ time: Math.floor(t / 1000), open: o, high: h, low: l, close: c })));
       g.marcas.setMarkers([{ time: Math.floor(p.opened_ts_ms / 1000), position: "belowBar", shape: "arrowUp",
-        color: color("--accent"), text: "entrada" }]);
+        color: color("--acento"), text: "entrada" }]);
       g.chart.timeScale().fitContent();
-    }).catch(() => { g.pedido = 0; });
+    }).catch(() => {
+      // Se vuelve a pedir en el siguiente repintado; mientras, que se sepa.
+      g.pedido = 0;
+      if (!g.nota) { g.nota = el("p", { class: "error" }, "No se pudieron cargar las velas; se reintenta solo."); g.caja.append(g.nota); }
+    });
   }
   return g.caja;
 }
@@ -293,8 +313,8 @@ function pintarPosiciones(f) {
   for (const n of ORDEN_CARTERAS) {
     const c = f.carteras[n];
     if (!c || !c.disponible) continue;
-    for (const o of c.pendientes) pendientes.push([chipCartera(n), [o.symbol, "par"], SETUP[o.setup] || o.setup,
-      precio(o.limit_price), precio(o.stop_price), precio(o.target_price), hora(o.created_ts_ms)]);
+    for (const o of c.pendientes) pendientes.push([chipCartera(n), [simbolo(o.symbol, ""), "par"], SETUP[o.setup] || o.setup,
+      pc(o.limit_price), pc(o.stop_price), pc(o.target_price), hora(o.created_ts_ms)]);
   }
   $("pendientes-caja").hidden = !pendientes.length;
   $("pendientes").replaceChildren(tabla([["Cartera"], ["Par"], ["Setup", 0, "m-oculta"], ["Límite", 1], ["Stop", 1, "m-oculta"],
@@ -310,17 +330,17 @@ function pintarDemo(f) {
     $("demo").replaceChildren(el("p", { class: "vacio" }, "El ejecutor del demo no ha arrancado."));
     return [];
   }
-  const modo = d.modo === "NORMAL" ? chip("NORMAL", "ok") : chip(d.modo, "aviso");
+  const modo = d.modo === "NORMAL" ? chip("normal", "ok") : chip(d.modo, "aviso");
   const c = d.conciliacion;
   const conc = !c ? chip("sin conciliar", "aviso")
-    : c.cuadra ? chip(`cuadra · ${hace(f.generado_ms - c.ts_ms)}`, "ok") : chip("DESCUADRE", "mal");
+    : c.cuadra ? chip(`cuadra, hace ${hace(f.generado_ms - c.ts_ms)}`, "ok") : chip("descuadre", "mal");
   const par = (l, v, clase = "") => el("div", {}, el("span", { class: "l" }, l), el("b", { class: clase }, v));
-  const cab = el("div", { class: "demo-datos" },
+  const cab = el("div", { class: "datos" },
     par("Modo", modo), par("Equity", d.equity_usd == null ? "–" : usd(d.equity_usd) + (d.equity_fiable ? "" : " (no fiable)")),
-    par("Cerradas hoy", `${d.cerradas_hoy} · ${usd(d.pnl_hoy_usd, true)}`, signoClase(d.pnl_hoy_usd)),
+    par("Cerradas hoy", `${d.cerradas_hoy} (${usd(d.pnl_hoy_usd, true)})`, signoClase(d.pnl_hoy_usd)),
     par("Conciliación", conc));
   const hijos = [cab];
-  if (c && !c.cuadra) hijos.push(el("p", { class: "nota" }, c.descuadres.join(" · ")));
+  if (c && !c.cuadra) hijos.push(el("p", { class: "nota" }, c.descuadres.join("; ")));
   const tarjetas = d.posiciones.map((p) => ({ ...p, clave: "demo-" + p.decision_id,
     carteras: [{ n: "demo", pnl_usd: p.pnl_usd, pnl_r: p.pnl_r }] }));
   hijos.push(tarjetas.length
@@ -328,7 +348,7 @@ function pintarDemo(f) {
     : el("p", { class: "vacio" }, "Ninguna posición en el demo."));
   if (d.entradas.length) {
     hijos.push(el("h3", {}, "Entradas en OKX"), tabla([["Par"], ["Límite", 1], ["Stop", 1, "m-oculta"], ["Desde", 1, "m-oculta"]],
-      d.entradas.map((e) => [[e.simbolo, "par"], precio(e.limite), precio(e.stop), hora(e.creada_ms)])));
+      d.entradas.map((e) => [[simbolo(e.simbolo, ""), "par"], pc(e.limite), pc(e.stop), hora(e.creada_ms)])));
   }
   if (d.tratadas.length) {
     hijos.push(el("details", {}, el("summary", {}, "Últimas decisiones de la IA en el demo"),
@@ -349,32 +369,32 @@ function pintarPapelL(f) {
   const l = f.papel_l;
   if (!l || !l.disponible) {
     $("papel-l").replaceChildren(el("p", { class: "vacio" },
-      `Empieza el lunes ${l ? l.inicio.split("-").reverse().join("/") : "12/10/2026"} a las 00:00 UTC; el primer resultado, el martes a las 00:20 UTC.`));
+      `Empieza el lunes ${l ? soloFecha(Date.parse(l.inicio + "T00:00:00Z")) : "12/10/2026"} a las 00:00 UTC; el primer resultado, el martes a las 00:20 UTC.`));
     return;
   }
   const par = (t, v, clase = "") => el("div", {}, el("span", { class: "l" }, t), el("b", { class: clase }, v));
   const pct = (x) => num(x, 1, true) + " %";
   const corte = l.caida_max_pct > 0.8 * l.corte_pct ? "aviso" : "";
-  const hijos = [el("div", { class: "demo-datos" },
+  const hijos = [el("div", { class: "datos" },
     par("Equity (pasada)", usd(l.equity_usd)), par("Rendimiento", pct(l.rendimiento_pct), signoClase(l.rendimiento_pct)),
     par("Caída máx.", `${num(l.caida_max_pct, 1)} % (corte ${l.corte_pct} %)`, corte),
-    ...(l.caida_velas_pct == null ? [] : [par("Caída vela a vela", `${num(l.caida_velas_pct, 1)} % · BTC ${num(l.btc_caida_velas_pct, 1)} % (informativa)`)]),
-    par("BTC, mismo periodo", `${pct(l.btc_rendimiento_pct)} · caída ${num(l.btc_caida_max_pct, 1)} %`),
+    ...(l.caida_velas_pct == null ? [] : [par("Caída vela a vela", `${num(l.caida_velas_pct, 1)} %; BTC ${num(l.btc_caida_velas_pct, 1)} % (informativa)`)]),
+    par("BTC, mismo periodo", `${pct(l.btc_rendimiento_pct)}, caída ${num(l.btc_caida_max_pct, 1)} %`),
     par("Última pasada", hace(f.generado_ms - l.pasada_ms)))];
   if (Object.keys(l.huecos).length) {
-    hijos.push(el("p", { class: "nota" }, chip("FALTAN VELAS", "mal"), " " + Object.entries(l.huecos)
-      .map(([s, n]) => `${base(s)}: ${n}`).join(" · ") + ": así el papel no vale."));
+    hijos.push(el("p", { class: "nota" }, chip("faltan velas", "mal"), " " + Object.entries(l.huecos)
+      .map(([s, n]) => `${base(s)}: ${n}`).join("; ") + ": así el papel no vale."));
   }
   hijos.push(el("h3", {}, "Posiciones"), l.posiciones.length
     ? tabla([["Par"], ["Entrada", 1], ["Ahora ≈", 1], ["Stop", 1, "m-oculta"], ["Objetivo", 1, "m-oculta"], ["Resultado ≈", 1], ["Desde", 1, "m-oculta"]],
-      l.posiciones.map((p) => [[p.symbol, "par"], precio(p.entrada), precio(p.precio), precio(p.stop), precio(p.objetivo),
+      l.posiciones.map((p) => [[simbolo(p.symbol, ""), "par"], pc(p.entrada), pc(p.precio), pc(p.stop), pc(p.objetivo),
         [usd(p.pnl_usd, true), signoClase(p.pnl_usd)], hora(p.abierta_ms)]))
     : el("p", { class: "vacio" }, "En USDC: ninguna moneda cumple ahora."));
   if (l.ultimas.length) {
     hijos.push(el("h3", {}, `Últimas operaciones (${l.operaciones} cerradas)`),
       tabla([["Par"], ["Motivo"], ["Abierta", 1, "m-oculta"], ["Cerrada", 1], ["Neto", 1]], l.ultimas.map((o) => {
         const [clase, texto] = MOTIVO_L[o.motivo] || ["", o.motivo];
-        return [[o.symbol, "par"], chip(texto, clase), soloDia(o.entrada_ms), soloDia(o.salida_ms), [usd(o.neto_usd, true), signoClase(o.neto_usd)]];
+        return [[simbolo(o.symbol, ""), "par"], chip(texto, clase), soloDia(o.entrada_ms), soloDia(o.salida_ms), [usd(o.neto_usd, true), signoClase(o.neto_usd)]];
       })));
   }
   hijos.push(el("p", { class: "nota" }, "Solo papel: cada noche a las 00:20 UTC se rehace L con el mismo simulador que se midió y los precios reales. "
@@ -387,12 +407,12 @@ function pintarPapelL(f) {
 function pintarSistema(f) {
   $("servicios").replaceChildren(...Object.entries(f.servicios).map(([k, s]) =>
     el("div", { class: "nodo e-" + (s.estado || "sin_datos") }, el("span", {}, SERVICIO[k] || k),
-      el("small", {}, (ESTADO[s.estado] || s.estado) + (s.ultimo_ms ? ` · ${hace(f.generado_ms - s.ultimo_ms)}` : "")))));
+      el("small", {}, (ESTADO[s.estado] || s.estado) + (s.ultimo_ms ? `, hace ${hace(f.generado_ms - s.ultimo_ms)}` : "")))));
   const n = f.noticias;
   const flags = Object.entries(n.flags || {});
   $("noticias").replaceChildren(!n.disponible ? el("p", { class: "vacio" }, "Sin datos del servicio de noticias.")
     : !flags.length ? el("p", { class: "vacio" }, "Sin avisos activos: ninguna moneda bloqueada.")
-    : tabla([["Par"], ["Aviso"]], flags.map(([par, tipos]) => [[par, "par"], tipos.map((t) => chip(t, "aviso"))])));
+    : tabla([["Par"], ["Aviso"]], flags.map(([par, tipos]) => [[simbolo(par, ""), "par"], tipos.map((t) => chip(t, "aviso"))])));
 }
 
 function pintarBandas(f) {
@@ -416,8 +436,9 @@ function pintarAgresividad(f) {
   const etiqueta = { 1: "prudente", 3: "normal", 5: "agresivo" };
   // Cada nivel dice su riesgo; los extremos, ademas, su nombre (antes el 1 y el 5 no decian el %).
   $("niveles").replaceChildren(...sl.niveles.map((n) => el("div", { class: n.nivel === sl.nivel ? "hoy" : null },
-    el("b", {}, String(n.nivel)), el("small", {}, (n.nivel === sl.nivel ? "hoy · " : etiqueta[n.nivel] && n.nivel !== 3
-      ? etiqueta[n.nivel] + " · " : "") + `${num(n.riesgo_pct, 2)} %`))));
+    el("b", {}, String(n.nivel)), el("small", {}, (n.nivel === sl.nivel ? "hoy, " : etiqueta[n.nivel] && n.nivel !== 3
+      ? etiqueta[n.nivel] + ", " : "") + `${num(n.riesgo_pct, 2)} %`))));
+  $("niveles").setAttribute("aria-label", `Nivel de agresividad: ${sl.nivel} de ${sl.niveles.length}`);
   const hoy = sl.niveles.find((n) => n.nivel === sl.nivel);
   $("nivel-hoy").replaceChildren(...(hoy ? [["Riesgo por operación", num(hoy.riesgo_pct, 2) + " %"],
     ["Operaciones al día", `${hoy.max_operaciones} / 6`], ["Setups", hoy.setups.map((s) => SETUP[s] || s).join(", ")]] : [])
@@ -446,7 +467,7 @@ function pintarMonedas(f) {
     if (m.detalle) caja.append(el("span", { class: "moneda-estado" }, m.detalle));
     return caja;
   };
-  const filas = f.limites.whitelist.map((s) => [[base(s), "par"], ...carteras.map(([, c]) => celda(c.por_moneda.monedas[s]))]);
+  const filas = f.limites.whitelist.map((s) => [[simbolo(base(s), ""), "par"], ...carteras.map(([, c]) => celda(c.por_moneda.monedas[s]))]);
   $("monedas").replaceChildren(tabla([["Moneda"], ...carteras.map(([n]) => [NOMBRE[n] || n])], filas));
 }
 
@@ -495,15 +516,15 @@ function pintarFlujo(f) {
   const c = f.carteras[flujoCartera];
   if (!c || !c.flujo.vela_ms) { $("flujo").replaceChildren(el("p", { class: "vacio" }, "Sin datos")); return; }
   $("flujo-vela").textContent = `vela que cerró el ${hora(c.flujo.vela_ms + VELA_MS)}`;
-  const boton = (texto, activo, alPulsar) => {
-    const b = el("button", { type: "button", "aria-pressed": String(activo) }, texto);
-    b.onclick = alPulsar;
+  const boton = (texto, activo, foco, alPulsar) => {
+    const b = el("button", { type: "button", "aria-pressed": String(activo), "data-foco": foco }, texto);
+    b.onclick = () => { alPulsar(); guardarFiltros(); conservarFoco(() => pintarFlujo(ultimaFoto)); };
     return b;
   };
   $("flujo-cartera").replaceChildren(...disponibles.map((n) =>
-    boton(NOMBRE[n], n === flujoCartera, () => { flujoCartera = n; pintarFlujo(ultimaFoto); })));
-  $("flujo-moneda").replaceChildren(boton("todas", flujoMoneda == null, () => { flujoMoneda = null; pintarFlujo(ultimaFoto); }),
-    ...f.limites.whitelist.map((s) => boton(base(s), flujoMoneda === s, () => { flujoMoneda = s; pintarFlujo(ultimaFoto); })));
+    boton(NOMBRE[n], n === flujoCartera, "fc-" + n, () => { flujoCartera = n; })));
+  $("flujo-moneda").replaceChildren(boton("todas", flujoMoneda == null, "fm-todas", () => { flujoMoneda = null; }),
+    ...f.limites.whitelist.map((s) => boton(base(s), flujoMoneda === s, "fm-" + s, () => { flujoMoneda = s; })));
 
   const pasos = pasosDelFlujo(f, c);
   const m = flujoMoneda && c.por_moneda.monedas[flujoMoneda];
@@ -530,20 +551,23 @@ function pintarFlujo(f) {
 
 function pintar(f) {
   ultimaFoto = f;
-  pintarCarteras(f);
-  pintarBandas(f);
-  pintarTarjetas(f);
-  pintarPapelL(f);
-  pintarSistema(f);
-  pintarAgresividad(f);
-  pintarMonedas(f);
-  pintarFlujo(f);
+  conservarFoco(() => {
+    pintarCarteras(f);
+    pintarBandas(f);
+    pintarTarjetas(f);
+    pintarPapelL(f);
+    pintarSistema(f);
+    pintarAgresividad(f);
+    pintarMonedas(f);
+    pintarFlujo(f);
+  });
   estadoControles(f);
 }
 
 // --- La IA: una vela por fila (candidatos, lo que dijo, lo que hizo el motor) y el detalle desplegable ---
 
 let historialPedido = 0;
+const cargado = new Set();          // las partes del historial que ya llegaron alguna vez
 let velasIA = [];
 let filtroMoneda = "*";
 
@@ -552,9 +576,10 @@ function chipCandidato(c) {
   const partes = [base(c.simbolo), SETUP[c.setup] || c.setup || ""];
   if (c.numeros) partes.push(`R:R ${num(c.numeros.rr, 1)}`);
   let texto = partes.filter(Boolean).join(" ");
-  if (abre && c.ia.multiplicador != null && c.ia.multiplicador < 1) texto += ` · ×${num(c.ia.multiplicador, 1)}`;
+  if (abre && c.ia.multiplicador != null && c.ia.multiplicador < 1) texto += ` ×${num(c.ia.multiplicador, 1)}`;
   const titulo = !c.ia ? "la IA no lo menciona: cuenta como saltado" : abre ? "la IA lo abre" : "la IA lo salta";
-  return el("span", { class: "cand " + (abre ? "abre" : "salta"), title: titulo }, texto);
+  return el("span", { class: "cand " + (abre ? "abre" : "salta"), title: titulo }, el("span", { translate: "no" }, texto),
+    el("span", { class: "sr" }, ` (${titulo})`));
 }
 
 function veredictoMotor(c) {
@@ -572,8 +597,8 @@ function detalleCandidatos(v) {
     const cab = el("div", {}, el("b", {}, c.simbolo), " ",
       el("span", { class: "gris" }, [c.ia.tipo === "open" ? "abre" : "salta",
         c.ia.confianza != null ? `confianza ${num(c.ia.confianza, 2)}` : null,
-        c.numeros ? `entrada ${precio(c.numeros.entrada)} · stop ${num(c.numeros.stop_pct, 1)} % · objetivo ${num(c.numeros.objetivo_pct, 1, true)} %` : null]
-        .filter(Boolean).join(" · ")));
+        c.numeros ? `entrada ${precio(c.numeros.entrada)}, stop ${num(c.numeros.stop_pct, 1)} %, objetivo ${num(c.numeros.objetivo_pct, 1, true)} %` : null]
+        .filter(Boolean).join(", ")));
     const caja = el("div", { class: "motivo-cand" }, cab);
     if (c.ia.motivos.length) caja.append(el("ul", {}, ...c.ia.motivos.map((m) => el("li", {}, m))));
     if (c.ia.riesgos.length) caja.append(el("ul", { class: "riesgos" }, ...c.ia.riesgos.map((m) => el("li", {}, "Riesgo: " + m))));
@@ -597,7 +622,7 @@ function filaVela(v) {
   const motor = v.candidatos.map(veredictoMotor).filter(Boolean);
   paso("Motor", motor.length ? el("div", { class: "veredictos" }, ...motor) : el("span", { class: "gris" }, "nada que enviar"));
   const detalle = detalleCandidatos(v);
-  if (detalle) paso("", detalle);
+  if (detalle) paso("Detalle", detalle);
   return el("article", { class: "vela", "data-m": v.candidatos.map((c) => base(c.simbolo)).join(" ") }, cuando, pasos);
 }
 
@@ -605,8 +630,8 @@ function pintarDecisiones() {
   const monedas = [...new Set(velasIA.flatMap((v) => v.candidatos.map((c) => base(c.simbolo))))].sort();
   if (filtroMoneda !== "*" && !monedas.includes(filtroMoneda)) filtroMoneda = "*";
   $("filtro").replaceChildren(...(monedas.length > 1 ? ["*", ...monedas] : []).map((m) => {
-    const b = el("button", { type: "button", "aria-pressed": String(m === filtroMoneda) }, m === "*" ? "todas" : m);
-    b.onclick = () => { filtroMoneda = m; pintarDecisiones(); };
+    const b = el("button", { type: "button", "aria-pressed": String(m === filtroMoneda), "data-foco": "filtro-" + m }, m === "*" ? "todas" : m);
+    b.onclick = () => { filtroMoneda = m; guardarFiltros(); conservarFoco(pintarDecisiones); };
     return b;
   }));
   const visibles = velasIA.filter((v) => filtroMoneda === "*" || v.candidatos.some((c) => base(c.simbolo) === filtroMoneda));
@@ -620,8 +645,8 @@ function pintarOperaciones(ops) {
     ["Entrada", 1, "m-oculta"], ["Salida", 1, "m-oculta"], ["Neto", 1], ["R", 1], ["Duración", 1, "m-oculta"], ["Salida por"]],
   ops.map((o) => {
     const [clase, texto] = MOTIVO[o.reason] || ["", o.reason];
-    return [hora(o.closed_ts_ms).replace(" UTC", ""), chipCartera(o.cartera), [o.symbol, "par"], SETUP[o.setup] || o.setup,
-      precio(o.entry_price), precio(o.exit_price), [usd(o.net_pnl_usd, true), signoClase(o.net_pnl_usd)],
+    return [hora(o.closed_ts_ms).replace(" UTC", ""), chipCartera(o.cartera), [simbolo(o.symbol, ""), "par"], SETUP[o.setup] || o.setup,
+      pc(o.entry_price), pc(o.exit_price), [usd(o.net_pnl_usd, true), signoClase(o.net_pnl_usd)],
       [num(o.r_multiple, 2, true), signoClase(o.r_multiple)],
       // Entrada y salida en la misma vela de 4 h (la XRP del 07/10): "0 s" no dice nada.
       o.closed_ts_ms - o.opened_ts_ms < VELA_MS ? "misma vela" : hace(o.closed_ts_ms - o.opened_ts_ms), chip(texto, clase)];
@@ -632,12 +657,14 @@ function pintarOperaciones(ops) {
 
 let grafico = null;
 const series = {};
+let ultimaCurva = null;
 
 function color(variable) {
   return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
 }
 
 function pintarCurva(c) {
+  ultimaCurva = c;
   if (typeof LightweightCharts === "undefined") {
     $("curva-nota").textContent = "No se pudo cargar la librería de gráficos.";
     return;
@@ -645,13 +672,13 @@ function pintarCurva(c) {
   if (!grafico) {
     grafico = LightweightCharts.createChart($("curva"), {
       autoSize: true,
-      layout: { background: { color: "transparent" }, textColor: color("--ink-3"), fontFamily: "IBM Plex Mono, monospace", fontSize: 11 },
-      grid: { vertLines: { color: color("--line") }, horzLines: { color: color("--line") } },
-      rightPriceScale: { borderColor: color("--line") },
-      timeScale: { borderColor: color("--line"), timeVisible: true, fixLeftEdge: true, fixRightEdge: true, rightOffset: 0 },
+      layout: { background: { color: "transparent" }, textColor: color("--tinta-3"), fontFamily: "IBM Plex Sans, sans-serif", fontSize: 12 },
+      grid: { vertLines: { color: color("--linea") }, horzLines: { color: color("--linea") } },
+      rightPriceScale: { borderColor: color("--linea") },
+      timeScale: { borderColor: color("--linea"), timeVisible: true, fixLeftEdge: true, fixRightEdge: true, rightOffset: 0 },
       localization: { priceFormatter: (v) => usd(v) },
     });
-    const opciones = { btc: ["--hold", 1], baseline: ["--base", 2], ai: ["--ia", 3] };
+    const opciones = { btc: ["--serie-btc", 1], baseline: ["--serie-base", 2], ai: ["--serie-ia", 3] };
     for (const [k, [v, grosor]] of Object.entries(opciones)) {
       series[k] = grafico.addSeries(LightweightCharts.LineSeries, { color: color(v), lineWidth: grosor, priceLineVisible: false });
     }
@@ -667,16 +694,21 @@ function pintarCurva(c) {
 function cargarHistorial() {
   if (Date.now() - historialPedido < 60000) return;
   historialPedido = Date.now();
-  fetch("/api/decisiones?limite=20").then((r) => r.json()).then((v) => { velasIA = v; pintarDecisiones(); }).catch(() => {});
-  fetch("/api/curva").then((r) => r.json()).then(pintarCurva).catch(() => {});
-  Promise.all(["baseline", "ai"].map((c) => fetch(`/api/operaciones?cartera=${c}&limite=100`).then((r) => r.json())))
-    .then(([a, b]) => pintarOperaciones([...a, ...b])).catch(() => {});
+  // Si falla, se dice (y se reintenta solo con la foto de dentro de un minuto); si ya habia datos, se quedan.
+  const fallo = (id, texto) => () => { if (!cargado.has(id)) $(id).replaceChildren(el("p", { class: "error" }, texto)); };
+  fetch("/api/decisiones?limite=20").then(json).then((v) => { velasIA = v; cargado.add("decisiones"); conservarFoco(pintarDecisiones); })
+    .catch(fallo("decisiones", "No se pudo cargar lo que decidió la IA; se reintenta en un minuto."));
+  fetch("/api/curva").then(json).then((c) => { cargado.add("curva-nota"); pintarCurva(c); })
+    .catch(fallo("curva-nota", "No se pudo cargar la curva; se reintenta en un minuto."));
+  Promise.all(["baseline", "ai"].map((c) => fetch(`/api/operaciones?cartera=${c}&limite=100`).then(json)))
+    .then(([a, b]) => { cargado.add("operaciones"); pintarOperaciones([...a, ...b]); })
+    .catch(fallo("operaciones", "No se pudieron cargar las operaciones; se reintenta en un minuto."));
 }
 
 // --- Los controles: POST /api/comandos, solo desde aqui (cabecera X-Ploutos-Panel; ver api/mando.py) ---
 
 function mandar(orden, motivo = "") {
-  $("aviso-accion").textContent = "Enviando...";
+  $("aviso-accion").textContent = "Enviando…";
   fetch("/api/comandos", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Ploutos-Panel": "1" },
@@ -701,9 +733,10 @@ function preparaControles() {
     const n = ultimaFoto ? posicionesAgrupadas(ultimaFoto).length : 0;
     $("confirmar-titulo").textContent = `¿Cerrar ${n === 1 ? "la posición abierta" : `las ${n} posiciones abiertas`} a mercado?`;
     caja.hidden = false; chk.checked = false; si.disabled = true; $("aviso-accion").textContent = "";
+    chk.focus();
   };
   chk.onchange = () => { si.disabled = !chk.checked; };
-  $("confirmar-no").onclick = () => { caja.hidden = true; $("aviso-accion").textContent = "Cancelado: no se ha vendido nada."; };
+  $("confirmar-no").onclick = () => { caja.hidden = true; $("b-cerrar").focus(); $("aviso-accion").textContent = "Cancelado: no se ha vendido nada."; };
   si.onclick = () => { caja.hidden = true; mandar("cerrar_todo"); };
 }
 preparaControles();
@@ -754,8 +787,24 @@ function conectar() {
 // Se pintan todas las secciones siempre; solo cambia cual se ve.
 const PAGINAS = ["resumen", "ia", "operaciones", "sistema"];
 
+function leerFiltros() {
+  const q = new URLSearchParams(location.hash.split("?")[1] || "");
+  filtroMoneda = q.get("moneda") || "*";
+  flujoCartera = q.get("cartera") || "ai";
+  flujoMoneda = q.get("camino") || null;
+}
+
+function guardarFiltros() {
+  const q = new URLSearchParams();
+  if (filtroMoneda !== "*") q.set("moneda", filtroMoneda);
+  if (flujoCartera !== "ai") q.set("cartera", flujoCartera);
+  if (flujoMoneda) q.set("camino", flujoMoneda);
+  // replaceState: cambiar un filtro no llena el "atras" ni dispara hashchange.
+  history.replaceState(null, "", "#ia" + (String(q) ? "?" + q : ""));
+}
+
 function irA() {
-  const pedida = location.hash.slice(1);
+  const pedida = location.hash.slice(1).split("?")[0];
   const pag = PAGINAS.includes(pedida) ? pedida : "resumen";
   for (const p of PAGINAS) $("pag-" + p).hidden = p !== pag;
   for (const a of document.querySelectorAll(".paginas a")) {
@@ -764,8 +813,28 @@ function irA() {
   // La curva se ajusto con la pagina escondida (ancho 0): se reajusta al volver a verla.
   if (pag === "resumen" && grafico) requestAnimationFrame(() => grafico.timeScale().fitContent());
 }
-window.addEventListener("hashchange", () => { irA(); window.scrollTo(0, 0); });
+window.addEventListener("hashchange", () => {
+  leerFiltros();
+  irA();
+  window.scrollTo(0, 0);
+  if (ultimaFoto) pintarFlujo(ultimaFoto);
+  if (cargado.has("decisiones")) pintarDecisiones();
+});
+leerFiltros();
 irA();
+
+// "Ir al contenido": sin tocar la direccion (cambiarla llevaria a otra pagina).
+$("saltar").onclick = (e) => { e.preventDefault(); $("contenido").focus(); };
+
+// Si el sistema pasa de claro a oscuro (o al reves), los graficos se rehacen con los colores nuevos:
+// la libreria guarda los colores al crearse y no lee las variables de CSS.
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+  if (grafico) { grafico.remove(); grafico = null; for (const k of Object.keys(series)) delete series[k]; }
+  if (ultimaCurva) pintarCurva(ultimaCurva);
+  for (const g of graficosPos.values()) { if (g.observador) g.observador.disconnect(); if (g.chart) g.chart.remove(); }
+  graficosPos.clear();
+  if (ultimaFoto) pintarTarjetas(ultimaFoto);
+});
 
 fetch("/api/foto").then((r) => r.json()).then(recibir).catch(() => {});
 conectar();

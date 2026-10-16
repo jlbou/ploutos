@@ -36,3 +36,8 @@ Thumbs.db
 # Lo personal (repositorio que sera publico, 15/10/2026)
 CLAUDE.local.md
 privado/
+
+# Skills de diseno para el panel (copiadas de Ebisu el 17/10/2026): fuera de git
+.claude/skills/frontend-design/
+.claude/skills/web-design-guidelines/
+.claude/skills/svg-logo-designer/
