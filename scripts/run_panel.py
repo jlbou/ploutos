@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import ipaddress
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -50,6 +51,23 @@ def comprobar(host: str) -> str:
     raise SinTailscale(f"{host} no es de la red de Tailscale ni de la propia maquina: el panel no se abre ahi")
 
 
+def hosts_permitidos(ip: str, puerto: int, _run=subprocess.run) -> set[str]:
+    """Los valores de la cabecera Host con los que se entra al panel (api/guardia.py, hueco S5): su IP y, si
+    Tailscale lo da, su nombre de MagicDNS entero y el corto. Se preguntan al arrancar: nada escrito en el
+    repositorio (es publico). En la propia maquina, la IP y `localhost`."""
+    hosts = {f"{ip}:{puerto}"}
+    if ipaddress.ip_address(ip).is_loopback:
+        return hosts | {f"localhost:{puerto}"}
+    try:
+        r = _run(["tailscale", "status", "--json"], capture_output=True, text=True, timeout=10)
+        nombre = ((json.loads(r.stdout or "{}").get("Self") or {}).get("DNSName") or "").rstrip(".").lower()
+    except (OSError, subprocess.TimeoutExpired, ValueError, AttributeError):
+        return hosts
+    if nombre.endswith(".ts.net"):
+        hosts |= {f"{nombre}:{puerto}", f"{nombre.split('.')[0]}:{puerto}"}
+    return hosts
+
+
 def rutas(var: Path) -> dict[str, Path]:
     return {"principal": var / "ploutos.db", "baseline": var / "ploutos-paper.db", "ai": var / "ploutos-paper-ai.db",
             "noticias": var / "ploutos-news.db", "control": var / "ploutos-control.db",
@@ -74,7 +92,8 @@ def main() -> int:
 
     from api.app import crear_app
     from core.config import load_settings
-    uvicorn.run(crear_app(load_settings(), rutas(Path(args.var))), host=host, port=args.puerto, log_level="warning")
+    app = crear_app(load_settings(), rutas(Path(args.var)), hosts=hosts_permitidos(host, args.puerto))
+    uvicorn.run(app, host=host, port=args.puerto, log_level="warning")
     return 0
 
 

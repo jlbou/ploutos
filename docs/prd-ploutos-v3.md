@@ -141,7 +141,7 @@ vigilante externo), fallo de conciliacion, error de acceso a la IA o a OKX, toke
 ## 10. Interfaz (se rehace en el paso 3, con la estrategia)
 
 Panel de solo lectura, solo por la red privada (Tailscale); **antes del dinero real, que solo responda a su propio
-nombre** (el hueco de DNS rebinding pendiente). Lo que tiene que ensenyar: equity en euros, caida, distancia al suelo y
+nombre** (el hueco de DNS rebinding: arreglado el 17/10/2026, `api/guardia.py`). Lo que tiene que ensenyar: equity en euros, caida, distancia al suelo y
 a los escalones, posiciones con su stop en el exchange, operaciones cerradas, la curva frente a BTC mantenido (en
 euros), el estado de cada servicio y el CSV fiscal en euros.
 

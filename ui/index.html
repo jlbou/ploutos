@@ -354,14 +354,11 @@ details.limites summary{cursor:pointer;font-family:var(--f-titulo);font-weight:6
   <img src="logo-claro.svg" alt="" width="72" height="72">
   <div class="rueda" aria-hidden="true"></div>
   <p id="carga-txt">Conectando con el bot…</p>
+  <p id="carga-txt-2" hidden>Sigue sin conectar. Comprueba que Tailscale esté activo en este dispositivo; se reintenta solo.</p>
 </div>
-<script>
-// Sin el JavaScript del panel tambien: si a los 15 s no ha llegado nada, decir donde mirar.
-setTimeout(function () {
-  var t = document.getElementById("carga-txt"), c = document.getElementById("carga");
-  if (c && !c.classList.contains("fuera")) t.textContent = "Sigue sin conectar. Comprueba que Tailscale esté activo en este dispositivo; se reintenta solo.";
-}, 15000);
-</script>
+<!-- Sin el JavaScript del panel tambien: a los 15 s sin nada, carga.js ensenya donde mirar (fuera de linea: la CSP no
+     deja scripts en linea). -->
+<script src="carga.js"></script>
 <a class="saltar" href="#contenido" id="saltar">Ir al contenido</a>
 <div class="caido" id="caido" role="alert">Sin conexión con el bot: los datos de abajo pueden ser viejos. Se reintenta cada 5 s.</div>
 

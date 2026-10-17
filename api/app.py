@@ -7,7 +7,8 @@
 Abre las bases en `mode=ro` en CADA peticion y las cierra: no guarda nada en memoria que pueda quedar
 viejo, y si una base no esta, esa parte de la foto sale "sin datos". No importa `ai/` ni habla con el
 exchange (test de arquitectura). UNICA excepcion (el propietario, 28/09): el CSV fiscal pide a OKX el cambio USDC/EUR,
-dato PUBLICO y solo al bajarlo (`api/cambio.py`; otro test comprueba que es lo unico del panel que sale a la red). Sirve tambien la pagina (`ui/`) y los controles (`POST /api/comandos`, ver api/mando.py): lo UNICO
+dato PUBLICO y solo al bajarlo (`api/cambio.py`; otro test comprueba que es lo unico del panel que sale a la red).
+Delante de todo, `api/guardia.py` (17/10): solo contesta si el Host es el del panel (DNS rebinding) y pone la CSP. Sirve tambien la pagina (`ui/`) y los controles (`POST /api/comandos`, ver api/mando.py): lo UNICO
 que escribe, y solo en la base de control.
 """
 
@@ -19,7 +20,7 @@ import json
 import mimetypes
 import sqlite3
 import time
-from collections.abc import Callable, Iterator, Mapping
+from collections.abc import Callable, Iterable, Iterator, Mapping
 from contextlib import ExitStack, contextmanager
 from pathlib import Path
 from typing import Any
@@ -30,6 +31,7 @@ from fastapi.staticfiles import StaticFiles
 
 from api import cambio, historial, mando
 from api.foto import foto
+from api.guardia import Guardia
 from core.config import Settings
 from notify import control
 
@@ -80,10 +82,12 @@ class _SinCache(StaticFiles):
 
 def crear_app(settings: Settings, rutas: Mapping[str, Path],
               reloj: Callable[[], int] = lambda: int(time.time() * 1000), ui: Path = UI,
-              pedir_cambio: cambio.Pedir = cambio.pedir_okx) -> FastAPI:
+              pedir_cambio: cambio.Pedir = cambio.pedir_okx, hosts: Iterable[str] | None = None) -> FastAPI:
     """`rutas`: principal, baseline, ai, noticias, control, (desde la fase 4) ejecutor y (10/10) la carpeta del papel de L. `ui`: la pagina (ficheros estaticos).
-    `pedir_cambio`: de donde sale el cambio USDC/EUR del CSV (los tests pasan uno falso: ninguno sale a la red)."""
+    `pedir_cambio`: de donde sale el cambio USDC/EUR del CSV (los tests pasan uno falso: ninguno sale a la red).
+    `hosts`: los nombres con los que se entra al panel (api/guardia.py: hueco S5); el servicio siempre los pasa."""
     app = FastAPI(title="Ploutos", docs_url=None, redoc_url=None, openapi_url=None)
+    app.add_middleware(Guardia, hosts=hosts)
 
     # El papel de L (10/10) es una carpeta con ficheros, no una base: no se abre con las conexiones.
     bases = {k: v for k, v in rutas.items() if k != "papel_l"}

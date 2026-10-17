@@ -198,8 +198,8 @@ Los de las fases cerradas siguen en `scripts/` (`check_paper.py`, `check_fase6.p
 - **Las claves del exchange no pueden retirar fondos**, solo operan desde la IP del servidor y solo las lee un
   servicio. Ni la IA ni ningún test las ven.
 - **El panel no existe desde Internet**: escucha solo en la red privada y el cortafuegos abre su puerto únicamente
-  en esa interfaz. *Pendiente:* que responda solo a su propio nombre (DNS rebinding); se arregla al rehacer el
-  panel, antes de cualquier dinero real.
+  en esa interfaz, y solo contesta a su propio nombre (contra el DNS rebinding), con una CSP que no deja scripts
+  en línea ni de fuera.
 - **Todo texto de fuera es no confiable.** Los anuncios se clasifican con reglas de palabras clave; los RSS con
   entidades XML se rechazan sin parsear; la IA del embudo recibe los titulares delimitados y sin herramientas.
 - **Ningún test sale a la red ni ve credenciales**, y uno comprueba que no hay datos personales en el repositorio.

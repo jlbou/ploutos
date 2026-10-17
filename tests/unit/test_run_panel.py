@@ -48,3 +48,37 @@ def test_el_servicio_no_pone_otra_ip():
     unidad = (Path(__file__).resolve().parents[2] / "deploy" / "ploutos-panel.service").read_text(encoding="utf-8")
     exec_start = next(l for l in unidad.splitlines() if l.startswith("ExecStart="))
     assert "--host" not in exec_start and "0.0.0.0" not in unidad
+
+
+# --- Hueco S5 (DNS rebinding): el panel solo contesta a su propio nombre (api/guardia.py) ---
+
+def _estado(nombre):
+    salida = '{"Self": {"DNSName": "%s", "HostName": "x"}}' % nombre
+    return lambda *a, **k: subprocess.CompletedProcess(a, 0, stdout=salida, stderr="")
+
+
+def test_los_nombres_del_panel_salen_de_tailscale():
+    """IP:puerto, el nombre de MagicDNS y el corto: los tres con los que se entra. Nada escrito en el repositorio."""
+    hosts = rp.hosts_permitidos("100.70.1.2", 8765, _run=_estado("Ploutos.ejemplo.ts.net."))
+    assert hosts == {"100.70.1.2:8765", "ploutos.ejemplo.ts.net:8765", "ploutos:8765"}
+
+
+def test_sin_nombre_de_tailscale_solo_por_ip():
+    for run in (_estado(""), _estado("algo.otra-cosa.com.")):
+        assert rp.hosts_permitidos("100.70.1.2", 8765, _run=run) == {"100.70.1.2:8765"}
+
+    def roto(*a, **k):
+        raise FileNotFoundError("tailscale")
+    assert rp.hosts_permitidos("100.70.1.2", 8765, _run=roto) == {"100.70.1.2:8765"}
+
+
+def test_en_la_propia_maquina_ip_y_localhost():
+    def nunca(*a, **k):
+        raise AssertionError("en local no se pregunta a Tailscale")
+    assert rp.hosts_permitidos("127.0.0.1", 8765, _run=nunca) == {"127.0.0.1:8765", "localhost:8765"}
+
+
+def test_el_servicio_arranca_con_el_cierre_puesto():
+    """Enchufado: main() le pasa los nombres a crear_app (si no, el cierre existiria y no se usaria)."""
+    texto = SCRIPT.read_text(encoding="utf-8")
+    assert "hosts=hosts_permitidos(" in texto

@@ -52,8 +52,8 @@ Lo que se hizo despacio, por fases, con criterio escrito y jueces. Es la base.
   unico sitio donde hoy ya se comprueba "papel = medicion".
 - **Costes y filtros** (`strategy/costes`, filtros de spread y de 3x el coste): valen para cualquier estrategia.
 - **Noticias de OKX** (`ploutos-news`): el deslistado y la suspension importan siempre.
-- **El panel** (`api/`, `ui/`): la estructura se queda; las tarjetas, segun la estrategia. **Con un hueco de seguridad
-  pendiente** (S5 de Ebisu: DNS rebinding en `api/mando.py`; ver 5).
+- **El panel** (`api/`, `ui/`): la estructura se queda; las tarjetas, segun la estrategia. El hueco de seguridad
+  S5 (DNS rebinding), **arreglado el 17/10** (`api/guardia.py`; ver 7.2).
 - **La IA**: el contrato, el parser y el presupuesto (`ai/`) son reutilizables; **que papel tiene la IA** se decide
   otra vez en el paso 1.
 
@@ -88,7 +88,8 @@ Lo que se hizo despacio, por fases, con criterio escrito y jueces. Es la base.
 ## 7. Decisiones del paso 0 (una por mensaje)
 
 1. Las carteras de la fase 6 y el demo: **retiradas el 15/10 (el propietario, b)**, `docs/cierre-fase-6.md`.
-2. El hueco S5 del panel: **se arregla en el paso 3, al rehacer el panel (el propietario, b)**. Hoy casi no tiene efecto (los
+2. El hueco S5 del panel: **se arregla en el paso 3, al rehacer el panel (el propietario, b)**. *Cambiado el 17/10 (el
+   propietario, a): arreglado ya, con la CSP, en `api/guardia.py`.* Hoy casi no tiene efecto (los
    controles ya no mandan sobre ninguna cartera); antes de cualquier dinero real, tiene que estar arreglado.
 3. Las ramas: **`revision-1510-b` juntada en `main` el 15/10 (el propietario, a; 1679 tests, mutacion 16/16)**;
    `objetivo-taker` y `sombra-log`, archivadas como etiquetas `archivo/...` y borradas. El objetivo cobrado taker se

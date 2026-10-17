@@ -26,8 +26,8 @@ fue con prisa. **Ahora se trabaja como en Ebisu, en este orden y sin saltarse pa
    `estudio.py limpia` (una vez; deja un cerrojo) -> veredicto. Ninguna estrategia medida aun. **El 30/10, al acabar
    V5: desactivar `ploutos-libros.timer`** (el recolector se para solo, pero el temporizador sigue lanzandose).
 3. **Construir solo si una estrategia pasa**, con la prueba de oro (el bot hace lo mismo que el simulador). Aqui se
-   limpia el codigo de los setups (etiqueta `archivo/antes-de-limpiar`, en el repositorio privado del historial) y se
-   arregla el hueco S5 del panel.
+   limpia el codigo de los setups (etiqueta `archivo/antes-de-limpiar`, en el repositorio privado del historial). El hueco S5
+   del panel, **arreglado el 17/10** (`api/guardia.py`: solo contesta a su nombre; CSP).
 
 **Sigue en marcha, en silencio:** el papel de L (12/10/2026-11/01/2027, `docs/diseno-papel-l.md`; **desde el 16/10, solo
 informacion: L ya no es candidata**, `docs/preregistro-papel-l.md` 4), el embudo de
@@ -85,7 +85,8 @@ claude_runtime/  directorio VACIO desde el que se ejecuta claude -p
   importa `strategy`, `features` ni `ai`.
 - El estado verdadero es el del **exchange**. Cada regla dura se comprueba en **al menos dos sitios**. Indicadores
   **solo sobre velas cerradas**.
-- `deploy/*.sh`, `*.service` y `*.timer` **sin CRLF** (hay test). El panel solo sale a la red desde `api/cambio.py`.
+- `deploy/*.sh`, `*.service` y `*.timer` **sin CRLF** (hay test). El panel solo sale a la red desde `api/cambio.py`;
+  solo contesta si el `Host` es el suyo (`api/guardia.py`) y su CSP no deja scripts en linea (hay tests).
 - El CLI de la IA con `DISABLE_UPDATES=1` y version fija (`ai.invoke.VERIFIED_VERSION`).
 
 ## Convenciones de trabajo
