@@ -178,6 +178,17 @@ encendidas por defecto (`--restricted --disable-slash-commands --strict-mcp-conf
 - **Una vela solo esta lista con las OCHO monedas cerradas.** Un par que OKX retira puede bloquear una regla en
   silencio.
 
+## graphify (mapa del proyecto; instalado el 18/10/2026, sin avisos automaticos)
+
+Herramienta (`graphify`, version 0.9.72, en un entorno propio fuera del proyecto; ruta en `CLAUDE.local.md`) que
+convierte el proyecto en un grafo consultable en `graphify-out/` (fuera de git). Se usa a mano: sin hooks. Respeta
+`.gitignore`, asi que no entran `var/` (con Kronos), `.venv/`, `.env` ni `privado/`.
+
+- Para preguntas sobre el proyecto, `graphify query "<pregunta>"` si existe `graphify-out/graph.json`;
+  `graphify path "<A>" "<B>"` para relaciones y `graphify explain "<concepto>"` para un concepto.
+- `graphify-out/GRAPH_REPORT.md` solo para una vision general.
+- Despues de cambiar codigo, `graphify update .` (solo analiza el codigo, sin coste).
+
 ## Operacion
 
 ```bash

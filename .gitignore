@@ -41,3 +41,7 @@ privado/
 .claude/skills/frontend-design/
 .claude/skills/web-design-guidelines/
 .claude/skills/svg-logo-designer/
+
+# Mapa del proyecto de graphify (se regenera)
+graphify-out/
+.claude/skills/graphify/
