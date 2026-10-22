@@ -175,6 +175,9 @@ encendidas por defecto (`--restricted --disable-slash-commands --strict-mcp-conf
   CREA vacio.
 - **Lo que vive en memoria se pierde al reiniciar:** todo estado de una regla se deriva de lo guardado.
 - **`needrestart` reinicia servicios**: mirar `ActiveEnterTimestamp`.
+- **Los jueces de noticias y de comandos de Telegram miran TODA la historia:** un hueco del servicio daria FALLA cada
+  noche para siempre. Los que no fueron un fallo (un reinicio impuesto por el proveedor) se apuntan, con su motivo y
+  una ventana ajustada, en `core/paradas.py`: el juez los muestra como "justificado". Solo con decision del propietario.
 - **Una vela solo esta lista con las OCHO monedas cerradas.** Un par que OKX retira puede bloquear una regla en
   silencio.
 

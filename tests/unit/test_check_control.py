@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 
+from core import paradas
 from notify import comandos as cmds
 from portfolio import store
 
@@ -94,6 +95,36 @@ def test_un_hueco_del_servicio_se_ve(tmp_path):
     s.reloj.ms += 20 * 60_000
     s.hasta(s.reloj.ms + 60_000)
     assert "el servicio no se ha parado (una vuelta cada <= 10 min)" in fallos(check_control.juzgar(s.r.conn, {}, H4)[0])
+
+
+def _servicio_con_hueco(tmp_path):
+    s = Servicio(tmp_path)
+    s.hasta(T0 + 60_000)
+    s.reloj.ms += 20 * 60_000
+    s.hasta(s.reloj.ms + 60_000)
+    return s
+
+
+NOMBRE_HUECO = "el servicio no se ha parado (una vuelta cada <= 10 min)"
+
+
+def test_un_hueco_dentro_de_una_parada_conocida_se_justifica_y_se_ve(tmp_path, monkeypatch):
+    s = _servicio_con_hueco(tmp_path)
+    monkeypatch.setattr(paradas, "PARADAS_CONOCIDAS",
+                        (paradas.Parada(T0 - 60_000, T0 + 40 * 60_000, "reinicio de prueba"),))
+    checks, _ = check_control.juzgar(s.r.conn, {}, H4)
+    hueco = next(c for c in checks if c.nombre == NOMBRE_HUECO)
+    assert hueco.ok
+    assert len(hueco.justificados) == 1 and "reinicio de prueba" in hueco.justificados[0]
+
+
+def test_un_hueco_mayor_que_la_parada_conocida_sigue_siendo_fallo(tmp_path, monkeypatch):
+    s = _servicio_con_hueco(tmp_path)
+    monkeypatch.setattr(paradas, "PARADAS_CONOCIDAS",
+                        (paradas.Parada(T0 - 60_000, T0 + 10 * 60_000, "reinicio de prueba"),))
+    checks, _ = check_control.juzgar(s.r.conn, {}, H4)
+    hueco = next(c for c in checks if c.nombre == NOMBRE_HUECO)
+    assert not hueco.ok and not hueco.justificados
 
 
 def test_una_respuesta_que_no_salio_se_ve(tmp_path):

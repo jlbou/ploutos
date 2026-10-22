@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pytest
 
+from core import paradas
 from core.config import load_settings
 from data.news import store as db
 from data.news.okx import Lectura
@@ -92,6 +93,31 @@ def test_un_hueco_de_mas_de_15_min_se_detecta(base):
     with base:
         base.execute("DELETE FROM news_lecturas WHERE ms BETWEEN ? AND ?", (T0 + 10 * MIN, T0 + 25 * MIN))
     assert any("sin lecturas" in f for f in fallos(base)["el servicio no se ha parado (lecturas cada <= 15 min)"])
+
+
+def _quitar_lecturas(base, desde_min, hasta_min):
+    with base:
+        base.execute("DELETE FROM news_lecturas WHERE ms BETWEEN ? AND ?",
+                     (T0 + desde_min * MIN, T0 + hasta_min * MIN))
+
+
+def test_un_hueco_dentro_de_una_parada_conocida_se_justifica_y_se_ve(base, monkeypatch):
+    _quitar_lecturas(base, 10, 25)
+    monkeypatch.setattr(paradas, "PARADAS_CONOCIDAS",
+                        (paradas.Parada(T0, T0 + 40 * MIN, "reinicio de prueba"),))
+    checks, _ = check_news.juzgar(base, {}, WL, TF)
+    hueco = next(c for c in checks if c.nombre.startswith("el servicio no se ha parado"))
+    assert hueco.ok
+    assert len(hueco.justificados) == 1 and "reinicio de prueba" in hueco.justificados[0]
+
+
+def test_un_hueco_mayor_que_la_parada_conocida_sigue_siendo_fallo(base, monkeypatch):
+    _quitar_lecturas(base, 10, 25)
+    monkeypatch.setattr(paradas, "PARADAS_CONOCIDAS",
+                        (paradas.Parada(T0, T0 + 20 * MIN, "reinicio de prueba"),))
+    checks, _ = check_news.juzgar(base, {}, WL, TF)
+    hueco = next(c for c in checks if c.nombre.startswith("el servicio no se ha parado"))
+    assert not hueco.ok and not hueco.justificados
 
 
 def test_una_flag_activa_sin_aviso_se_detecta(base):

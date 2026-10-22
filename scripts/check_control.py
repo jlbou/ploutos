@@ -32,6 +32,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
+from core import paradas  # noqa: E402
 from core.clock import timeframe_ms  # noqa: E402
 from notify import control  # noqa: E402
 from notify.comandos import CONFIRMAR_MS, EDAD_MAX_MS, Comando, Orden, reconstruir  # noqa: E402
@@ -45,6 +46,7 @@ MANUALES = ("CLOSE_ONLY_MANUAL", "HALTED")
 class Check:
     def __init__(self, nombre: str):
         self.nombre, self.fallos, self.comprobados = nombre, [], 0
+        self.justificados: list[str] = []       # huecos explicados por una parada conocida
 
     @property
     def ok(self) -> bool:
@@ -68,7 +70,12 @@ def juzgar(ctl: sqlite3.Connection, carteras: dict[str, sqlite3.Connection],
     for a, b in zip(vueltas, vueltas[1:]):
         c.comprobados += 1
         if b - a > HUECO_MAX_MS:
-            c.fallos.append(f"sin vueltas de {_fmt(a)} a {_fmt(b)} ({(b - a) / 60_000:.0f} min)")
+            hueco = f"sin vueltas de {_fmt(a)} a {_fmt(b)} ({(b - a) / 60_000:.0f} min)"
+            parada = paradas.justificada(a, b)
+            if parada is None:
+                c.fallos.append(hueco)
+            else:
+                c.justificados.append(f"{hueco}: {parada.motivo}")
     checks.append(c)
 
     c = Check("cada comando de Telegram recibio su respuesta")
@@ -178,6 +185,8 @@ def main() -> int:
             print(f"          - {f}")
         if len(c.fallos) > MAX_EJEMPLOS:
             print(f"          ... y {len(c.fallos) - MAX_EJEMPLOS} mas")
+        for j in c.justificados:
+            print(f"          · justificado: {j}")
     print()
     if any(not c.ok for c in checks):
         print("RESULTADO: hay incoherencias. El criterio NO se cumple.")

@@ -26,6 +26,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from core.clock import timeframe_ms  # noqa: E402
+from core import paradas  # noqa: E402
 from core.config import load_settings  # noqa: E402
 from data.news import store as db  # noqa: E402
 from features.news import bases_de, flags  # noqa: E402
@@ -39,6 +40,7 @@ MAX_EJEMPLOS = 5
 class Check:
     def __init__(self, nombre: str):
         self.nombre, self.fallos, self.comprobados = nombre, [], 0
+        self.justificados: list[str] = []       # huecos explicados por una parada conocida
 
     @property
     def ok(self) -> bool:
@@ -62,8 +64,13 @@ def juzgar(news: sqlite3.Connection, carteras: dict[str, sqlite3.Connection], wh
     for a, b in zip(lecturas, lecturas[1:]):
         c.comprobados += 1
         if b["ms"] - a["ms"] > HUECO_MAX_MS:
-            c.fallos.append(f"sin lecturas de {_fmt(a['ms'])} a {_fmt(b['ms'])} "
-                            f"({(b['ms'] - a['ms']) / 60_000:.0f} min)")
+            hueco = (f"sin lecturas de {_fmt(a['ms'])} a {_fmt(b['ms'])} "
+                     f"({(b['ms'] - a['ms']) / 60_000:.0f} min)")
+            parada = paradas.justificada(a["ms"], b["ms"])
+            if parada is None:
+                c.fallos.append(hueco)
+            else:
+                c.justificados.append(f"{hueco}: {parada.motivo}")
     checks.append(c)
 
     c = Check("si la fuente cayo mas de 1 h, se aviso")
@@ -145,6 +152,8 @@ def main() -> int:
             print(f"          - {f}")
         if len(c.fallos) > MAX_EJEMPLOS:
             print(f"          ... y {len(c.fallos) - MAX_EJEMPLOS} mas")
+        for j in c.justificados:
+            print(f"          · justificado: {j}")
     print()
     if any(not c.ok for c in checks):
         print("RESULTADO: hay incoherencias. El criterio NO se cumple.")
