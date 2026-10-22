@@ -8,6 +8,8 @@
 #   .env   -> regla 19, los secretos se crean en el servidor a mano
 #   var/   -> la base de datos del servidor es la buena, no la de pruebas
 #   .venv/ -> se crea alli con las dependencias de Linux
+#   privado/, CLAUDE.local.md -> lo personal del propietario no sale del portatil
+#   graphify-out/, .ruff_cache/ -> se regeneran, no hacen falta en el servidor
 
 set -euo pipefail
 
@@ -37,6 +39,10 @@ if command -v rsync >/dev/null 2>&1; then
         --exclude '*.db' \
         --exclude '*.db-wal' \
         --exclude '*.db-shm' \
+        --exclude 'privado/' \
+        --exclude 'CLAUDE.local.md' \
+        --exclude 'graphify-out/' \
+        --exclude '.ruff_cache/' \
         "${REPO_DIR}/" "${TARGET}:${REMOTE_DIR}/"
 else
     # Sin rsync (habitual en Windows): tar por la tuberia hace lo mismo.
@@ -54,6 +60,10 @@ else
         --exclude='*.db' \
         --exclude='*.db-wal' \
         --exclude='*.db-shm' \
+        --exclude='privado' \
+        --exclude='CLAUDE.local.md' \
+        --exclude='graphify-out' \
+        --exclude='.ruff_cache' \
         . | "${SSH_BIN}" "${TARGET}" "tar xzf - -C ${REMOTE_DIR}"
 fi
 
